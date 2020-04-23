@@ -7,8 +7,16 @@ declare module 'Game' {
   export interface ICard {
     cardId: string;
     suit: ISuit;
-    rank?: IRank;
+    rank: IRank;
     pinValue: number;
+    selected?: boolean;
+    cardText?: string;
+  }
+
+  export interface IDummyCard {
+    cardText?: string;
+    suit?: ISuit;
+    selected?: boolean;
   }
 
   export interface IMeld {
@@ -30,15 +38,17 @@ declare module 'Game' {
   }
 
   export interface IPlayerCurrent {
+    playerId: string;
     cards: ICard[];
     isPlayerTurn: boolean,
     isInHand: boolean,
   }
 
   export interface IPlayerOther {
+    playerId: string;
     cards: number;
-    isPlayerTurn: boolean,
-    isInHand: boolean,
+    isPlayerTurn: boolean;
+    isInHand: boolean;
   }
 
 

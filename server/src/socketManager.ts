@@ -1,48 +1,69 @@
 import * as WebSocket from "ws";
-import startGame from "./game/startGame";
 import buildPlayerInfo from "./game/buildPlayerInfo";
 import socketHandler from "./game/socketHandler";
-import * as redis from "redis";
-import {IPlayer} from 'Game';
+import { IPlayer } from "Game";
+import Database from "./Database";
 
-const client = redis.createClient();
+interface IGameController {
+  [gameId: string]: {
+    players: {
+      [playerId: string]: WebSocket;
+    };
+  };
+}
+
+const gameController: IGameController = {};
 
 const socketManager = (server: any) => {
-  const wss = new WebSocket.Server({server});
-  wss.on('connection', (socket: WebSocket) => {
-    socket.on('message', (message: string) => {
-      const data: { type: string, value: any } = JSON.parse(message);
+  const wss = new WebSocket.Server({ server });
+  wss.on("connection", (socket: WebSocket) => {
+    let gameId = "";
+    let playerId = "";
+    socket.on("message", (message: string) => {
+      const data: { type: string; value: any } = JSON.parse(message);
 
-      console.log(data);
-      client.get(data.value.gameId, (err, gameStr) => {
-        if (err) {
-          console.log(err);
-          process.exit(1);
+      if (!gameController[data.value.gameId]) {
+        gameController[data.value.gameId] = { players: {} };
+        gameId = data.value.gameId;
+      }
+      gameController[data.value.gameId].players[data.value.playerId] = socket;
+      playerId = data.value.playerId;
+
+      const sql = `select * from game where gameId = '${data.value.gameId}'`;
+      Database.query(sql, (games) => {
+        if (games.length !== 1) {
+          throw new Error("game does not exist");
         }
-        if (data.type === 'newGame') {
-          if (gameStr) {
-            throw new Error('game already exists');
-          }
-          client.set(data.value.gameId, JSON.stringify(startGame(data.value.numberOfPlayers)));
-          return;
-        }
-        if (!gameStr) {
-          throw new Error('game does not exist');
-        }
-        const game = JSON.parse(gameStr);
-        const sendToAll = socketHandler(game, data, socket);
-        if (sendToAll) {
-          (Object.values(game.players) as IPlayer[])
-            .forEach(player => {
-              const playerInfo = JSON.stringify(buildPlayerInfo(game, player.playerId));
-              player.socket.send(playerInfo);
-            });
-        } else {
-          const playerInfo = JSON.stringify(buildPlayerInfo(game, data.value.playerId));
-          socket.send(playerInfo);
-        }
+        const game = JSON.parse(games[0].GameJson);
+        const sendToAll = socketHandler(game, data);
         const newGameStr = JSON.stringify(game);
-        client.set(data.value.gameId, newGameStr);
+        const sql = `update game set GameJson= '${newGameStr}' where GameId = '${game.gameId}'`;
+        Database.exec(sql, (err: Error | null) => {
+          if (err) {
+            throw err;
+          }
+          if (sendToAll) {
+            try {
+              (Object.values(game.players) as IPlayer[]).forEach((player) => {
+                const playerInfo = JSON.stringify({
+                  type: "updateGame",
+                  game: buildPlayerInfo(game, player.playerId),
+                });
+                gameController[game.gameId].players[player.playerId].send(
+                  playerInfo
+                );
+              });
+            } catch (ex) {
+              console.log("failed to send");
+            }
+          } else {
+            const playerInfo = JSON.stringify({
+              type: "updateGame",
+              game: buildPlayerInfo(game, data.value.playerId),
+            });
+            socket.send(playerInfo);
+          }
+        });
       });
     });
   });

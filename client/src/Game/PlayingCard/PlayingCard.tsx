@@ -1,6 +1,8 @@
 import React from 'react';
 import Debounce from '../../utils/debounce';
 import CardIcons from './CardIcons';
+import { ICard, IDummyCard } from "Game";
+import { CSSProperties } from '@material-ui/styles';
 
 const DEFAULTS = {
   buttonHighlight: '#f00',
@@ -39,13 +41,23 @@ const DEFAULTS = {
   }
 };
 
-export default function PlayingCard({card, left, top, onSelect, styling, ...props}) {
+interface IProps {
+  card: ICard | IDummyCard;
+  left: number;
+  top: number;
+  onSelect: () => void;
+  styling?: CSSProperties;
+  onPinned?: () => void;
+  onMoved: () => void;
+}
+
+export default function PlayingCard({ card, left, top, onSelect, styling, ...props }: IProps) {
   const config = Object.assign({}, DEFAULTS, styling);
   const selectDebounce = new Debounce(() => {
     onSelect();
   }, 300, true);
 
-  const styleCard = {
+  const styleCard: CSSProperties = {
     position: 'absolute',
     left: left || 0,
     width: 70,
@@ -59,7 +71,7 @@ export default function PlayingCard({card, left, top, onSelect, styling, ...prop
     background: config.cardBackground,
     borderRadius: 12,
     boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.25)',
-    color: card.cardText ? config.textColor : config.suitConstants[card.suit].color
+    color: card.cardText ? config.textColor : config.suitConstants[card.suit || 'C'].color
   };
   const styleText = {
     fontSize: 10,
@@ -70,12 +82,12 @@ export default function PlayingCard({card, left, top, onSelect, styling, ...prop
   return (
     <div
       style={styleCard}
-      onClick={onSelect ? event => selectDebounce.debounce(event) : null}
+      onClick={onSelect ? event => selectDebounce.debounce(event) : undefined}
     >
       {card.cardText &&
-      <div style={styleText}>
-        {card.cardText}
-      </div>
+        <div style={styleText}>
+          {card.cardText}
+        </div>
       }
       {!card.cardText && (
         <CardIcons

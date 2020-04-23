@@ -1,5 +1,3 @@
-import * as WebSocket from "ws";
-
 declare module 'Game' {
   export type ISuit = 'C' | 'D' | 'H' | 'S' | 'J';
   export type IRank = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K' | 'A';
@@ -17,7 +15,6 @@ declare module 'Game' {
     playerId: string;
     teamId: string;
     position: IPosition;
-    socket: WebSocket;
     hand: ICard[];
     foot: ICard[];
     isInHand: boolean;
@@ -42,6 +39,8 @@ declare module 'Game' {
   }
 
   export interface IGame {
+    gameId: string;
+    name: string;
     deck: ICard[];
     discard: ICard[];
     players: {

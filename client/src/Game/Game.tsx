@@ -3,15 +3,15 @@ import GameContext from "./GameContext";
 import Player from "./Player/Player";
 
 const Game = () => {
-  const {game} = useContext(GameContext);
+  const { gameState: { game }} = useContext(GameContext);
   return (
     <>
-      {game.players.map(player => (
+      {Boolean(game?.currentPlayer) && (
         <Player
-          player={player}
-          key={player.playerId}
+          player={game?.currentPlayer || {}}
+          key={game?.currentPlayer.playerId}
         />
-      ))}
+      )}
     </>
   )
 };

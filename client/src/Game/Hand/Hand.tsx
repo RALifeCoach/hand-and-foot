@@ -8,13 +8,21 @@ import usePinCard from "../hooks/usePinCard";
 import useRePinCards from "../hooks/useRePinCards";
 import FlexRow from "../../shared/flex-grid/FlexRow";
 import FlexColumn from "../../shared/flex-grid/FlexColumn";
+import { ICard } from "Game";
+import { IAction } from 'General';
 
 const DEFAULTS = {
   offset: 20,
   sortColor: 'grey'
 };
 
-const Hand = ({options, cards}) => {
+interface IHandState {
+  sortOrder: string,
+  cards: ICard[],
+  cardMoving: ICard | null;
+}
+
+const Hand = ({options, cards}:{options: any, cards: ICard[]}) => {
   const config = Object.assign({}, DEFAULTS, options);
   const sortCards = useSortCards();
   const moveCard = useMoveCard();
@@ -22,7 +30,7 @@ const Hand = ({options, cards}) => {
   const rePinCards = useRePinCards();
   const selectCard = useSelectCard();
 
-  const [state, dispatch] = useReducer((state, action) => {
+  const [state, dispatch] = useReducer((state: IHandState, action: IAction) => {
     switch (action.type) {
       case 'sortOrder':
         const newSortOrder = state.sortOrder !== action.value ? action.value : '';
@@ -44,7 +52,6 @@ const Hand = ({options, cards}) => {
   }, {
     sortOrder: '',
     cards: [],
-    sortState: '',
     cardMoving: null
   });
 
@@ -52,7 +59,7 @@ const Hand = ({options, cards}) => {
     dispatch({type: 'cards', value: cards});
   }, [cards]);
 
-  const countSelectedCards = state.cards.reduce((count, card) => count + (card.selected ? 1 : 0), 0);
+  const countSelectedCards = state.cards.reduce((count: number, card: ICard) => count + (card.selected ? 1 : 0), 0);
   const showIcons = countSelectedCards === 1;
   const movable = showIcons && !state.cardMoving;
   const {styleSortRank, styleSortSuit} = useSortStyles(state.sortOrder, config);
@@ -82,16 +89,16 @@ const Hand = ({options, cards}) => {
             position: 'relative'
           }}
         >
-          {state.cards.map((card, cardIndex) => {
+          {state.cards.map((card: ICard, cardIndex: number) => {
             return (
               <PlayingCard
                 card={card}
                 imageLocation={'below'}
-                left={(cardIndex * config.offset) + 'px'}
+                left={cardIndex * config.offset}
                 showIcons={showIcons}
                 onSelect={() => dispatch({type: 'select', value: card})}
-                onPinned={movable ? () => dispatch({type: 'pinCard', value: card}) : null}
-                onMoved={movable ? () => dispatch({type: 'cardMoving', value: card}) : null}
+                onPinned={movable ? () => dispatch({type: 'pinCard', value: card}) : undefined}
+                onMoved={movable ? () => dispatch({type: 'cardMoving', value: card}) : undefined}
                 key={card.cardId}
               />
             );
@@ -100,10 +107,8 @@ const Hand = ({options, cards}) => {
             <PlayingCard
               card={{cardText: 'Move to front of hand.'}}
               imageLocation={''}
-              left={(state.cards.length * config.offset) + 'px'}
+              left={state.cards.length * config.offset}
               onSelect={() => dispatch({type: 'select', value: null})}
-              onPinned={null}
-              onMoved={null}
             />
           )}
         </div>

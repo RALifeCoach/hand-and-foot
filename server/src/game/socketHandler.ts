@@ -1,13 +1,21 @@
-import {IAction, IGame} from "Game";
+import { IAction, IGame } from "Game";
 import addPlayer from "./addPlayer";
-import * as WebSocket from "ws";
 
-const socketHandler = (game: IGame, action: IAction, socket: WebSocket): boolean => {
+const socketHandler = (
+  game: IGame,
+  action: IAction,
+): boolean => {
   switch (action.type) {
-    case 'addPlayer':
-      return addPlayer(game, action.value.playerId, action.value.teamId, action.value.position, socket);
+    case "addPlayer":
+      console.log(game.players, action.value);
+      return addPlayer(
+        game,
+        action.value.playerId,
+        action.value.teamId,
+        action.value.position
+      );
     default:
-      throw new Error('unknown action type');
+      throw new Error("unknown action type");
   }
 };
 

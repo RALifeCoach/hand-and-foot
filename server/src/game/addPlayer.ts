@@ -2,7 +2,7 @@ import {IGame, IPlayer, ITeam} from "Game";
 import drawCards from "./drawCards";
 import * as WebSocket from "ws";
 
-const addPlayer = (game: IGame, playerId: string, teamId: string, position: number, socket: WebSocket): boolean => {
+const addPlayer = (game: IGame, playerId: string, teamId: string, position: number): boolean => {
   const player = game.players[playerId];
   if (player) {
     if (player.teamId !== teamId || player.position !== position) {
@@ -19,7 +19,6 @@ const addPlayer = (game: IGame, playerId: string, teamId: string, position: numb
     playerId,
     teamId,
     position,
-    socket,
     hand: drawCards(game.deck, 11),
     foot: drawCards(game.deck, 11),
     isInHand: true,

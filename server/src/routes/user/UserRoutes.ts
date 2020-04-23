@@ -1,7 +1,7 @@
 import * as express from 'express';
 import Database from '../../Database';
 import bcrypt from 'bcrypt';
-import userValidate from '../../Users/UserValidate';
+import userValidate from '../../user/UserValidate';
 
 const UserRoutes = () => {
   const router = express.Router();
@@ -45,8 +45,8 @@ const UserRoutes = () => {
       : `insert into users
       (userId, userName, role, password) values
       (
-        '${req.body.userId}', 
-        '${req.body.userName}', 
+        '${req.body.userId}',
+        '${req.body.userName}',
         '${req.body.role}',
         '${req.body.password}'
       )

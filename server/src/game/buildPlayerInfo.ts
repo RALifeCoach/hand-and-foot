@@ -4,6 +4,7 @@ const buildPlayerInfo = (game: IGame, playerId: string): IPlayerInfo => {
   const currentPlayer = game.players[playerId];
   return {
     currentPlayer: {
+      playerId: currentPlayer.playerId,
       cards: currentPlayer.isInHand ? currentPlayer.hand : currentPlayer.foot,
       isPlayerTurn: false,
       isInHand: currentPlayer.isInHand,

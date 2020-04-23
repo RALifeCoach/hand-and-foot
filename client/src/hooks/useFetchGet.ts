@@ -68,7 +68,6 @@ const useFetchGet = () => {
             dispatch({type: 'success', value: response});
           })
           .catch(ex => {
-            debugger;
             dispatch({type: 'failure', value: ex});
           });
       } catch (ex) {
