@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PlayingCard from '../PlayingCard/PlayingCard';
-import useSortStyles from "../hooks/useSortStyles";
 import FlexRow from "../../shared/flex-grid/FlexRow";
-import FlexColumn from "../../shared/flex-grid/FlexColumn";
 import { ICard } from "Game";
 import GameContext from '../GameContext';
+import SortButtons from './SortButtons';
 
 const DEFAULTS = {
   offset: 20,
@@ -20,55 +19,43 @@ interface IProps {
 
 const Hand = ({ options, cards, sortOrder, cardMoving }: IProps) => {
   const { gameDispatch, gameId, playerId } = useContext(GameContext);
+  const [magicCard, setMagicCard] = useState(0);
   const config = Object.assign({}, DEFAULTS, options);
 
   const countSelectedCards = cards
     .reduce((count: number, card: ICard) => count + (card.selected ? 1 : 0), 0);
   const showIcons = countSelectedCards === 1;
   const movable = showIcons && !cardMoving;
-  const { styleSortRank, styleSortSuit } = useSortStyles(sortOrder, config);
+
+
+  useEffect(() => {
+    console.log('magic', magicCard);
+  }, [magicCard]);
 
   return (
     <FlexRow>
-      <FlexColumn style={{ width: 80, padding: 10 }}>
+      <SortButtons
+        gameDispatch={gameDispatch}
+        sortOrder={sortOrder}
+        config={config}
+        gameId={gameId}
+        playerId={playerId}
+      />
+      <FlexRow>
         <div
-          style={styleSortRank}
-          onClick={() => gameDispatch({
-            type: 'sendMessage',
-            value: {
-              type: 'setSortOrder', value: { gameId, playerId, sortOrder: 'rank' }
-            }
-          })}
+          style={{ overflowX: 'auto', overflowY: 'hidden', maxWidth: '100%' }}
         >
-          A-4
-        </div>
-        <div
-          style={styleSortSuit}
-          onClick={() => gameDispatch({
-            type: 'sendMessage',
-            value: {
-              type: 'setSortOrder', value: { gameId, playerId, sortOrder: 'suit' }
-            }
-          })}
-        >
-          {String.fromCharCode(9824)}-{String.fromCharCode(9827)}
-        </div>
-      </FlexColumn>
-      <div
-        style={{ overflowX: 'auto', overflowY: 'hidden', maxWidth: 'calc(100vw - 100px)' }}
-      >
-        <div
-          style={{
-            width: config.offset * (cardMoving ? cards.length - 2 : cards.length - 1) + 70,
-            position: 'relative'
-          }}
-        >
-          {cards.map((card: ICard, cardIndex: number) => {
-            return (
+          <div
+            style={{
+              width: config.offset * (cardMoving ? cards.length + 1 : cards.length - 1) + 70,
+              position: 'relative'
+            }}
+          >
+            {cards.map((card: ICard, cardIndex: number) => (
               <PlayingCard
                 card={card}
                 imageLocation={'below'}
-                left={cardIndex * config.offset}
+                left={cardIndex * config.offset + (cardMoving && cardIndex >= magicCard ? config.offset : 0)}
                 showIcons={showIcons}
                 onSelect={() => gameDispatch({ type: 'select', value: card })}
                 onPinned={movable ? () => gameDispatch({
@@ -77,21 +64,32 @@ const Hand = ({ options, cards, sortOrder, cardMoving }: IProps) => {
                     type: 'setPin', value: { gameId, playerId, cardId: card.cardId }
                   }
                 }) : undefined}
-                onMoved={movable ? () => gameDispatch({type: 'cardMoving', value: card}) : undefined}
+                onMoved={movable ? () => {
+                  gameDispatch({ type: 'cardMoving', value: card });
+                  setMagicCard(cardIndex);
+                } : undefined}
+                onMouseEnter={Boolean(cardMoving) ? () => {
+                  console.log('enter')
+                  setMagicCard(cardIndex);
+                } : undefined}
                 key={card.cardId}
               />
-            );
-          })}
-          {cardMoving && (
-            <PlayingCard
-              card={{ cardText: 'Move to front of hand.' }}
-              imageLocation={''}
-              left={cards.length * config.offset}
-              onSelect={() => gameDispatch({ type: 'select', value: {cardId: ''} })}
-            />
-          )}
+            ))}
+            {cardMoving && (
+              <PlayingCard
+                card={{ cardText: 'Move to front of hand.' }}
+                imageLocation={''}
+                left={cards.length * config.offset + (cardMoving ? config.offset : 0)}
+                onSelect={() => gameDispatch({ type: 'select', value: { cardId: '' } })}
+                onMouseEnter={Boolean(cardMoving) ? () => {
+                  console.log('enter')
+                  setMagicCard(cards.length);
+                } : undefined}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </FlexRow>
     </FlexRow>
   );
 };

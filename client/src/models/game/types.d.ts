@@ -42,6 +42,7 @@ declare module 'Game' {
     playerId: number;
     playerName: string;
     playerState: IPlayerState;
+    numberOfCardsToDraw: number;
     cards: ICard[];
     isPlayerTurn: boolean;
     isInHand: boolean;
@@ -50,7 +51,6 @@ declare module 'Game' {
   export interface IPlayerOther {
     playerId: number;
     playerName: string;
-    playerState: IPlayerState;
     cards: number;
     isPlayerTurn: boolean;
     isInHand: boolean;
@@ -60,6 +60,7 @@ declare module 'Game' {
   export interface IGame {
     gameId: number;
     gameName: string;
+    gameState: IGameState;
     currentPlayer: IPlayerCurrent;
     otherPlayers: IPlayerOther[];
     teams: {[teamId: string]:ITeam};

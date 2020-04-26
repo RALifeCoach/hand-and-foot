@@ -31,7 +31,11 @@ const startGame = (numberOfPlayers: number) => {
     teams: {},
     discard: [],
     gameState: "waitingToStart",
-    numberOfPlayers,
+    numberOfPlayers: Number(numberOfPlayers),
+    currentPlayerId: 0,
+    numberOfRounds: 7,
+    rounds: [],
+    roundSequence: "sequential",
   } as IGameJson;
 };
 

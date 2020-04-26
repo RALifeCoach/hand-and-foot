@@ -3,6 +3,7 @@ import addPlayer from "./addPlayer";
 import setSortOrder from "./setSortOrder";
 import moveCard from "./moveCard";
 import pinCard from "./pinCard";
+import drawCardPlayer from './drawCardPlayer';
 
 const socketHandler = (
   game: IGameJson,
@@ -34,6 +35,8 @@ const socketHandler = (
       );
     case "setPin":
       return pinCard(game, action.value.playerId, action.value.cardId);
+    case "drawCard":
+      return drawCardPlayer(game, action.value.playerId);
     default:
       console.log(action);
       throw new Error("unknown action type");

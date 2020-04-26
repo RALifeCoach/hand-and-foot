@@ -1,6 +1,6 @@
 import buildPlayerInfo from "./game/buildPlayerInfo";
 import socketHandler from "./game/socketHandler";
-import { IPlayer } from "Game";
+import { IPlayer, IGameJson, IGameState } from "Game";
 import Database from "./Database";
 import { IGameController } from "./socketManager";
 
@@ -17,7 +17,7 @@ const processMessages = (
     if (games.length !== 1) {
       throw new Error("game does not exist");
     }
-    const game = JSON.parse(games[0].GameJson);
+    const game: IGameJson = JSON.parse(games[0].GameJson);
     console.log("process", data);
     const { sendToAll, message } = socketHandler(game, data);
     if (message) {
@@ -30,6 +30,23 @@ const processMessages = (
         throw err;
       }
       if (sendToAll) {
+        if (game.gameState !== "finished") {
+          game.gameState =
+            game.numberOfPlayers ===
+            Object.keys(gameController[gameId].players).length
+              ? "inPlay"
+              : "waitingToStart";
+          if (game.gameState === "inPlay" && game.currentPlayerId === 0) {
+            const currentPlayerIndex = Math.floor(
+              Math.random() * game.numberOfPlayers
+            );
+            console.log("index", currentPlayerIndex);
+            game.currentPlayerId = Object.values(game.players)[
+              currentPlayerIndex
+            ].playerId;
+            game.players[game.currentPlayerId].playerState === "playing";
+          }
+        }
         try {
           (Object.values(game.players) as IPlayer[]).forEach((player) => {
             const playerInfo =
@@ -39,6 +56,7 @@ const processMessages = (
                 game: buildPlayerInfo(game, player.playerId),
               });
             if (gameController[gameId].players[player.playerId]) {
+              console.log(player.playerId, "sent", playerInfo);
               gameController[gameId].players[player.playerId].send(playerInfo);
             }
           });

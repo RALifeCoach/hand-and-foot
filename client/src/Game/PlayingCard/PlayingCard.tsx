@@ -49,9 +49,10 @@ interface IProps {
   styling?: CSSProperties;
   onPinned?: () => void;
   onMoved: () => void;
+  onMouseEnter?: () => void;
 }
 
-export default function PlayingCard({ card, left, top, onSelect, styling, ...props }: IProps) {
+export default function PlayingCard({ card, left, top, onSelect, styling, onMouseEnter, ...props }: IProps) {
   const config = Object.assign({}, DEFAULTS, styling);
   const selectDebounce = new Debounce(() => {
     onSelect();
@@ -83,6 +84,7 @@ export default function PlayingCard({ card, left, top, onSelect, styling, ...pro
     <div
       style={styleCard}
       onClick={onSelect ? event => selectDebounce.debounce(event) : undefined}
+      onMouseEnter={onMouseEnter}
     >
       {card.cardText &&
         <div style={styleText}>

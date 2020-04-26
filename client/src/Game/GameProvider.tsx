@@ -22,7 +22,6 @@ const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) 
   const [sendMessage, lastMessage, readyState] = useWebSocket(socketUrl, STATIC_OPTIONS);
 
   useEffect(() => {
-    console.log('before send', playerId);
     dispatch({
       type: 'sendMessage', value: {
         type: 'addPlayer',
@@ -51,7 +50,6 @@ const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) 
   useEffect(() => {
     if (lastMessage) {
       const body = JSON.parse(lastMessage.data);
-      console.log('reply', playerId);
       dispatch({ type: 'setLastMessage', value: body });
     }
   }, [lastMessage, dispatch]);

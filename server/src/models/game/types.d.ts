@@ -16,7 +16,8 @@ declare module "Game" {
     | "A";
   export type IGameState = "waitingToStart" | "inPlay" | "finished";
   export type IPosition = 0 | 1 | 2 | 3;
-  export type IPlayerState = "playing" | "waiting";
+  export type IPlayerState = "playing" | "waiting" | "drawing";
+  export type IRoundSequence = "random" | "sequential";
 
   export interface ICard {
     cardId: number;
@@ -27,8 +28,11 @@ declare module "Game" {
 
   export interface IPlayer {
     playerId: number;
+    playerName: string;
     teamId: string;
     position: IPosition;
+    playerState: IPlayerState;
+    numberOfCardsToDraw: number;
     hand: ICard[];
     foot: ICard[];
     isInHand: boolean;
@@ -53,6 +57,17 @@ declare module "Game" {
     melds: IMelds;
   }
 
+  export interface IRound {
+    roundId: number;
+    minimumScore: number;
+    teams: {
+      [teamId: string]: {
+        scoreBase: number;
+        scoreCards: number;
+      }
+    }
+  }
+
   export interface IGameJson {
     deck: ICard[];
     discard: ICard[];
@@ -64,6 +79,10 @@ declare module "Game" {
     };
     gameState: IGameState;
     numberOfPlayers: number;
+    currentPlayerId: number;
+    numberOfRounds: number;
+    rounds: IRound[];
+    roundSequence: IRoundSequence;
   }
 
   export interface IGame {
@@ -76,6 +95,7 @@ declare module "Game" {
     playerId: number;
     playerName: string;
     playerState: IPlayerState;
+    numberOfCardsToDraw: number;
     cards: ICard[];
     isPlayerTurn: boolean;
     isInHand: boolean;
@@ -92,8 +112,6 @@ declare module "Game" {
   }
 
   export interface IPlayerInfo {
-    gameId: number;
-    gameName: string;
     gameState: IGameState;
     currentPlayer: IPlayerCurrent;
     otherPlayers: IPlayerOther[];

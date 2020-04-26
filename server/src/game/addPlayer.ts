@@ -27,6 +27,8 @@ const addPlayer = (
     playerId,
     teamId,
     position,
+    playerState: 'waiting',
+    numberOfCardsToDraw: 0,
     hand: drawCards(game.deck, 11),
     foot: drawCards(game.deck, 11),
     isInHand: true,
