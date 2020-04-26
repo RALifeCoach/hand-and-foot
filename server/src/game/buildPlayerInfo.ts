@@ -1,6 +1,6 @@
-import {IGame, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from "Game";
+import {IGameJson, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from "Game";
 
-const buildPlayerInfo = (game: IGame, playerId: string): IPlayerInfo => {
+const buildPlayerInfo = (game: IGameJson, playerId: number): IPlayerInfo => {
   const currentPlayer = game.players[playerId];
   return {
     currentPlayer: {
@@ -8,6 +8,7 @@ const buildPlayerInfo = (game: IGame, playerId: string): IPlayerInfo => {
       cards: currentPlayer.isInHand ? currentPlayer.hand : currentPlayer.foot,
       isPlayerTurn: false,
       isInHand: currentPlayer.isInHand,
+      sortOrder: currentPlayer.sortOrder,
     } as IPlayerCurrent,
     otherPlayers: (Object.values(game.players) as IPlayer[])
       .filter(player => player.playerId !== playerId)

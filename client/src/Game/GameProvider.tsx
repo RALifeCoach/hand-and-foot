@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer, memo, ReactNode } from 'react';
-import GameContext, { IGameContextState } from "./GameContext";
+import React, { useEffect, memo, ReactNode } from 'react';
+import GameContext from "./GameContext";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { IAction } from "General";
+import useGameReducer from './hooks/useGameReducer';
 
 const STATIC_OPTIONS = {
   shouldReconnect: () => true, //Will attempt to reconnect on all close events, such as server shutting down
@@ -9,79 +9,52 @@ const STATIC_OPTIONS = {
 
 interface IProps {
   children: ReactNode;
-  gameId: string;
-  playerId: string;
+  gameId: number;
+  playerId: number;
   teamId: string;
   position: number;
 }
 
 const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) => {
-  const [state, dispatch] = useReducer((state: IGameContextState, action: IAction) => {
-    switch (action.type) {
-      case 'setReadyState':
-        return { ...state, readyState: action.value };
-      case 'sendMessage':
-        if (state.readyState !== ReadyState.OPEN || state.savedMessages.length) {
-          return { ...state, savedMessages: [...state.savedMessages, action.value] };
-        }
-        return { ...state, currentMessage: action.value };
-      case 'popMessage':
-        const [nextMessage, ...rest] = state.savedMessages;
-        return { ...state, currentMessage: nextMessage, savedMessages: rest };
-      case 'clearMessage':
-        return { ...state, currentMessage: null };
-      case 'setLastMessage':
-        const message = action.value;
-        switch (message.type) {
-          case 'updateGame':
-            return { ...state, lastMessage: action.value, game: message.game };
-          default:
-            throw new Error(`unknown message type ${action.value.type}`);
-        }
-      default:
-        return state;
-    }
-  }, {
-    lastMessage: null,
-    readyState: null,
-    savedMessages: [],
-    currentMessage: null,
-    game: null,
-  } as IGameContextState);
+  const [state, dispatch] = useGameReducer(gameId, playerId);
 
   const socketUrl = 'ws://localhost:3010';
   const [sendMessage, lastMessage, readyState] = useWebSocket(socketUrl, STATIC_OPTIONS);
 
-  useEffect(() =>
-    sendMessage(JSON.stringify({
-      type: 'addPlayer',
-      value: { gameId: gameId, playerId, teamId, position }
-    }))
-    , [sendMessage, gameId, playerId, teamId, position]);
+  useEffect(() => {
+    console.log('before send', playerId);
+    dispatch({
+      type: 'sendMessage', value: {
+        type: 'addPlayer',
+        value: { gameId, playerId, teamId, position }
+      }
+    })
+  }, [dispatch, gameId, playerId, position, teamId]);
 
   useEffect(() => {
     dispatch({ type: 'setReadyState', value: readyState });
-  }, [readyState]);
+  }, [readyState, dispatch]);
 
   useEffect(() => {
     if (readyState === ReadyState.OPEN && state.savedMessages.length && !state.currentMessage) {
       dispatch({ type: 'popMessage', value: null });
     }
-  }, [state.savedMessages, readyState, state.currentMessage]);
+  }, [state.savedMessages, readyState, state.currentMessage, dispatch]);
 
   useEffect(() => {
     if (state.currentMessage) {
       sendMessage(state.currentMessage);
       dispatch({ type: 'clearMessage', value: null });
     }
-  }, [state.currentMessage, sendMessage]);
+  }, [state.currentMessage, sendMessage, dispatch]);
 
   useEffect(() => {
     if (lastMessage) {
       const body = JSON.parse(lastMessage.data);
+      console.log('reply', playerId);
       dispatch({ type: 'setLastMessage', value: body });
     }
-  }, [lastMessage]);
+  }, [lastMessage, dispatch]);
 
   return (
     <>
@@ -89,6 +62,8 @@ const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) 
         value={{
           gameDispatch: dispatch,
           gameState: state,
+          gameId: gameId,
+          playerId: playerId
         }}
       >
         {children}

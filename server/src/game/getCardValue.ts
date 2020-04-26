@@ -14,8 +14,9 @@ const VALUE_FROM_RANK = {
     "Q": 12,
     "K": 13,
     "A": 14,
+    "U": -1,
 }
 
-const getCardValue = (rank: IRank) => VALUE_FROM_RANK[rank];
+const getCardValue = (rank?: IRank) => VALUE_FROM_RANK[rank || 'U'];
 
 export default getCardValue;

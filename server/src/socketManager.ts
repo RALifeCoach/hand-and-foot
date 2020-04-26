@@ -1,10 +1,7 @@
 import * as WebSocket from "ws";
-import buildPlayerInfo from "./game/buildPlayerInfo";
-import socketHandler from "./game/socketHandler";
-import { IPlayer } from "Game";
-import Database from "./Database";
+import processMessages from "./processMessages";
 
-interface IGameController {
+export interface IGameController {
   [gameId: string]: {
     players: {
       [playerId: string]: WebSocket;
@@ -13,10 +10,11 @@ interface IGameController {
 }
 
 const gameController: IGameController = {};
+const messageStack: any[] = [];
 
 const socketManager = (server: any) => {
   const wss = new WebSocket.Server({ server });
-  wss.on("connection", (socket: WebSocket) => {
+  wss.on("connection", (socket: WebSocket, req: any) => {
     let gameId = "";
     let playerId = "";
     socket.on("message", (message: string) => {
@@ -29,42 +27,19 @@ const socketManager = (server: any) => {
       gameController[data.value.gameId].players[data.value.playerId] = socket;
       playerId = data.value.playerId;
 
-      const sql = `select * from game where gameId = '${data.value.gameId}'`;
-      Database.query(sql, (games) => {
-        if (games.length !== 1) {
-          throw new Error("game does not exist");
-        }
-        const game = JSON.parse(games[0].GameJson);
-        const sendToAll = socketHandler(game, data);
-        const newGameStr = JSON.stringify(game);
-        const sql = `update game set GameJson= '${newGameStr}' where GameId = '${game.gameId}'`;
-        Database.exec(sql, (err: Error | null) => {
-          if (err) {
-            throw err;
-          }
-          if (sendToAll) {
-            try {
-              (Object.values(game.players) as IPlayer[]).forEach((player) => {
-                const playerInfo = JSON.stringify({
-                  type: "updateGame",
-                  game: buildPlayerInfo(game, player.playerId),
-                });
-                gameController[game.gameId].players[player.playerId].send(
-                  playerInfo
-                );
-              });
-            } catch (ex) {
-              console.log("failed to send");
-            }
-          } else {
-            const playerInfo = JSON.stringify({
-              type: "updateGame",
-              game: buildPlayerInfo(game, data.value.playerId),
-            });
-            socket.send(playerInfo);
-          }
-        });
-      });
+      messageStack.push(data);
+      if (messageStack.length > 1) {
+        return;
+      }
+
+      processMessages(messageStack, gameController);
+    });
+    wss.on("close", () => {
+      socket.removeAllListeners();
+      delete gameController[gameId].players[playerId];
+      if (Object.keys(gameController[gameId].players).length === 0) {
+        delete gameController[gameId];
+      }
     });
   });
 };

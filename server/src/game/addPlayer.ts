@@ -1,18 +1,26 @@
-import {IGame, IPlayer, ITeam} from "Game";
+import { IGameJson, IPlayer, ITeam } from "Game";
 import drawCards from "./drawCards";
-import * as WebSocket from "ws";
 
-const addPlayer = (game: IGame, playerId: string, teamId: string, position: number): boolean => {
+const addPlayer = (
+  game: IGameJson,
+  playerId: number,
+  teamId: string,
+  position: number
+): { sendToAll: boolean; message: string } => {
   const player = game.players[playerId];
   if (player) {
     if (player.teamId !== teamId || player.position !== position) {
-      throw new Error('player is already present at a different team or position');
+      throw new Error(
+        "player is already present at a different team or position"
+      );
     }
-    return true;
+    return { sendToAll: true, message: '' };
   }
-  const positionExists = Object.values(game.players).some(player => player.position === position);
+  const positionExists = Object.values(game.players).some(
+    (player) => player.position === position
+  );
   if (positionExists) {
-    throw new Error('that position is already filled');
+    throw new Error("that position is already filled");
   }
 
   game.players[playerId] = {
@@ -33,11 +41,11 @@ const addPlayer = (game: IGame, playerId: string, teamId: string, position: numb
         dirtyMelds: [],
         runs: [],
         wildCards: [],
-      }
+      },
     } as ITeam;
   }
 
-  return true;
-}
+  return { sendToAll: true, message: '' };
+};
 
 export default addPlayer;

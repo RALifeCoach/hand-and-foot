@@ -8,22 +8,22 @@ import QueryString from 'query-string';
 
 const PLAYERS = [
   {
-    playerId: 'player 1',
+    playerId: 1,
     teamId: 'NS',
     position: 0
   },
   {
-    playerId: 'player 2',
+    playerId: 2,
     teamId: 'EW',
     position: 1
   },
   {
-    playerId: 'player 3',
+    playerId: 3,
     teamId: 'NS',
     position: 2
   },
   {
-    playerId: 'player 4',
+    playerId: 4,
     teamId: 'EW',
     position: 3
   },
@@ -35,34 +35,38 @@ const App = () => {
   const [gameStatus, getGame] = useFetchGet();
   useEffect(() => {
     if (!gameId) {
-      getGame('game/restart');
+      getGame('game/restart/TestGame/4');
     }
   }, [getGame, gameId]);
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
+      console.log(gameStatus.data);
       setGameId(gameStatus.data.gameId);
     }
   }, [gameStatus]);
 
+  if (!gameId) {
+    return (
+      <FetchHandling status={gameStatus} title="Fetching game" />
+    );
+  }
+
   return (
     <>
-      {Boolean(gameId) && (
-        <MainProvider>
-          {PLAYERS.map((player) => (
-            <GameProvider
-              gameId={gameId as string}
-              playerId={player.playerId}
-              teamId={player.teamId}
-              position={player.position}
-              key={player.playerId}
-            >
-              <Game />
-            </GameProvider>
-          ))}
-        </MainProvider>
-      )}
-      <FetchHandling status={gameStatus} title="Fetching game" />
+      <MainProvider>
+        {PLAYERS.map((player) => (
+          <GameProvider
+            gameId={Number(gameId)}
+            playerId={player.playerId}
+            teamId={player.teamId}
+            position={player.position}
+            key={player.playerId}
+          >
+            <Game />
+          </GameProvider>
+        ))}
+      </MainProvider>
     </>
   );
 };
