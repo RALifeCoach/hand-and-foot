@@ -62,6 +62,13 @@ const App = () => {
             teamId={player.teamId}
             position={player.position}
             key={player.playerId}
+            rules={{
+              canDraw7: true,
+              redThreeScore: 100,
+              canDiscardWild: true,
+              start7MinRound: 4,
+              wildCardMeldScore: 2000,
+            }}
           >
             <Game />
           </GameProvider>

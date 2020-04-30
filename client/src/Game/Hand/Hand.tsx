@@ -4,6 +4,8 @@ import FlexRow from "../../shared/flex-grid/FlexRow";
 import { ICard } from "Game";
 import GameContext from '../GameContext';
 import SortButtons from './SortButtons';
+import useSelectedCards from '../hooks/useSelectedCards';
+import useSendMessage from '../hooks/useSendMessage';
 
 const DEFAULTS = {
   offset: 20,
@@ -13,17 +15,18 @@ const DEFAULTS = {
 interface IProps {
   options: any;
   cards: ICard[];
+  selected: { [cardId: string]: boolean }
   sortOrder: string;
   cardMoving: ICard | null;
 }
 
-const Hand = ({ options, cards, sortOrder, cardMoving }: IProps) => {
+const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
   const { gameDispatch, gameId, playerId } = useContext(GameContext);
   const [magicCard, setMagicCard] = useState(0);
   const config = Object.assign({}, DEFAULTS, options);
+  const sendMessage = useSendMessage();
 
-  const countSelectedCards = cards
-    .reduce((count: number, card: ICard) => count + (card.selected ? 1 : 0), 0);
+  const countSelectedCards = useSelectedCards(cards, selected).length;
   const showIcons = countSelectedCards === 1;
   const movable = showIcons && !cardMoving;
 
@@ -54,16 +57,14 @@ const Hand = ({ options, cards, sortOrder, cardMoving }: IProps) => {
             {cards.map((card: ICard, cardIndex: number) => (
               <PlayingCard
                 card={card}
+                selected={Boolean(selected[card.cardId])}
                 imageLocation={'below'}
                 left={cardIndex * config.offset + (cardMoving && cardIndex >= magicCard ? config.offset : 0)}
                 showIcons={showIcons}
-                onSelect={() => gameDispatch({ type: 'select', value: card })}
-                onPinned={movable ? () => gameDispatch({
-                  type: 'sendMessage',
-                  value: {
-                    type: 'setPin', value: { gameId, playerId, cardId: card.cardId }
-                  }
-                }) : undefined}
+                onSelect={() => {
+                  gameDispatch({ type: 'select', value: card });
+                }}
+                onPinned={movable ? () => sendMessage('setPin', { cardId: card.cardId }) : undefined}
                 onMoved={movable ? () => {
                   gameDispatch({ type: 'cardMoving', value: card });
                   setMagicCard(cardIndex);

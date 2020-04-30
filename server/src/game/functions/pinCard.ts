@@ -1,10 +1,6 @@
 import { IGameJson, ICard } from "Game";
-import sortCards from "./sortCards";
-const pinCard = (
-  game: IGameJson,
-  playerId: number,
-  cardId: number
-): { sendToAll: boolean; message: string } => {
+import sortCards from "../utils/sortCards";
+const pinCard = (game: IGameJson, playerId: number, cardId: number): string => {
   const player = game.players[playerId];
   if (!player) {
     throw new Error("player is missing");
@@ -14,7 +10,7 @@ const pinCard = (
   const newCards: ICard[] = JSON.parse(JSON.stringify(cards));
   const updateCard = newCards.find((findCard) => findCard.cardId === cardId);
   if (!updateCard) {
-    throw new Error('cad not found');
+    throw new Error("cad not found");
   }
 
   if (updateCard.pinValue) {
@@ -36,13 +32,10 @@ const pinCard = (
     player.foot = sortCards(newCards, player.sortOrder);
   }
 
-  return {
-    sendToAll: false,
-    message: JSON.stringify({
-      type: "pinCard",
-      value: { cards: player.isInHand ? player.hand : player.foot },
-    }),
-  };
+  return JSON.stringify({
+    type: "pinCard",
+    value: { cards: player.isInHand ? player.hand : player.foot },
+  });
 };
 
 export default pinCard;

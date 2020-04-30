@@ -1,6 +1,6 @@
 import React from 'react';
 import {IDispatch} from "General";
-import {IGame, ICard} from "Game";
+import {IGame, ICard, IRules} from "Game";
 
 export interface IGameContextState {
   lastMessage: string | null;
@@ -8,7 +8,7 @@ export interface IGameContextState {
   savedMessages: any[];
   currentMessage: string | null;
   game: IGame | null;
-  cards: ICard[];
+  selected: {[cardId: string]: boolean};
   sortOrder: string;
   cardMoving: ICard | null;
 }
@@ -18,6 +18,7 @@ export interface IGameContext {
   gameState: IGameContextState;
   gameId: number;
   playerId: number;
+  rules: IRules;
 }
 
 const GameContext = React.createContext({} as IGameContext);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Debounce from '../../utils/debounce';
 import CardIcons from './CardIcons';
 import { ICard, IDummyCard } from "Game";
@@ -43,20 +43,25 @@ const DEFAULTS = {
 
 interface IProps {
   card: ICard | IDummyCard;
+  selected?: boolean;
   left: number;
   top: number;
-  onSelect: () => void;
+  onSelect?: () => void;
   styling?: CSSProperties;
   onPinned?: () => void;
   onMoved: () => void;
   onMouseEnter?: () => void;
 }
 
-export default function PlayingCard({ card, left, top, onSelect, styling, onMouseEnter, ...props }: IProps) {
+export default function PlayingCard({ card, selected = false, left, top, onSelect, styling, onMouseEnter, ...props }: IProps) {
   const config = Object.assign({}, DEFAULTS, styling);
-  const selectDebounce = new Debounce(() => {
-    onSelect();
-  }, 300, true);
+  const selectDebounce = useMemo(() => {
+    return new Debounce(() => {
+      if (onSelect) {
+        onSelect();
+      }
+    }, 300, true);
+  }, [onSelect]);
 
   const styleCard: CSSProperties = {
     position: 'absolute',
@@ -66,7 +71,7 @@ export default function PlayingCard({ card, left, top, onSelect, styling, onMous
     overflow: 'hidden',
     marginTop: top !== undefined
       ? top
-      : card.selected
+      : selected
         ? 0
         : 10,
     background: config.cardBackground,
@@ -80,24 +85,30 @@ export default function PlayingCard({ card, left, top, onSelect, styling, onMous
     height: 'auto',
   };
 
+  const handleClick = useCallback((event: any) => {
+    selectDebounce.debounce(event);
+  }, [selectDebounce]);
+
   return (
     <div
       style={styleCard}
-      onClick={onSelect ? event => selectDebounce.debounce(event) : undefined}
+      onClick={handleClick}
       onMouseEnter={onMouseEnter}
     >
-      {card.cardText &&
-        <div style={styleText}>
-          {card.cardText}
-        </div>
+      {Boolean(card.cardText)
+        ? (
+          <div style={styleText}>
+            {card.cardText}
+          </div>
+        )
+        : (
+          <CardIcons
+            card={card}
+            config={config}
+            {...props}
+          />
+        )
       }
-      {!card.cardText && (
-        <CardIcons
-          card={card}
-          config={config}
-          {...props}
-        />
-      )}
     </div>
   );
 }

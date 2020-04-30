@@ -1,12 +1,12 @@
 import { IGameJson, IPlayer, ITeam } from "Game";
-import drawCards from "./drawCards";
+import drawCards from "../utils/drawCards";
 
 const addPlayer = (
   game: IGameJson,
   playerId: number,
   teamId: string,
-  position: number
-): { sendToAll: boolean; message: string } => {
+  position: number,
+): string => {
   const player = game.players[playerId];
   if (player) {
     if (player.teamId !== teamId || player.position !== position) {
@@ -14,7 +14,7 @@ const addPlayer = (
         "player is already present at a different team or position"
       );
     }
-    return { sendToAll: true, message: '' };
+    return '';
   }
   const positionExists = Object.values(game.players).some(
     (player) => player.position === position
@@ -27,7 +27,7 @@ const addPlayer = (
     playerId,
     teamId,
     position,
-    playerState: 'waiting',
+    playerState: "waiting",
     numberOfCardsToDraw: 0,
     hand: drawCards(game.deck, 11),
     foot: drawCards(game.deck, 11),
@@ -37,17 +37,12 @@ const addPlayer = (
   if (!game.teams[teamId]) {
     game.teams[teamId] = {
       teamId,
-      melds: {
-        redThrees: 0,
-        cleanMelds: [],
-        dirtyMelds: [],
-        runs: [],
-        wildCards: [],
-      },
+      isDown: false,
+      melds: {},
     } as ITeam;
   }
 
-  return { sendToAll: true, message: '' };
+  return '';
 };
 
 export default addPlayer;

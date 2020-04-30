@@ -1,12 +1,12 @@
-import { IGameJson, ICard } from "Game";
-import sortCards from "./sortCards";
-import drawCards from "./drawCards";
+import { IGameJson } from "Game";
+import drawCards from "../utils/drawCards";
 const drawCardPlayer = (
   game: IGameJson,
   playerId: number
-): { sendToAll: boolean; message: string } => {
+): string => {
   const player = game.players[playerId];
   if (!player) {
+    console.log(playerId, game.players);
     throw new Error("player is missing");
   }
 
@@ -15,11 +15,12 @@ const drawCardPlayer = (
   } else {
     player.foot.push(...drawCards(game.deck, 1));
   }
+  player.numberOfCardsToDraw--;
+  if (player.playerState === 'draw' && player.numberOfCardsToDraw === 0) {
+    player.playerState = 'playing';
+  }
 
-  return {
-    sendToAll: true,
-    message: '',
-  };
+  return '';
 };
 
 export default drawCardPlayer;

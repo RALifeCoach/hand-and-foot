@@ -2,7 +2,7 @@ import * as express from "express";
 import Database from "../../Database";
 import bcrypt from "bcrypt";
 import userValidate from "../../user/UserValidate";
-import startGame from "../../game/startGame";
+import startGame from "../../game/functions/startGame";
 
 const GameRoutes = () => {
   const router = express.Router();

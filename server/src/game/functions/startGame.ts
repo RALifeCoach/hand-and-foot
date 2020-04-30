@@ -1,7 +1,8 @@
 import { ICard, IGameJson } from "Game";
-import { RANKS, SUITS } from "../../constants";
+import { RANKS, SUITS, ROUNDS } from "../../../constants";
 
 const startGame = (numberOfPlayers: number) => {
+  const numberOfRounds = 7;
   const deck: ICard[] = [];
   for (let deckIndex = 0; deckIndex < 6; deckIndex++) {
     for (let suitIndex = 0; suitIndex < 4; suitIndex++) {
@@ -33,9 +34,10 @@ const startGame = (numberOfPlayers: number) => {
     gameState: "waitingToStart",
     numberOfPlayers: Number(numberOfPlayers),
     currentPlayerId: 0,
-    numberOfRounds: 7,
-    rounds: [],
+    numberOfRounds: numberOfRounds,
+    rounds: ROUNDS.slice(0, numberOfRounds),
     roundSequence: "sequential",
+    currentRound: -1,
   } as IGameJson;
 };
 

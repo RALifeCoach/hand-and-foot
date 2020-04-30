@@ -1,8 +1,10 @@
 import {IGameJson, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from "Game";
+import GameValidate from "../GameValidate";
 
-const buildPlayerInfo = (game: IGameJson, playerId: number): IPlayerInfo => {
+const buildPlayerInfo = (game: IGameJson, gameId: number, playerId: number): IPlayerInfo => {
   const currentPlayer = game.players[playerId];
   return {
+    gameId,
     gameState: game.gameState,
     currentPlayer: {
       playerId: currentPlayer.playerId,
@@ -13,6 +15,7 @@ const buildPlayerInfo = (game: IGameJson, playerId: number): IPlayerInfo => {
       numberOfCardsToDraw: currentPlayer.numberOfCardsToDraw,
       isInHand: currentPlayer.isInHand,
       sortOrder: currentPlayer.sortOrder,
+      teamId: currentPlayer.teamId,
     } as IPlayerCurrent,
     otherPlayers: (Object.values(game.players) as IPlayer[])
       .filter((player) => player.playerId !== playerId)
@@ -34,9 +37,13 @@ const buildPlayerInfo = (game: IGameJson, playerId: number): IPlayerInfo => {
             cards: player.isInHand ? player.hand.length : player.foot.length,
             isPlayerTurn: game.currentPlayerId === player.playerId,
             isInHand: player.isInHand,
+            teamId: player.teamId,
           } as IPlayerOther)
       ),
     teams: game.teams,
+    discardCard: game.discard.length > 0 ? game.discard[0] : null,
+    discardCount: game.discard.length,
+    deckCount: game.deck.length,
   } as IPlayerInfo;
 }
 

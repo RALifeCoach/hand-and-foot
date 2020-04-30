@@ -2,6 +2,7 @@ import React, { useEffect, memo, ReactNode } from 'react';
 import GameContext from "./GameContext";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import useGameReducer from './hooks/useGameReducer';
+import { IRules } from 'Game';
 
 const STATIC_OPTIONS = {
   shouldReconnect: () => true, //Will attempt to reconnect on all close events, such as server shutting down
@@ -13,9 +14,10 @@ interface IProps {
   playerId: number;
   teamId: string;
   position: number;
+  rules: IRules;
 }
 
-const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) => {
+const GameProvider = ({ children, gameId, playerId, teamId, position, rules }: IProps) => {
   const [state, dispatch] = useGameReducer(gameId, playerId);
 
   const socketUrl = 'ws://localhost:3010';
@@ -61,7 +63,8 @@ const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) 
           gameDispatch: dispatch,
           gameState: state,
           gameId: gameId,
-          playerId: playerId
+          playerId: playerId,
+          rules
         }}
       >
         {children}

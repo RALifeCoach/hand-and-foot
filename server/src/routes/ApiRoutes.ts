@@ -1,7 +1,7 @@
 import * as express from "express";
 import UserRoutes from "./user/UserRoutes";
 import GameRoutes from "./game/GameRoutes";
-import canUpdateGames from "../game/canUpdateGames";
+import canUpdateGames from "../game/utils/canUpdateGames";
 import canUpdateUsers from "../user/canUpdateUsers";
 
 const ApiRoutes = () => {

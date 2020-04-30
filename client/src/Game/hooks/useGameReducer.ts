@@ -1,7 +1,7 @@
-import { useReducer } from 'react';
-import useSelectCard from './useSelectCard';
+import { useReducer } from "react";
+import useSelectCard from "./useSelectCard";
 import { IAction } from "General";
-import { IGameContextState } from '../GameContext';
+import { IGameContextState } from "../GameContext";
 import { ReadyState } from "react-use-websocket";
 
 const useGameReducer = (gameId: number, playerId: number) => {
@@ -57,7 +57,10 @@ const useGameReducer = (gameId: number, playerId: number) => {
             }
             return { ...state, currentMessage: JSON.stringify(message) };
           }
-          return { ...state, cards: selectCard(state.cards, action.value) };
+          return {
+            ...state,
+            selected: selectCard(state.selected, action.value),
+          };
         case "setLastMessage":
           const message = action.value;
           switch (message.type) {
@@ -94,11 +97,11 @@ const useGameReducer = (gameId: number, playerId: number) => {
       savedMessages: [],
       currentMessage: null,
       game: null,
-      cards: [],
+      selected: {},
       sortOrder: "",
       cardMoving: null,
     } as IGameContextState
   );
-}
+};
 
 export default useGameReducer;

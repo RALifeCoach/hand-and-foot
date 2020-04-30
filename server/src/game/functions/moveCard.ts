@@ -1,5 +1,5 @@
 import { IGameJson, ICard } from "Game";
-import sortCards from "./sortCards";
+import sortCards from "../utils/sortCards";
 
 const buildNewCards = (
   cards: ICard[],
@@ -66,26 +66,27 @@ const moveCard = (
   game: IGameJson,
   playerId: string,
   sourceCardId: number,
-  destCardId: number,
-): { sendToAll: boolean; message: string } => {
+  destCardId: number
+): string => {
   const player = game.players[playerId];
   if (!player) {
     throw new Error("player is missing");
   }
 
   if (player.isInHand) {
-    player.hand = rePinCards(buildNewCards(player.hand, sourceCardId, destCardId));
+    player.hand = rePinCards(
+      buildNewCards(player.hand, sourceCardId, destCardId)
+    );
   } else {
-    player.foot = rePinCards(buildNewCards(player.foot, sourceCardId, destCardId));
+    player.foot = rePinCards(
+      buildNewCards(player.foot, sourceCardId, destCardId)
+    );
   }
 
-  return {
-    sendToAll: false,
-    message: JSON.stringify({
-      type: "moveCard",
-      value: { cards: player.isInHand ? player.hand : player.foot },
-    }),
-  };
+  return JSON.stringify({
+    type: "moveCard",
+    value: { cards: player.isInHand ? player.hand : player.foot },
+  });
 };
 
 export default moveCard;

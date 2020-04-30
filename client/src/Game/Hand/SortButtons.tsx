@@ -2,6 +2,7 @@ import React from 'react';
 import useSortStyles from "../hooks/useSortStyles";
 import FlexColumn from "../../shared/flex-grid/FlexColumn";
 import { IDispatch } from 'General';
+import useSendMessage from '../hooks/useSendMessage';
 
 interface IProps {
   gameDispatch: IDispatch;
@@ -13,27 +14,18 @@ interface IProps {
 
 const SortButtons = ({ gameDispatch, sortOrder, config, gameId, playerId }: IProps) => {
   const { styleSortRank, styleSortSuit } = useSortStyles(sortOrder, config);
+  const sendMessage = useSendMessage();
   return (
     <FlexColumn style={{ width: 80, padding: 10 }}>
       <div
         style={styleSortRank}
-        onClick={() => gameDispatch({
-          type: 'sendMessage',
-          value: {
-            type: 'setSortOrder', value: { gameId, playerId, sortOrder: 'rank' }
-          }
-        })}
+        onClick={() => sendMessage('setSortOrder', { sortOrder: 'rank' })}
       >
         A-4
         </div>
       <div
         style={styleSortSuit}
-        onClick={() => gameDispatch({
-          type: 'sendMessage',
-          value: {
-            type: 'setSortOrder', value: { gameId, playerId, sortOrder: 'suit' }
-          }
-        })}
+        onClick={() => sendMessage('setSortOrder', { sortOrder: 'suit' })}
       >
         {String.fromCharCode(9824)}-{String.fromCharCode(9827)}
       </div>

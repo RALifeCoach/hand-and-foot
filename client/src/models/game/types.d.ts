@@ -1,16 +1,29 @@
-declare module 'Game' {
-  export type ISuit = 'C' | 'D' | 'H' | 'S' | 'J';
-  export type IRank = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K' | 'A';
-  export type IGameState = 'waitingToStart' | 'inPlay' | 'finished' | 'paused';
-  export type IPlayerState = 'playing' | 'waiting';
+declare module "Game" {
+  export type ISuit = "C" | "D" | "H" | "S" | "J";
+  export type IRank =
+    | "2"
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "J"
+    | "Q"
+    | "K"
+    | "A";
+  export type IGameState = "waitingToStart" | "inPlay" | "finished" | "waitingToReStart";
+  export type IPlayerState = "playing" | "waiting" | "draw";
   export type IPosition = 0 | 1 | 2 | 3;
+  export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
 
   export interface ICard {
     cardId: number;
     suit: ISuit;
     rank: IRank;
     pinValue: number;
-    selected?: boolean;
     cardText?: string;
   }
 
@@ -21,21 +34,17 @@ declare module 'Game' {
   }
 
   export interface IMeld {
-    cards: ICard[],
-    isComplete: boolean,
-  }
-
-  export interface IMelds {
-    redThrees: number;
-    cleanMelds: IMeld[];
-    dirtyMelds: IMeld[];
-    runs: IMeld[];
-    wildCards: IMeld[];
+    meldId: string;
+    cards: ICard[];
+    isComplete: boolean;
+    type: IMeldType;
+    rank?: IRank;
   }
 
   export interface ITeam {
     teamId: string;
-    melds: IMelds
+    isDown: boolean;
+    melds: {[meldId: string]: IMeld};
   }
 
   export interface IPlayerCurrent {
@@ -46,6 +55,7 @@ declare module 'Game' {
     cards: ICard[];
     isPlayerTurn: boolean;
     isInHand: boolean;
+    teamId: string;
   }
 
   export interface IPlayerOther {
@@ -56,13 +66,24 @@ declare module 'Game' {
     isInHand: boolean;
   }
 
-
   export interface IGame {
     gameId: number;
     gameName: string;
     gameState: IGameState;
     currentPlayer: IPlayerCurrent;
     otherPlayers: IPlayerOther[];
-    teams: {[teamId: string]:ITeam};
+    teams: { [teamId: string]: ITeam };
+    discardCard: ICard | null;
+    discountCount: number;
+    deckCount: number;
+  }
+
+  export type IRuleType = "canDraw7" | "canDiscardWild" | "redThreeScore" | "start7MinRound" | "wildCardMeldScore";
+  export interface IRules {
+    canDraw7: boolean;
+    redThreeScore: number;
+    canDiscardWild: boolean;
+    start7MinRound: number;
+    wildCardMeldScore: number;
   }
 }

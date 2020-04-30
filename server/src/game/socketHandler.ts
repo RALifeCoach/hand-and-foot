@@ -1,42 +1,76 @@
 import { IAction, IGameJson } from "Game";
-import addPlayer from "./addPlayer";
-import setSortOrder from "./setSortOrder";
-import moveCard from "./moveCard";
-import pinCard from "./pinCard";
-import drawCardPlayer from './drawCardPlayer';
+import addPlayer from "./functions/addPlayer";
+import setSortOrder from "./functions/setSortOrder";
+import moveCard from "./functions/moveCard";
+import pinCard from "./functions/pinCard";
+import drawCardPlayer from "./functions/drawCardPlayer";
+import discardCard from "./functions/discardCard";
+import playCards from "./functions/playCards";
+import { ACTION_RESPONSE } from '../../constants';
 
 const socketHandler = (
   game: IGameJson,
-  action: IAction
-): { sendToAll: boolean; message: string } => {
+  action: IAction,
+): { logIt: boolean, canUndo: boolean, sendToAll: boolean; message: string } => {
   switch (action.type) {
     case "addPlayer":
-      return addPlayer(
-        game,
-        action.value.playerId,
-        action.value.teamId,
-        action.value.position
-      );
+      return {
+        message: addPlayer(
+          game,
+          action.value.playerId,
+          action.value.teamId,
+          action.value.position
+        ),
+        ...ACTION_RESPONSE[action.type]
+      };
     case "setSortOrder":
-      return setSortOrder(game, action.value.playerId, action.value.sortOrder);
+      return {
+        message: setSortOrder(game, action.value.playerId, action.value.sortOrder),
+        ...ACTION_RESPONSE[action.type]
+      };
     case "moveCard":
-      return moveCard(
+      return {
+        message: moveCard(
         game,
         action.value.playerId,
         action.value.movingCardId,
         action.value.destCardId
-      );
-    case "moveCard":
-      return moveCard(
-        game,
-        action.value.playerId,
-        action.value.movingCardId,
-        action.value.destCardId
-      );
+        ),
+        ...ACTION_RESPONSE[action.type]
+      };
     case "setPin":
-      return pinCard(game, action.value.playerId, action.value.cardId);
+      return {
+        message: pinCard(game, action.value.playerId, action.value.cardId),
+        ...ACTION_RESPONSE[action.type]
+      };
     case "drawCard":
-      return drawCardPlayer(game, action.value.playerId);
+      return {
+        message: drawCardPlayer(game, action.value.playerId),
+        ...ACTION_RESPONSE[action.type]
+      };
+    case "discardCard":
+      return {
+        message: discardCard(game, action.value.playerId, action.value.toDiscard),
+        ...ACTION_RESPONSE[action.type]
+      };
+    case "playCards":
+      return {
+        message: playCards(
+        game,
+        action.value.playerId,
+        action.value.cardIds,
+        action.value.meldId,
+        action.value.meldType,
+        action.value.meldRank
+        ),
+        ...ACTION_RESPONSE[action.type]
+      };
+    case "disconnect":
+      game.gameState = "waitingToReStart";
+      return {
+        message: "",
+        ...ACTION_RESPONSE[action.type]
+       };
     default:
       console.log(action);
       throw new Error("unknown action type");

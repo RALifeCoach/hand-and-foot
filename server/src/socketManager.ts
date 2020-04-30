@@ -20,14 +20,10 @@ const socketManager = (server: any) => {
     socket.on("message", (message: string) => {
       const data: { type: string; value: any } = JSON.parse(message);
 
-      if (!gameController[data.value.gameId]) {
-        gameController[data.value.gameId] = { players: {} };
-        gameId = data.value.gameId;
-      }
-      gameController[data.value.gameId].players[data.value.playerId] = socket;
+      gameId = data.value.gameId;
       playerId = data.value.playerId;
 
-      messageStack.push(data);
+      messageStack.push({ ...data, socket });
       if (messageStack.length > 1) {
         return;
       }
@@ -40,6 +36,8 @@ const socketManager = (server: any) => {
       if (Object.keys(gameController[gameId].players).length === 0) {
         delete gameController[gameId];
       }
+
+      messageStack.push({ type: "disconnect", value: { gameId, playerId } });
     });
   });
 };

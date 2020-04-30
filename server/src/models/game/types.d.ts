@@ -14,10 +14,15 @@ declare module "Game" {
     | "Q"
     | "K"
     | "A";
-  export type IGameState = "waitingToStart" | "inPlay" | "finished";
+  export type IGameState =
+    | "waitingToStart"
+    | "inPlay"
+    | "finished"
+    | "waitingToReStart";
   export type IPosition = 0 | 1 | 2 | 3;
-  export type IPlayerState = "playing" | "waiting" | "drawing";
+  export type IPlayerState = "playing" | "waiting" | "draw";
   export type IRoundSequence = "random" | "sequential";
+  export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
 
   export interface ICard {
     cardId: number;
@@ -40,32 +45,34 @@ declare module "Game" {
   }
 
   export interface IMeld {
+    meldId: string;
     cards: ICard[];
     isComplete: boolean;
-  }
-
-  export interface IMelds {
-    redThrees: number;
-    cleanMelds: IMeld[];
-    dirtyMelds: IMeld[];
-    runs: IMeld[];
-    wildCards: IMeld[];
+    type: IMeldType;
+    rank?: IRank;
   }
 
   export interface ITeam {
     teamId: string;
-    melds: IMelds;
+    isDown: boolean;
+    melds: { [meldId: string]: IMeld };
   }
 
   export interface IRound {
     roundId: number;
     minimumScore: number;
+    played: boolean;
     teams: {
       [teamId: string]: {
         scoreBase: number;
         scoreCards: number;
-      }
-    }
+      };
+    };
+  }
+
+  export interface ILogEntry {
+    canUndo: boolean;
+    logId: string;
   }
 
   export interface IGameJson {
@@ -78,11 +85,13 @@ declare module "Game" {
       [teamId: string]: ITeam;
     };
     gameState: IGameState;
+    currentRound: number;
     numberOfPlayers: number;
     currentPlayerId: number;
     numberOfRounds: number;
     rounds: IRound[];
     roundSequence: IRoundSequence;
+    transactionLog: ILogEntry[];
   }
 
   export interface IGame {
@@ -100,6 +109,7 @@ declare module "Game" {
     isPlayerTurn: boolean;
     isInHand: boolean;
     sortOrder: string;
+    teamId: string;
   }
 
   export interface IPlayerOther {
@@ -109,12 +119,17 @@ declare module "Game" {
     cards: number;
     isPlayerTurn: boolean;
     isInHand: boolean;
+    teamId: string;
   }
 
   export interface IPlayerInfo {
+    gameId: number;
     gameState: IGameState;
     currentPlayer: IPlayerCurrent;
     otherPlayers: IPlayerOther[];
     teams: { [teamId: string]: ITeam };
+    discardCard: ICard | null;
+    discardCount: number;
+    deckCount: number;
   }
 }
