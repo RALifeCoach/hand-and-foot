@@ -1,6 +1,6 @@
 import { IGameJson, ICard } from "Game";
 import sortCards from "../utils/sortCards";
-const pinCard = (game: IGameJson, playerId: number, cardId: number): string => {
+const pinCard = (game: IGameJson, playerId: number, cardId: number) => {
   const player = game.players[playerId];
   if (!player) {
     throw new Error("player is missing");
@@ -32,10 +32,10 @@ const pinCard = (game: IGameJson, playerId: number, cardId: number): string => {
     player.foot = sortCards(newCards, player.sortOrder);
   }
 
-  return JSON.stringify({
+  return {
     type: "pinCard",
     value: { cards: player.isInHand ? player.hand : player.foot },
-  });
+  };
 };
 
 export default pinCard;

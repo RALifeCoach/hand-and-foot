@@ -61,6 +61,8 @@ const useGameReducer = (gameId: number, playerId: number) => {
             ...state,
             selected: selectCard(state.selected, action.value),
           };
+        case "clearError":
+          return { ...state, error: "" };
         case "setLastMessage":
           const message = action.value;
           switch (message.type) {
@@ -69,7 +71,6 @@ const useGameReducer = (gameId: number, playerId: number) => {
                 ...state,
                 lastMessage: action.value,
                 game: message.game,
-                cards: message.game.currentPlayer.cards,
                 sortOrder: message.game.currentPlayer.sortOrder,
               };
             case "sortOrder":
@@ -77,12 +78,43 @@ const useGameReducer = (gameId: number, playerId: number) => {
               return {
                 ...state,
                 sortOrder: newSortOrder,
-                cards: message.value.cards,
+                game: {
+                  ...state.game,
+                  currentPlayer: {
+                    ...state?.game?.currentPlayer,
+                    cards: message.value.cards,
+                  },
+                },
               };
             case "moveCard":
               return { ...state, cardMoving: null, cards: message.value.cards };
             case "pinCard":
-              return { ...state, cards: message.value.cards };
+              return {
+                ...state,
+                game: {
+                  ...state.game,
+                  currentPlayer: {
+                    ...state?.game?.currentPlayer,
+                    cards: message.value.cards,
+                  },
+                },
+              };
+            case "unmetMin":
+              return {
+                ...state,
+                error: "You do not have enough points on the board to go down",
+              };
+            case "cannotUndo":
+              if (Object.keys(state.selected).length > 0) {
+                return {
+                  ...state,
+                  selected: {},
+                };
+              }
+              return {
+                ...state,
+                error: "There is nothing to undo",
+              };
             default:
               debugger;
               throw new Error(`unknown message type ${action.value.type}`);
@@ -100,6 +132,7 @@ const useGameReducer = (gameId: number, playerId: number) => {
       selected: {},
       sortOrder: "",
       cardMoving: null,
+      error: "",
     } as IGameContextState
   );
 };

@@ -5,7 +5,7 @@ const setSortOrder = (
   game: IGameJson,
   playerId: string,
   sortOrder: string
-): string => {
+) => {
   const player = game.players[playerId];
   if (!player) {
     throw new Error("player is missing");
@@ -18,10 +18,10 @@ const setSortOrder = (
     player.foot = sortCards(player.foot, sortOrder);
   }
 
-  return JSON.stringify({
+  return {
     type: "sortOrder",
     value: { sortOrder, cards: player.isInHand ? player.hand : player.foot },
-  });
+  };
 };
 
 export default setSortOrder;

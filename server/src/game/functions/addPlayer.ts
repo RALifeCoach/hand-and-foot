@@ -6,7 +6,7 @@ const addPlayer = (
   playerId: number,
   teamId: string,
   position: number,
-): string => {
+) => {
   const player = game.players[playerId];
   if (player) {
     if (player.teamId !== teamId || player.position !== position) {
@@ -14,7 +14,7 @@ const addPlayer = (
         "player is already present at a different team or position"
       );
     }
-    return '';
+    return null;
   }
   const positionExists = Object.values(game.players).some(
     (player) => player.position === position
@@ -42,7 +42,7 @@ const addPlayer = (
     } as ITeam;
   }
 
-  return '';
+  return null;
 };
 
 export default addPlayer;

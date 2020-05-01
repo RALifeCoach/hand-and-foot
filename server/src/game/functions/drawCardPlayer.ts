@@ -3,7 +3,7 @@ import drawCards from "../utils/drawCards";
 const drawCardPlayer = (
   game: IGameJson,
   playerId: number
-): string => {
+) => {
   const player = game.players[playerId];
   if (!player) {
     console.log(playerId, game.players);
@@ -20,7 +20,7 @@ const drawCardPlayer = (
     player.playerState = 'playing';
   }
 
-  return '';
+  return null;
 };
 
 export default drawCardPlayer;

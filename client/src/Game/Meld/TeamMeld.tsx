@@ -15,8 +15,8 @@ const TeamMeld = ({ melds, type, title }: IProps) => {
 
   return (
     <>
-      <FlexRow>
-        <FlexRow style={{ width: 100 }}>
+      <FlexRow style={{width: '100%'}}>
+        <FlexRow>
           <div>{title}:&nbsp;</div>
           <div>{complete.length}</div>
         </FlexRow>
@@ -26,6 +26,7 @@ const TeamMeld = ({ melds, type, title }: IProps) => {
             cards={meld.cards}
             type={type}
             rank={meld.rank}
+            key={meld.meldId}
           />
         ))}
       </FlexRow>

@@ -24,6 +24,7 @@ interface IProps {
 const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
   const cards = useSelectedCards(game.currentPlayer.cards, selected);
   const playValues = useCanPlay(game, cards, null);
+
   const sendMessage = useSendMessage();
 
   const handlePlay = useCallback(() => {
@@ -56,7 +57,7 @@ const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
           game={game}
           selected={selected}
         />
-        <div
+        <div style={{ width: '100%', position: 'relative', paddingLeft: 80 }}
           onClick={handlePlay}
         >
           <TeamMelds
@@ -64,6 +65,18 @@ const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
           />
         </div>
       </FlexRow>
+      {Object.values(game.teams)
+        .filter(team => team.teamId !== game.currentPlayer.teamId)
+        .map(team => (
+          <FlexRow
+            style={{ height: 120, width: '100%', position: 'relative', paddingLeft: 88 }}
+            key={team.teamId}
+          >
+            <TeamMelds
+              team={team}
+            />
+          </FlexRow>
+        ))}
     </Paper>
   );
 };

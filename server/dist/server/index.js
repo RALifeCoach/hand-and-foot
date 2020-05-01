@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const http = require("http");
-const socketManager_1 = require("./src/socketManager");
+const socketManager_1 = require("./src/socket/socketManager");
 const ApiRoutes_1 = require("./src/routes/ApiRoutes");
 const cors = require("cors");
 const AuthenticationRoutes_1 = require("./src/routes/authentication/AuthenticationRoutes");

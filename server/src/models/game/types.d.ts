@@ -92,6 +92,7 @@ declare module "Game" {
     rounds: IRound[];
     roundSequence: IRoundSequence;
     transactionLog: ILogEntry[];
+    minimumPoints: number;
   }
 
   export interface IGame {

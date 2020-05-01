@@ -23,7 +23,7 @@ const PlayerAction = ({ game }: IProps) => {
     return (
       <Button
         variant="contained"
-        style={{ maxWidth: 100, maxHeight: 80 }}
+        style={{ maxWidth: 100, maxHeight: 80, minWidth: 100, minHeight: 80 }}
         onClick={() => sendMessage('drawCard', {})}
       >
         <FlexColumn>
@@ -38,9 +38,10 @@ const PlayerAction = ({ game }: IProps) => {
     return (
       <Button
         variant="contained"
-        style={{ fontSize: 20, maxWidth: 100, maxHeight: 80 }}
+        style={{ fontSize: 20, maxWidth: 100, maxHeight: 80, minWidth: 100, minHeight: 80 }}
+        onClick={() => sendMessage('undo', {})}
       >
-        Play or<br />Discard
+        Undo
       </Button>
     );
   }

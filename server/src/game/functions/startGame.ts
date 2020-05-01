@@ -38,6 +38,8 @@ const startGame = (numberOfPlayers: number) => {
     rounds: ROUNDS.slice(0, numberOfRounds),
     roundSequence: "sequential",
     currentRound: -1,
+    transactionLog: [],
+    minimumPoints: 0,
   } as IGameJson;
 };
 

@@ -11,6 +11,7 @@ export interface IGameContextState {
   selected: {[cardId: string]: boolean};
   sortOrder: string;
   cardMoving: ICard | null;
+  error: string;
 }
 
 export interface IGameContext {

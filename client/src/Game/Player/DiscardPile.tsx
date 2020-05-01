@@ -7,7 +7,7 @@ import useSendMessage from "../hooks/useSendMessage";
 
 interface IProps {
   game: IGame;
-  selected: {[cardId: string]: boolean};
+  selected: { [cardId: string]: boolean };
 }
 
 const DiscardPile = ({ game, selected }: IProps) => {
@@ -26,7 +26,7 @@ const DiscardPile = ({ game, selected }: IProps) => {
   }, [toDiscard, canDraw7, sendMessage]);
 
   return (
-    <div style={{ position: 'relative', width: 80, display: 'inline-block' }} >
+    <div style={{ position: 'relative', zIndex: 500 }} >
       <PlayingCard
         card={game.discardCard === null ? { cardText: 'Empty.' } : game.discardCard}
         imageLocation={''}

@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { ITeam } from 'Game';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import TeamMeld from './TeamMeld';
+import { Typography } from '@material-ui/core';
 
 interface IProps {
   team: ITeam;
@@ -14,8 +15,8 @@ const TeamMelds = ({ team }: IProps) => {
   const runs = Object.values(team.melds).filter(meld => meld.type === 'run');
   const wild = Object.values(team.melds).filter(meld => meld.type === 'wild');
   return (
-    <FlexColumn>
-      <div>{team.teamId}</div>
+    <FlexColumn style={{width: '100%'}}>
+      <Typography variant="h4">{team.teamId}</Typography>
       <TeamMeld
         melds={redThrees}
         type="3s"

@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as http from "http";
-import socketManager from "./src/socketManager";
+import socketManager from "./src/socket/socketManager";
 import ApiRoutes from "./src/routes/ApiRoutes";
 import * as cors from "cors";
 import AuthenticationRoutes from "./src/routes/authentication/AuthenticationRoutes";

@@ -1,5 +1,5 @@
 import { IGameJson } from "Game";
-import { IGameController } from "../../socketManager";
+import { IGameController } from "../../socket/socketManager";
 import startNewRound from "../functions/startNewRound";
 
 const startPlaying = (

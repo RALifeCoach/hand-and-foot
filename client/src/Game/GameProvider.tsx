@@ -3,6 +3,7 @@ import GameContext from "./GameContext";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import useGameReducer from './hooks/useGameReducer';
 import { IRules } from 'Game';
+import SnackMessage from '../shared/SnackMessage';
 
 const STATIC_OPTIONS = {
   shouldReconnect: () => true, //Will attempt to reconnect on all close events, such as server shutting down
@@ -68,6 +69,12 @@ const GameProvider = ({ children, gameId, playerId, teamId, position, rules }: I
         }}
       >
         {children}
+        <SnackMessage
+          open={Boolean(state.error)}
+          message={state.error}
+          type="error"
+          onClose={() => dispatch({type: 'clearError', value: null})}
+        />
       </GameContext.Provider>
     </>
   );

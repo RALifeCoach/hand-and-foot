@@ -53,7 +53,9 @@ interface IProps {
   onMouseEnter?: () => void;
 }
 
-export default function PlayingCard({ card, selected = false, left, top, onSelect, styling, onMouseEnter, ...props }: IProps) {
+export default function PlayingCard(
+  { card, selected = false, left, top, onSelect, styling, onMouseEnter, ...props }: IProps
+) {
   const config = Object.assign({}, DEFAULTS, styling);
   const selectDebounce = useMemo(() => {
     return new Debounce(() => {

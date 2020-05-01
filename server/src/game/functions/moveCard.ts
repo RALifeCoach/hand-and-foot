@@ -67,7 +67,7 @@ const moveCard = (
   playerId: string,
   sourceCardId: number,
   destCardId: number
-): string => {
+) => {
   const player = game.players[playerId];
   if (!player) {
     throw new Error("player is missing");
@@ -83,10 +83,10 @@ const moveCard = (
     );
   }
 
-  return JSON.stringify({
+  return {
     type: "moveCard",
     value: { cards: player.isInHand ? player.hand : player.foot },
-  });
+  };
 };
 
 export default moveCard;

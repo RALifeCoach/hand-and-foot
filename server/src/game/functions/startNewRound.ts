@@ -1,6 +1,10 @@
 import { IGameJson } from "Game";
 import startNewTurn from "./startNewTurn";
 
+const ROUND_MINIMUM = [
+  50, 90, 120, 150, 190, 220, 250, 290
+];
+
 const startNewRound = (game: IGameJson) => {
   if (game.roundSequence === 'random') {
     const unplayedRounds = game.rounds.filter(round => !round.played);
@@ -9,6 +13,7 @@ const startNewRound = (game: IGameJson) => {
   } else {
     game.currentRound = game.currentRound + 1;
   }
+  game.minimumPoints = ROUND_MINIMUM[game.currentRound];
   Object.keys(game.teams).forEach(teamId => {
     const team = game.teams[teamId];
     team.isDown = false;
