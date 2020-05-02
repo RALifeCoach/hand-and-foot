@@ -1,8 +1,9 @@
 import { ICard } from "Game";
+import isWildCard from "./isWildCard";
 
 const mapMeldCards = (cards: ICard[]) => {
   return cards.reduce((mapping, card) => {
-    if (card.suit === 'J' || card.rank === '2') {
+    if (isWildCard(card)) {
       mapping.wild += 1;
     } else {
       mapping.naturals += 1;

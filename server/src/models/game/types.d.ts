@@ -93,6 +93,14 @@ declare module "Game" {
     roundSequence: IRoundSequence;
     transactionLog: ILogEntry[];
     minimumPoints: number;
+    canOverFillMeld: boolean;
+    redThreeScore: number;
+    wildCardMeldScore: number;
+    runScore: number;
+    cleanScore: number,
+    dirtyScore: number,
+    canPickupWithWild: boolean,
+    canLockDiscards: boolean,
   }
 
   export interface IGame {

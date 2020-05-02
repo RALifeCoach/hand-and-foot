@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import FlexColumn from "../../shared/flex-grid/FlexColumn";
 import Hand from "../Hand/Hand";
 import { IPlayerCurrent, ICard, IGame } from "Game";
@@ -12,6 +12,7 @@ import TeamMelds from "../Meld/TeamMelds";
 import useSendMessage from "../hooks/useSendMessage";
 import useSelectedCards from "../hooks/useSelectedCards";
 import useCanPlay from "../hooks/useCanPlay";
+import SnackMessage from "../../shared/SnackMessage";
 
 interface IProps {
   player: IPlayerCurrent;
@@ -22,62 +23,76 @@ interface IProps {
 }
 
 const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
+  const [error, setError] = useState('');
   const cards = useSelectedCards(game.currentPlayer.cards, selected);
-  const playValues = useCanPlay(game, cards, null);
+  const getPlayValues = useCanPlay(game, null);
 
   const sendMessage = useSendMessage();
 
   const handlePlay = useCallback(() => {
+    const playValues = getPlayValues(cards);
     if (playValues) {
+      if (playValues.error) {
+        setError(playValues.error);
+        return;
+      }
       sendMessage('playCards', { cardIds: cards.map(card => card.cardId), meldId: null, ...playValues })
     }
-  }, [playValues, cards, sendMessage]);
+  }, [getPlayValues, cards, sendMessage]);
 
   return (
-    <Paper elevation={1} style={{ margin: 8 }}>
-      <FlexColumn>
-        <div style={{ marginLeft: 16 }}>Player {player.playerId}</div>
-        <FlexRow>
-          <OtherPlayers game={game as IGame} />
-          <Spacer multiplier={2} />
-          <PlayerAction
-            game={game}
-          />
-        </FlexRow>
-        <Hand
-          options={{}}
-          cards={game.currentPlayer.cards}
-          selected={selected}
-          sortOrder={sortOrder}
-          cardMoving={cardMoving}
-        />
-      </FlexColumn>
-      <FlexRow style={{ height: 120, width: '100%', position: 'relative', paddingLeft: 8 }}>
-        <DiscardPile
-          game={game}
-          selected={selected}
-        />
-        <div style={{ width: '100%', position: 'relative', paddingLeft: 80 }}
-          onClick={handlePlay}
-        >
-          <TeamMelds
-            team={game.teams[game.currentPlayer.teamId]}
-          />
-        </div>
-      </FlexRow>
-      {Object.values(game.teams)
-        .filter(team => team.teamId !== game.currentPlayer.teamId)
-        .map(team => (
-          <FlexRow
-            style={{ height: 120, width: '100%', position: 'relative', paddingLeft: 88 }}
-            key={team.teamId}
-          >
-            <TeamMelds
-              team={team}
+    <>
+      <Paper elevation={1} style={{ margin: 8 }}>
+        <FlexColumn>
+          <div style={{ marginLeft: 16 }}>Player {player.playerId}</div>
+          <FlexRow>
+            <OtherPlayers game={game as IGame} />
+            <Spacer multiplier={2} />
+            <PlayerAction
+              game={game}
             />
           </FlexRow>
-        ))}
-    </Paper>
+          <Hand
+            options={{}}
+            cards={game.currentPlayer.cards}
+            selected={selected}
+            sortOrder={sortOrder}
+            cardMoving={cardMoving}
+          />
+        </FlexColumn>
+        <FlexRow style={{ height: 120, width: '100%', position: 'relative', paddingLeft: 8 }}>
+          <DiscardPile
+            game={game}
+            selected={selected}
+          />
+          <div style={{ width: '100%', position: 'relative', paddingLeft: 80 }}
+            onClick={handlePlay}
+          >
+            <TeamMelds
+              team={game.teams[game.currentPlayer.teamId]}
+            />
+          </div>
+        </FlexRow>
+        {Object.values(game.teams)
+          .filter(team => team.teamId !== game.currentPlayer.teamId)
+          .map(team => (
+            <FlexRow
+              style={{ height: 120, width: '100%', position: 'relative', paddingLeft: 88 }}
+              key={team.teamId}
+            >
+              <TeamMelds
+                team={team}
+              />
+            </FlexRow>
+          ))}
+      </Paper>
+      <SnackMessage
+        open={Boolean(error)}
+        message={error}
+        type="error"
+        onClose={() => setError('')}
+      />
+    </>
   );
 };
 

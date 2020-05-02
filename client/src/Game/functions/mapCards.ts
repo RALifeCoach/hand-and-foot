@@ -1,9 +1,16 @@
 import { ICard } from "Game";
+import isWildCard from "./isWildCard";
+
+export interface ICardMapping {
+  others: { [type: string]: number };
+  suits: { [suit: string]: number };
+  ranks: { [rank: string]: number };
+}
 
 const mapCards = (cards: ICard[]) => {
   return cards.reduce(
     (mapping, card) => {
-      if (card.suit === "J" || card.rank === "2") {
+      if (isWildCard(card)) {
         if (!mapping.others["wild"]) {
           mapping.others["wild"] = 0;
         }
@@ -34,11 +41,7 @@ const mapCards = (cards: ICard[]) => {
       mapping.ranks[card.rank] += 1;
       return mapping;
     },
-    { others: {}, suits: {}, ranks: {} } as {
-      others: { [type: string]: number };
-      suits: { [suit: string]: number };
-      ranks: { [rank: string]: number };
-    }
+    { others: {}, suits: {}, ranks: {} } as ICardMapping
   );
 };
 

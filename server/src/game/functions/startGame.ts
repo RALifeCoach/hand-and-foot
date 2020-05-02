@@ -26,21 +26,53 @@ const startGame = (numberOfPlayers: number) => {
       pinValue: 0,
     });
   }
-  return {
-    deck,
-    players: {},
-    teams: {},
-    discard: [],
-    gameState: "waitingToStart",
-    numberOfPlayers: Number(numberOfPlayers),
-    currentPlayerId: 0,
-    numberOfRounds: numberOfRounds,
-    rounds: ROUNDS.slice(0, numberOfRounds),
-    roundSequence: "sequential",
-    currentRound: -1,
-    transactionLog: [],
-    minimumPoints: 0,
-  } as IGameJson;
+  return Number(numberOfPlayers) === 3
+    ? {
+      deck,
+      players: {},
+      teams: {},
+      discard: [],
+      gameState: "waitingToStart",
+      numberOfPlayers: Number(numberOfPlayers),
+      currentPlayerId: 0,
+      numberOfRounds: numberOfRounds,
+      rounds: ROUNDS.slice(0, numberOfRounds),
+      roundSequence: "sequential",
+      currentRound: -1,
+      transactionLog: [],
+      minimumPoints: 0,
+      canOverFillMeld: false,
+      redThreeScore: 100,
+      wildCardMeldScore: 1000,
+      runScore: 2000,
+      cleanScore: 500,
+      dirtyScore: 300,
+      canPickupWithWild: true,
+      canLockDiscards: true,
+    } as IGameJson
+    : {
+      deck,
+      players: {},
+      teams: {},
+      discard: [],
+      gameState: "waitingToStart",
+      numberOfPlayers: Number(numberOfPlayers),
+      currentPlayerId: 0,
+      numberOfRounds: numberOfRounds,
+      rounds: ROUNDS.slice(0, numberOfRounds),
+      roundSequence: "random",
+      currentRound: -1,
+      transactionLog: [],
+      minimumPoints: 0,
+      canOverFillMeld: true,
+      redThreeScore: -500,
+      wildCardMeldScore: 500,
+      runScore: 1000,
+      cleanScore: 300,
+      dirtyScore: 100,
+      canPickupWithWild: false,
+      canLockDiscards: false,
+    } as IGameJson;
 };
 
 export default startGame;
