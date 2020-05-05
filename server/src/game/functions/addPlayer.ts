@@ -1,5 +1,4 @@
-import { IGameJson, IPlayer, ITeam } from "Game";
-import drawCards from "../utils/drawCards";
+import { IGameJson, IPlayer, ITeam, ICard } from "Game";
 
 const addPlayer = (
   game: IGameJson,
@@ -29,8 +28,8 @@ const addPlayer = (
     position,
     playerState: "waiting",
     numberOfCardsToDraw: 0,
-    hand: drawCards(game.deck, 11),
-    foot: drawCards(game.deck, 11),
+    hand: [] as ICard[],
+    foot: [] as ICard[],
     isInHand: true,
   } as IPlayer;
 

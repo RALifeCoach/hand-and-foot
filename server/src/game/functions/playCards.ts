@@ -1,7 +1,8 @@
 import { IGameJson, IMeldType, IRank } from "Game";
 import * as uuid from "uuid";
 import logGameState from "../../socket/logGameState";
-import isRedThree from "./isRedThree";
+import isRedThree from "../utils/isRedThree";
+import isWildCard from "../utils/isWildCard";
 
 const playCards = (
   gameId: number,
@@ -9,7 +10,7 @@ const playCards = (
   playerId: number,
   cardIds: number[],
   meldId: string,
-  meldType: IMeldType | undefined,
+  meldType: IMeldType,
   meldRank: IRank | undefined,
   resolve: any
 ) => {
@@ -39,16 +40,26 @@ const playCards = (
           meldId: thisMeldId,
           cards: [],
           isComplete: isRedThree(card),
-          type: meldType as IMeldType,
+          type: meldType,
           rank: meldRank,
         };
       }
+      if (isRedThree(card)) {
+        player.numberOfCardsToDraw += 1;
+      }
       const meld = team.melds[thisMeldId];
+      if (meld.type === "clean" && isWildCard(card)) {
+        meld.type = "dirty";
+      }
       meld.cards.push(...cards.splice(playCardIndex, 1));
     });
 
     if (!game.canOverFillMeld && team.melds[thisMeldId].cards.length > 6) {
       team.melds[thisMeldId].isComplete = true;
+    }
+
+    if (cards.length === 0 && player.playerState !== "draw7") {
+      player.isInHand = false;
     }
 
     resolve(null);

@@ -37,7 +37,7 @@ const canPlayFindExistingMelds = (
       // may be adding to meld
       if (meld.type === "clean" || meld.type === "dirty") {
         return (
-          Object.keys(mapping.ranks).length === 1 && cards[0].rank === meld.rank
+          Object.keys(mapping.ranks).length === 1 && mapping.ranks[meld.rank || '']
         );
       }
 

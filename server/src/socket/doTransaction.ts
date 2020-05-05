@@ -26,7 +26,7 @@ const doTransaction = (
       ) {
         game.gameState = "inPlay";
       }
-      resolve({ game, message: message === null ? '' : JSON.stringify(message) });
+      resolve({ newGame: game, message: message === null ? '' : JSON.stringify(message) });
   })
 };
 

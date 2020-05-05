@@ -19,7 +19,6 @@ const startPlaying = (
     return;
   }
   let currentPlayerIndex = Math.floor(Math.random() * game.numberOfPlayers);
-  console.log("index", currentPlayerIndex);
   if (currentPlayerIndex >= game.numberOfPlayers) {
     currentPlayerIndex = 0;
   }

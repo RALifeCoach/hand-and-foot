@@ -18,9 +18,10 @@ declare module "Game" {
     | "waitingToStart"
     | "inPlay"
     | "finished"
-    | "waitingToReStart";
+    | "waitingToReStart"
+    | "askRoundEnd";
   export type IPosition = 0 | 1 | 2 | 3;
-  export type IPlayerState = "playing" | "waiting" | "draw";
+  export type IPlayerState = "playing" | "waiting" | "draw" | "draw7";
   export type IRoundSequence = "random" | "sequential";
   export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
 
@@ -78,6 +79,7 @@ declare module "Game" {
   export interface IGameJson {
     deck: ICard[];
     discard: ICard[];
+    pileIsLocked: boolean;
     players: {
       [playerId: string]: IPlayer;
     };
@@ -97,10 +99,11 @@ declare module "Game" {
     redThreeScore: number;
     wildCardMeldScore: number;
     runScore: number;
-    cleanScore: number,
-    dirtyScore: number,
-    canPickupWithWild: boolean,
-    canLockDiscards: boolean,
+    cleanScore: number;
+    dirtyScore: number;
+    canPickupWithWild: boolean;
+    canLockDiscards: boolean;
+    askRoundEnd: boolean;
   }
 
   export interface IGame {

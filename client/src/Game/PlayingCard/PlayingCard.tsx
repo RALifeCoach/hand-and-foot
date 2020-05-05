@@ -3,6 +3,7 @@ import Debounce from '../../utils/debounce';
 import CardIcons from './CardIcons';
 import { ICard, IDummyCard } from "Game";
 import { CSSProperties } from '@material-ui/styles';
+import { SUIT_IMAGES } from '../../constants';
 
 const DEFAULTS = {
   buttonHighlight: '#f00',
@@ -17,28 +18,7 @@ const DEFAULTS = {
   pinOffsetTop: '60%',
   moveOffsetTop: '80%',
   besideOffsetLeft: '30%',
-  suitConstants: {
-    C: {
-      image: String.fromCharCode(9827),
-      color: '#000'
-    },
-    D: {
-      image: String.fromCharCode(9830),
-      color: '#F00'
-    },
-    H: {
-      image: String.fromCharCode(9829),
-      color: '#F00'
-    },
-    S: {
-      image: String.fromCharCode(9824),
-      color: '#000'
-    },
-    J: {
-      image: String.fromCharCode(9733),
-      color: '#00F'
-    }
-  }
+  SUIT_IMAGES,
 };
 
 interface IProps {
@@ -79,7 +59,7 @@ export default function PlayingCard(
     background: config.cardBackground,
     borderRadius: 12,
     boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.25)',
-    color: card.cardText ? config.textColor : config.suitConstants[card.suit || 'C'].color
+    color: card.cardText ? config.textColor : config.SUIT_IMAGES[card.suit || 'C'].color
   };
   const styleText = {
     fontSize: 10,

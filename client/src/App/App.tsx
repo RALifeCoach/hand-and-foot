@@ -68,6 +68,8 @@ const App = () => {
               canDiscardWild: true,
               start7MinRound: 4,
               wildCardMeldScore: 2000,
+              canOverfillMeld: false,
+              
             }}
           >
             <Game />

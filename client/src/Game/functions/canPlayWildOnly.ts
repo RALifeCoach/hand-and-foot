@@ -1,16 +1,17 @@
-import { ICard, IMeld, IMeldType, IRank } from "Game";
+import { ICard, IMeld } from "Game";
 import mapMeldCards from "./mapMeldCards";
+import { ICanPlay } from "../hooks/useCanPlay";
 
 const canPlayWildOnly = (
   processMeld: IMeld | null,
   cards: ICard[],
   wildCardMeldScore: number
-): { meldType?: IMeldType; meldRank?: IRank; error: string } | null => {
+): ICanPlay => {
   // wild cards - okay if new meld and at least 3 cards (if wild card melds allowed)
   if (processMeld === null) {
     return cards.length > 2 && wildCardMeldScore > 0
       ? { meldType: "wild", error: "" }
-      : null;
+      : { error: "You cannot make a new meld with those cards"};
   }
   // okay if adding to wild card meld
   if (processMeld.type === "wild") {
@@ -21,10 +22,10 @@ const canPlayWildOnly = (
   if (["clean", "dirty"].indexOf(processMeld.type) > -1) {
     return (mappedMeld?.wild || 0) + cards.length < (mappedMeld?.naturals || 0)
       ? { meldType: "dirty", meldRank: processMeld.rank, error: "" }
-      : null;
+      : { error: "There must be fewer wilds than naturals" };
   }
   // can't add to run
-  return null;
+  return { error: "You can't add a wild card to a run" };
 };
 
 export default canPlayWildOnly;

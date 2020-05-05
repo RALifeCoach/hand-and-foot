@@ -1,5 +1,6 @@
 import { IGameJson } from "Game";
 import startNewTurn from "./startNewTurn";
+import drawCards from "../utils/drawCards";
 
 const ROUND_MINIMUM = [
   50, 90, 120, 150, 190, 220, 250, 290
@@ -13,6 +14,10 @@ const startNewRound = (game: IGameJson) => {
   } else {
     game.currentRound = game.currentRound + 1;
   }
+  Object.keys(game.players).forEach(playerId => {
+    game.players[playerId].hand = drawCards(game.deck, 11);
+    game.players[playerId].foot = drawCards(game.deck, 11);
+  });
   game.minimumPoints = ROUND_MINIMUM[game.currentRound];
   Object.keys(game.teams).forEach(teamId => {
     const team = game.teams[teamId];

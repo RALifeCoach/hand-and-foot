@@ -2,12 +2,8 @@ import { IGameJson } from "Game";
 import * as uuid from "uuid";
 import Database from "../Database";
 
-const logGameState = (
-  gameId: number,
-  game: IGameJson,
-  canUndo: boolean,
-) => {
-  return new Promise(resolve => {
+const logGameState = (gameId: number, game: IGameJson, canUndo: boolean) => {
+  return new Promise((resolve) => {
     const logId = uuid.v4();
     const sql = `insert into game_log values ('${logId}', ${gameId}, '${JSON.stringify(
       game
@@ -17,7 +13,7 @@ const logGameState = (
         console.log(err);
         throw err;
       }
-      game.transactionLog.push({
+      game.transactionLog.unshift({
         canUndo,
         logId,
       });

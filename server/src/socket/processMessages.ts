@@ -33,15 +33,15 @@ const processMessages = (
     }
     const game: IGameJson = JSON.parse(games[0].GameJson);
 
-    new Promise<{ game: IGameJson; message: string }>((resolve) => {
+    new Promise<{ newGame: IGameJson; message: string }>((resolve) => {
       if (data.type === "undo") {
         undoTransaction(game, resolve);
       } else {
         doTransaction(game, data, gameController, gameId, resolve);
       }
-    }).then(({ game, message }: { game: IGameJson; message: string }) => {
+    }).then(({ newGame, message }: { newGame: IGameJson; message: string }) => {
       sendResponse(
-        game,
+        newGame,
         message,
         gameController,
         data.value.gameId,

@@ -11,11 +11,11 @@ const undoTransaction = (game: IGameJson, resolve: any) => {
         throw new Error(`undo game does not exist ${undo.logId}`);
       }
       const undoGame: IGameJson = JSON.parse(games[0].GameJson);
-      resolve({ game: undoGame, message: "" });
+      resolve({ newGame: undoGame, message: "" });
     });
   } else {
     resolve({
-      game,
+      newGame: game,
       message: JSON.stringify({
         type: "cannotUndo",
         value: "",

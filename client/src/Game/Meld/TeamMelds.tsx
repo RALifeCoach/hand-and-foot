@@ -1,14 +1,17 @@
 import React, { memo } from 'react';
-import { ITeam } from 'Game';
+import { ITeam, IGame, ICard } from 'Game';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import TeamMeld from './TeamMeld';
 import { Typography } from '@material-ui/core';
 
 interface IProps {
   team: ITeam;
+  game: IGame;
+  isCurrentPlayer?: boolean;
+  selectedCards: ICard[],
 }
 
-const TeamMelds = ({ team }: IProps) => {
+const TeamMelds = ({ team, game, isCurrentPlayer, selectedCards }: IProps) => {
   const redThrees = Object.values(team.melds).filter(meld => meld.type === '3s');
   const clean = Object.values(team.melds).filter(meld => meld.type === 'clean');
   const dirty = Object.values(team.melds).filter(meld => meld.type === 'dirty');
@@ -19,28 +22,38 @@ const TeamMelds = ({ team }: IProps) => {
       <Typography variant="h4">{team.teamId}</Typography>
       <TeamMeld
         melds={redThrees}
-        type="3s"
         title="Red Threes"
+        game={game}
+        isCurrentPlayer={isCurrentPlayer}
+        selectedCards={selectedCards}
       />
       <TeamMeld
         melds={clean}
-        type="clean"
         title="Clean Melds"
+        game={game}
+        isCurrentPlayer={isCurrentPlayer}
+        selectedCards={selectedCards}
       />
       <TeamMeld
         melds={dirty}
-        type="dirty"
         title="Dirty Melds"
+        game={game}
+        isCurrentPlayer={isCurrentPlayer}
+        selectedCards={selectedCards}
       />
       <TeamMeld
         melds={runs}
-        type="run"
         title="Runs"
+        game={game}
+        isCurrentPlayer={isCurrentPlayer}
+        selectedCards={selectedCards}
       />
       <TeamMeld
         melds={wild}
-        type="wild"
         title="Wild Cards"
+        game={game}
+        isCurrentPlayer={isCurrentPlayer}
+        selectedCards={selectedCards}
       />
     </FlexColumn>
   );

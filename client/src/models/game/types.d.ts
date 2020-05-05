@@ -14,7 +14,11 @@ declare module "Game" {
     | "Q"
     | "K"
     | "A";
-  export type IGameState = "waitingToStart" | "inPlay" | "finished" | "waitingToReStart";
+  export type IGameState =
+    | "waitingToStart"
+    | "inPlay"
+    | "finished"
+    | "waitingToReStart";
   export type IPlayerState = "playing" | "waiting" | "draw";
   export type IPosition = 0 | 1 | 2 | 3;
   export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
@@ -44,7 +48,7 @@ declare module "Game" {
   export interface ITeam {
     teamId: string;
     isDown: boolean;
-    melds: {[meldId: string]: IMeld};
+    melds: { [meldId: string]: IMeld };
   }
 
   export interface IPlayerCurrent {
@@ -76,14 +80,22 @@ declare module "Game" {
     discardCard: ICard | null;
     discountCount: number;
     deckCount: number;
+    pileIsLocked: boolean;
   }
 
-  export type IRuleType = "canDraw7" | "canDiscardWild" | "redThreeScore" | "start7MinRound" | "wildCardMeldScore";
+  export type IRuleType =
+    | "canDraw7"
+    | "canDiscardWild"
+    | "redThreeScore"
+    | "start7MinRound"
+    | "wildCardMeldScore"
+    | "canOverfillMeld";
   export interface IRules {
     canDraw7: boolean;
     redThreeScore: number;
     canDiscardWild: boolean;
     start7MinRound: number;
     wildCardMeldScore: number;
+    canOverfillMeld: boolean;
   }
 }

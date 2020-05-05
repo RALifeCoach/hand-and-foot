@@ -10,11 +10,8 @@ const drawCardPlayer = (
     throw new Error("player is missing");
   }
 
-  if (player.isInHand) {
-    player.hand.push(...drawCards(game.deck, 1));
-  } else {
-    player.foot.push(...drawCards(game.deck, 1));
-  }
+  const cards = player.isInHand ? player.hand : player.foot;
+  cards.push(...drawCards(game.deck, 1));
   player.numberOfCardsToDraw--;
   if (player.playerState === 'draw' && player.numberOfCardsToDraw === 0) {
     player.playerState = 'playing';

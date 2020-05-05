@@ -1,5 +1,6 @@
 import {IGameJson, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from "Game";
 import GameValidate from "../GameValidate";
+import isWildCard from "./isWildCard";
 
 const buildPlayerInfo = (game: IGameJson, gameId: number, playerId: number): IPlayerInfo => {
   const currentPlayer = game.players[playerId];
@@ -44,6 +45,7 @@ const buildPlayerInfo = (game: IGameJson, gameId: number, playerId: number): IPl
     discardCard: game.discard.length > 0 ? game.discard[0] : null,
     discardCount: game.discard.length,
     deckCount: game.deck.length,
+    pileIdLocked: game.discard.some(card => isWildCard(card)),
   } as IPlayerInfo;
 }
 

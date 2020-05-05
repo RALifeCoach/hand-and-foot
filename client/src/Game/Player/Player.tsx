@@ -26,18 +26,15 @@ const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
   const [error, setError] = useState('');
   const cards = useSelectedCards(game.currentPlayer.cards, selected);
   const getPlayValues = useCanPlay(game, null);
-
   const sendMessage = useSendMessage();
 
   const handlePlay = useCallback(() => {
     const playValues = getPlayValues(cards);
-    if (playValues) {
-      if (playValues.error) {
-        setError(playValues.error);
-        return;
-      }
-      sendMessage('playCards', { cardIds: cards.map(card => card.cardId), meldId: null, ...playValues })
+    if (playValues.error) {
+      setError(playValues.error);
+      return;
     }
+    sendMessage('playCards', { cardIds: cards.map(card => card.cardId), ...playValues })
   }, [getPlayValues, cards, sendMessage]);
 
   return (
@@ -70,6 +67,9 @@ const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
           >
             <TeamMelds
               team={game.teams[game.currentPlayer.teamId]}
+              game={game}
+              isCurrentPlayer={game.currentPlayer.isPlayerTurn}
+              selectedCards={cards}
             />
           </div>
         </FlexRow>
@@ -82,6 +82,8 @@ const Player = ({ player, game, selected, sortOrder, cardMoving }: IProps) => {
             >
               <TeamMelds
                 team={team}
+                game={game}
+                selectedCards={cards}
               />
             </FlexRow>
           ))}

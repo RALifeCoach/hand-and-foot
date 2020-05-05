@@ -1,34 +1,24 @@
 import { IGame } from "Game";
-import useSelectedCards from "./useSelectedCards";
 import useGetGameRule from "./useGetGameRule";
+import useSelectedCards from "./useSelectedCards";
+import canDiscard from "../functions/canDiscard";
+import { useCallback } from "react";
 
-const useCanDiscard = (
-  game: IGame,
-  selected: { [cardId: string]: boolean }
-) => {
-  const cardsSelected = useSelectedCards(game.currentPlayer.cards, selected);
-  const redThreeScore = useGetGameRule("redThreeScore");
-  const canDiscardWild = useGetGameRule("canDiscardWild");
-  if (
-    game.gameState !== "inPlay" ||
-    game.currentPlayer.playerState !== "playing" ||
-    cardsSelected.length !== 1
-  ) {
-    return null;
-  }
+const useCanDiscard = (game: IGame, selected: { [cardId: string]: boolean }) => {
+  const cards = useSelectedCards(game.currentPlayer.cards, selected);
+  const redThreeScore: number = useGetGameRule("redThreeScore") as number;
+  const canDiscardWild: boolean = useGetGameRule("canDiscardWild") as boolean;
+  return useCallback(() => {
+    if (
+      game.gameState !== "inPlay" ||
+      game.currentPlayer.playerState !== "playing" ||
+      cards.length !== 1
+    ) {
+      return "You cannot discard at this point in time";
+    }
 
-  const toDiscard = cardsSelected[0];
-  if (!canDiscardWild) {
-    if (toDiscard.suit === "J" || toDiscard.rank === "2") {
-      return null;
-    }
-  }
-  if (redThreeScore > 0) {
-    if (["H", "D"].indexOf(toDiscard.suit) > -1 && toDiscard.rank === "3") {
-      return null;
-    }
-  }
-  return toDiscard;
+    return canDiscard(game, cards[0], canDiscardWild, redThreeScore);
+  }, [game, canDiscardWild, redThreeScore, cards])
 };
 
 export default useCanDiscard;
