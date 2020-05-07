@@ -32,7 +32,7 @@ declare module "Game" {
   }
 
   export interface IDummyCard {
-    cardText?: string;
+    cardText?: ReactNode;
     suit?: ISuit;
     selected?: boolean;
   }
@@ -49,6 +49,8 @@ declare module "Game" {
     teamId: string;
     isDown: boolean;
     melds: { [meldId: string]: IMeld };
+    scoreBase: number;
+    scoreCards: number;
   }
 
   export interface IPlayerCurrent {
@@ -68,6 +70,14 @@ declare module "Game" {
     cards: number;
     isPlayerTurn: boolean;
     isInHand: boolean;
+    teamId: string;
+  }
+
+  export interface IMessage {
+    isSent: boolean;
+    type: IMessageType;
+    playerName: string;
+    text: string;
   }
 
   export interface IGame {
@@ -77,10 +87,18 @@ declare module "Game" {
     currentPlayer: IPlayerCurrent;
     otherPlayers: IPlayerOther[];
     teams: { [teamId: string]: ITeam };
+    messages: IMessage[];
     discardCard: ICard | null;
-    discountCount: number;
-    deckCount: number;
+    discardCount: number;
+    pickupPiles: number[];
     pileIsLocked: boolean;
+    minimumPoints: number;
+    canPickupWithWild: boolean;
+    canLockDiscards: boolean;
+    canOverFillMeld: boolean;
+    redThreeScore: number;
+    wildCardMeldScore: number;
+    canDraw7: boolean;
   }
 
   export type IRuleType =

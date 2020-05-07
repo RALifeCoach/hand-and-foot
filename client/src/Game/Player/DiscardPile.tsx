@@ -6,6 +6,7 @@ import useCanDrawFromPile from "../hooks/useCanDrawFromPile";
 import useSendMessage from "../hooks/useSendMessage";
 import useSelectedCards from "../hooks/useSelectedCards";
 import SnackMessage from "../../shared/SnackMessage";
+import { LockOutlined } from '@material-ui/icons';
 
 interface IProps {
   game: IGame;
@@ -37,12 +38,23 @@ const DiscardPile = ({ game, selected }: IProps) => {
     <>
       <div style={{ position: 'relative', zIndex: 500 }} >
         <PlayingCard
-          card={game.discardCard === null ? { cardText: 'Empty' } : game.discardCard}
+          card={game.discardCard === null
+            ? { cardText: 'Empty' }
+            : game.discardCard
+          }
           imageLocation="below"
           left={0}
           top={0}
           onSelect={handleClick}
         />
+        <div style={{ position: 'absolute', top: 22, left: 30 }}>
+          <span style={{ fontSize: 18, color: '#881111' }}>{game.discardCount.toString()}</span>
+        </div>
+        {game.pileIsLocked && (
+          <div style={{ position: 'absolute', top: 60, left: 22 }}>
+            <LockOutlined style={{ width: 25, height: 25 }} />
+          </div>
+        )}
       </div>
       <SnackMessage
         open={Boolean(error)}

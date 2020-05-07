@@ -1,5 +1,4 @@
 import { IGame, ICard, IMeld, IMeldType, IRank } from "Game";
-import useGetGameRule from "./useGetGameRule";
 import mapCards from "../functions/mapCards";
 import { useCallback } from "react";
 import canPlayFindExistingMelds from "../functions/canPlayFindExistingMelds";
@@ -18,10 +17,6 @@ export interface ICanPlayReturn extends ICanPlay {
 }
 
 const useCanPlay = (game: IGame, meld: IMeld | null) => {
-  const redThreeScore = useGetGameRule("redThreeScore");
-  const wildCardMeldScore = useGetGameRule("wildCardMeldScore");
-  const canOverfillMeld = useGetGameRule("canOverfillMeld");
-
   return useCallback(
     (cards: ICard[]): ICanPlayReturn => {
       if (
@@ -32,14 +27,14 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
         return { error: "Not at this time", meldId: null };
       }
 
-      if (!canOverfillMeld && cards.length > 7) {
+      if (!game.canOverFillMeld && cards.length > 7) {
         return { error: "Too many cards", meldId: null };
       }
 
       const mapping = mapCards(cards);
       if (mapping.others.red3 || mapping.others.black3) {
         return {
-          ...canPlay3s(game, mapping, redThreeScore as number),
+          ...canPlay3s(game, mapping, game.redThreeScore as number),
           meldId: meld?.meldId || null,
         };
       }
@@ -60,7 +55,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
       const processMeld = existingMelds.length === 1 ? existingMelds[0] : null;
 
       if (
-        !canOverfillMeld &&
+        !game.canOverFillMeld &&
         (processMeld?.cards?.length || 0) + cards.length > 7
       ) {
         return { error: "Too many cards", meldId: null };
@@ -69,7 +64,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
       // this is true if only wild cards (3's were dealt with above)
       if (Object.keys(mapping.suits).length === 0) {
         return {
-          ...canPlayWildOnly(processMeld, cards, wildCardMeldScore as number),
+          ...canPlayWildOnly(processMeld, cards, game.wildCardMeldScore as number),
           meldId: processMeld?.meldId || null,
         };
       }
@@ -79,7 +74,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
         meldId: processMeld?.meldId || null,
       };
     },
-    [game, meld, redThreeScore, wildCardMeldScore, canOverfillMeld]
+    [game, meld]
   );
 };
 

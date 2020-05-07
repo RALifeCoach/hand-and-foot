@@ -32,7 +32,7 @@ const socketHandler = (game: IGameJson, gameId: number, action: IAction): Promis
       case "setPin":
         resolve(pinCard(game, action.value.playerId, action.value.cardId));
       case "drawCard":
-        resolve(drawCardPlayer(game, action.value.playerId));
+        resolve(drawCardPlayer(game, action.value.playerId, action.value.pileIndex));
         break;
       case "discardCard":
         discardCard(gameId, game, action.value.playerId, action.value.toDiscard, resolve);

@@ -14,11 +14,15 @@ const scoreTeam = (
       case "wild":
         if (meld.isComplete) {
           score.scoreBase += game.wildCardMeldScore;
+        } else {
+          score.scoreBase -= game.wildCardMeldScore;
         }
         break;
       case "run":
         if (meld.isComplete) {
           score.scoreBase += game.runScore;
+        } else {
+          score.scoreBase -= game.runScore;
         }
         break;
       case "clean":

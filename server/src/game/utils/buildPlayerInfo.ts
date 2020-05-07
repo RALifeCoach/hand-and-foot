@@ -1,8 +1,20 @@
-import {IGameJson, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from "Game";
-import GameValidate from "../GameValidate";
+import {
+  IGameJson,
+  IPlayer,
+  IPlayerCurrent,
+  IPlayerInfo,
+  IPlayerOther,
+  IMessage,
+} from "Game";
 import isWildCard from "./isWildCard";
 
-const buildPlayerInfo = (game: IGameJson, gameId: number, playerId: number): IPlayerInfo => {
+const buildPlayerInfo = (
+  game: IGameJson,
+  gameId: number,
+  playerId: number,
+  messages: IMessage[],
+  isCurrentPlayer: boolean,
+): IPlayerInfo => {
   const currentPlayer = game.players[playerId];
   return {
     gameId,
@@ -22,11 +34,11 @@ const buildPlayerInfo = (game: IGameJson, gameId: number, playerId: number): IPl
       .filter((player) => player.playerId !== playerId)
       .sort((playerA, playerB) => {
         const positionA =
-          (playerA.position + currentPlayer.position) %
-          Object.keys(game.players).length;
+          (playerA.position + game.numberOfPlayers - currentPlayer.position) %
+          game.numberOfPlayers;
         const positionB =
-          (playerB.position + currentPlayer.position) %
-          Object.keys(game.players).length;
+          (playerB.position + game.numberOfPlayers - currentPlayer.position) %
+          game.numberOfPlayers;
         return positionA - positionB;
       })
       .map(
@@ -44,9 +56,16 @@ const buildPlayerInfo = (game: IGameJson, gameId: number, playerId: number): IPl
     teams: game.teams,
     discardCard: game.discard.length > 0 ? game.discard[0] : null,
     discardCount: game.discard.length,
-    deckCount: game.deck.length,
-    pileIdLocked: game.discard.some(card => isWildCard(card)),
+    pickupPiles: game.pickupPiles.map((pile) => pile.length),
+    pileIsLocked: game.discard.some((card) => isWildCard(card)),
+    minimumPoints: game.minimumPoints,
+    canPickupWithWild: game.canPickupWithWild,
+    canLockDiscards: game.canLockDiscards,
+    canOverFillMeld: game.canOverFillMeld,
+    redThreeScore: game.redThreeScore,
+    wildCardMeldScore: game.wildCardMeldScore,
+    messages: isCurrentPlayer ? messages : [],
   } as IPlayerInfo;
-}
+};
 
 export default buildPlayerInfo;

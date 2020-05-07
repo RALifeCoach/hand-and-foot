@@ -27,7 +27,7 @@ const canPlay3s = (
   // black 3's - okay only when the player is in their foot and have 1 card left and the card is a valid discard
   if (!game.currentPlayer.isInHand && game.currentPlayer.cards.length === 1) {
     const discard = game.currentPlayer.cards[0];
-    if (canDiscard(game, discard, false, 0)) {
+    if (canDiscard(game, discard)) {
       return isBlackThree(discard)
         ? { error: "Cannot play black threes and also discard a black 3" }
         : { meldType: 'clean', meldRank: '3', error: '' };

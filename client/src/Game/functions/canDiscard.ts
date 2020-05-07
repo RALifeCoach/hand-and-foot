@@ -8,8 +8,6 @@ import mapCards from "./mapCards";
 const canDiscard = (
   game: IGame,
   card: ICard,
-  canDiscardWild: boolean,
-  redThreeScore: number
 ) => {
   if (game.gameState !== 'inPlay' || !game.currentPlayer.isPlayerTurn || game.currentPlayer.numberOfCardsToDraw) {
     return "It's not time to discard";
@@ -17,7 +15,7 @@ const canDiscard = (
   const toDiscard = card;
   // can discard red threes if they are a penalty
   if (isRedThree(toDiscard)) {
-    if (redThreeScore > 0) {
+    if (game.redThreeScore > 0) {
       return "Cannot discard red 3's";
     }
     return '';
@@ -27,7 +25,7 @@ const canDiscard = (
     return '';
   }
   // cannot discard wild cards if not allowed
-  if (isWildCard(toDiscard) && !canDiscardWild) {
+  if (isWildCard(toDiscard) && !game.canLockDiscards) {
     return "Cannot discard wild cards";
   }
 

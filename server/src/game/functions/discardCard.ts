@@ -3,6 +3,8 @@ import startNewTurn from "./startNewTurn";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
 import logGameState from "../../socket/logGameState";
 import endRound from "./endRound";
+import addMessageFoot from "../utils/messages/addMessageFoot";
+import canGoDown from "../utils/canGoDown";
 
 const discardCard = (
   gameId: number,
@@ -19,7 +21,7 @@ const discardCard = (
   const team = game.teams[player.teamId];
   const points = computeTeamCardPoints(game, team);
   if (!team.isDown) {
-    if (points > 0 && points < game.minimumPoints) {
+    if (!canGoDown(game, team, points)) {
       resolve({
         type: "unmetMin",
         value: { cards: player.isInHand ? player.hand : player.foot },
@@ -41,6 +43,7 @@ const discardCard = (
     game.discard.unshift(...cards.splice(discardCardIndex, 1));
     if (cards.length === 0) {
       player.isInHand = false;
+      addMessageFoot(game, false);
     }
     // check for any complete melds (can happen when overflow meld is true)
     Object.keys(team.melds).forEach(meldId => {

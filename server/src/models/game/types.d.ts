@@ -24,6 +24,7 @@ declare module "Game" {
   export type IPlayerState = "playing" | "waiting" | "draw" | "draw7";
   export type IRoundSequence = "random" | "sequential";
   export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
+  export type IMessageType = 'started' | 'added' | 'completed' | 'foot';
 
   export interface ICard {
     cardId: number;
@@ -57,6 +58,8 @@ declare module "Game" {
     teamId: string;
     isDown: boolean;
     melds: { [meldId: string]: IMeld };
+    scoreBase: number;
+    scoreCards: number;
   }
 
   export interface IRound {
@@ -76,8 +79,16 @@ declare module "Game" {
     logId: string;
   }
 
+  export interface IMessage {
+    isSent: boolean,
+    type: IMessageType;
+    playerName: string;
+    text: string;
+  }
+
   export interface IGameJson {
     deck: ICard[];
+    pickupPiles: ICard[][];
     discard: ICard[];
     pileIsLocked: boolean;
     players: {
@@ -94,9 +105,8 @@ declare module "Game" {
     rounds: IRound[];
     roundSequence: IRoundSequence;
     transactionLog: ILogEntry[];
+    messages: IMessage[];
     minimumPoints: number;
-    canOverFillMeld: boolean;
-    redThreeScore: number;
     wildCardMeldScore: number;
     runScore: number;
     cleanScore: number;
@@ -104,6 +114,10 @@ declare module "Game" {
     canPickupWithWild: boolean;
     canLockDiscards: boolean;
     askRoundEnd: boolean;
+    canOverFillMeld: boolean;
+    redThreeScore: number;
+    canDraw7: boolean;
+    minimumRoundNatural7: number;
   }
 
   export interface IGame {
@@ -142,6 +156,13 @@ declare module "Game" {
     teams: { [teamId: string]: ITeam };
     discardCard: ICard | null;
     discardCount: number;
-    deckCount: number;
+    pickupPiles: number[];
+    pileIsLocked: boolean;
+    minimumPoints: number;
+    canPickupWithWild: boolean;
+    canLockDiscards: boolean;
+    canOverFillMeld: boolean;
+    redThreeScore: number;
+    wildCardMeldScore: number;
   }
 }

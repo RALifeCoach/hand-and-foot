@@ -17,7 +17,6 @@ const processMessages = (
   gameController[data.value.gameId].players[data.value.playerId] = data.socket;
 
   const gameId = data.value.gameId;
-  const playerId = data.value.playerId;
   console.log(
     "about to process",
     data.type,

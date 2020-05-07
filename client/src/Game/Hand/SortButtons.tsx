@@ -16,7 +16,7 @@ const SortButtons = ({ gameDispatch, sortOrder, config, gameId, playerId }: IPro
   const { styleSortRank, styleSortSuit } = useSortStyles(sortOrder, config);
   const sendMessage = useSendMessage();
   return (
-    <FlexColumn style={{ width: 80, padding: 10 }}>
+    <FlexColumn style={{ width: 60, margin: '8px 8px 8px 8px' }}>
       <div
         style={styleSortRank}
         onClick={() => sendMessage('setSortOrder', { sortOrder: 'rank' })}

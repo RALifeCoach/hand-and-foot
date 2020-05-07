@@ -63,15 +63,27 @@ const useGameReducer = (gameId: number, playerId: number) => {
           };
         case "clearError":
           return { ...state, error: "" };
+        case "messagesSeen":
+          return { ...state, newMessages: false };
         case "setLastMessage":
           const message = action.value;
           switch (message.type) {
             case "updateGame":
+              if (message.messageId === state.messageId) {
+                return state;
+              }
+              const newMessages =
+                message.game.gameState === "inPlay"
+                  ? message.game.messages
+                  : [];
               return {
                 ...state,
                 lastMessage: action.value,
                 game: message.game,
                 sortOrder: message.game.currentPlayer.sortOrder,
+                messages: [...state.messages, ...newMessages],
+                newMessages: state.newMessages || newMessages.length > 0,
+                messageId: message.messageId,
               };
             case "sortOrder":
               const newSortOrder = message.value.sortOrder;
@@ -128,11 +140,14 @@ const useGameReducer = (gameId: number, playerId: number) => {
       readyState: null,
       savedMessages: [],
       currentMessage: null,
+      messages: [],
+      newMessages: false,
       game: null,
       selected: {},
       sortOrder: "",
       cardMoving: null,
       error: "",
+      messageId: "",
     } as IGameContextState
   );
 };

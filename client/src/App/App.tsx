@@ -6,7 +6,7 @@ import useFetchGet from "../hooks/useFetchGet";
 import FetchHandling from "../shared/FetchHandling";
 import QueryString from 'query-string';
 
-const PLAYERS = [
+const PLAYERS4 = [
   {
     playerId: 1,
     teamId: 'NS',
@@ -28,16 +28,35 @@ const PLAYERS = [
     position: 3
   },
 ];
+const PLAYERS3 = [
+  {
+    playerId: 1,
+    teamId: '1',
+    position: 0
+  },
+  {
+    playerId: 2,
+    teamId: '2',
+    position: 1
+  },
+  {
+    playerId: 3,
+    teamId: '3',
+    position: 2
+  },
+];
 
 const App = () => {
   const queryParams = QueryString.parse(window.location.search);
   const [gameId, setGameId] = useState(queryParams.game_id);
+  const isTest = queryParams.test === 'true';
+  const players = queryParams.players || 4;
   const [gameStatus, getGame] = useFetchGet();
   useEffect(() => {
     if (!gameId) {
-      getGame('game/restart/TestGame/4');
+      getGame(`game/restart/TestGame/${players}`);
     }
-  }, [getGame, gameId]);
+  }, [getGame, gameId, players]);
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
@@ -52,31 +71,37 @@ const App = () => {
     );
   }
 
+  if (isTest) {
+    return (
+      <>
+        <MainProvider>
+          {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (
+            <GameProvider
+              gameId={Number(gameId)}
+              playerId={player.playerId}
+              teamId={player.teamId}
+              position={player.position}
+              key={player.playerId}
+              rules={{
+                canDraw7: true,
+                redThreeScore: 100,
+                canDiscardWild: true,
+                start7MinRound: 4,
+                wildCardMeldScore: 2000,
+                canOverfillMeld: false,
+
+              }}
+            >
+              <Game />
+            </GameProvider>
+          ))}
+        </MainProvider>
+      </>
+    );
+  }
+
   return (
-    <>
-      <MainProvider>
-        {PLAYERS.map((player) => (
-          <GameProvider
-            gameId={Number(gameId)}
-            playerId={player.playerId}
-            teamId={player.teamId}
-            position={player.position}
-            key={player.playerId}
-            rules={{
-              canDraw7: true,
-              redThreeScore: 100,
-              canDiscardWild: true,
-              start7MinRound: 4,
-              wildCardMeldScore: 2000,
-              canOverfillMeld: false,
-              
-            }}
-          >
-            <Game />
-          </GameProvider>
-        ))}
-      </MainProvider>
-    </>
+    <div>Not test</div>
   );
 };
 

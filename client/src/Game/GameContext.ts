@@ -1,6 +1,6 @@
 import React from 'react';
 import {IDispatch} from "General";
-import {IGame, ICard, IRules} from "Game";
+import {IGame, ICard, IRules, IMessage} from "Game";
 
 export interface IGameContextState {
   lastMessage: string | null;
@@ -12,6 +12,9 @@ export interface IGameContextState {
   sortOrder: string;
   cardMoving: ICard | null;
   error: string;
+  messages: IMessage[];
+  newMessages: boolean;
+  messageId: string;
 }
 
 export interface IGameContext {

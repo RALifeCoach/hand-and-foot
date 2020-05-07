@@ -1,37 +1,10 @@
-import { ICard, IGameJson } from "Game";
-import { RANKS, SUITS, ROUNDS } from "../../../constants";
+import { IGameJson } from "Game";
+import { ROUNDS } from "../../../constants";
 
 const startGame = (numberOfPlayers: number) => {
   const numberOfRounds = 7;
-  const deck: ICard[] = [];
-  for (let deckIndex = 0; deckIndex < 6; deckIndex++) {
-    for (let suitIndex = 0; suitIndex < 4; suitIndex++) {
-      for (let rankIndex = 0; rankIndex < 13; rankIndex++) {
-        deck.push({
-          cardId: deckIndex * 52 + suitIndex * 13 + rankIndex + 1,
-          suit: SUITS[suitIndex],
-          rank: RANKS[rankIndex],
-          pinValue: 0,
-        });
-      }
-    }
-    deck.push({
-      cardId: 501 + deckIndex,
-      suit: "J",
-      pinValue: 0,
-    });
-    deck.push({
-      cardId: 511 + deckIndex,
-      suit: "J",
-      pinValue: 0,
-    });
-  }
   return Number(numberOfPlayers) === 4
     ? ({
-        deck,
-        players: {},
-        teams: {},
-        discard: [],
         pileIsLocked: false,
         gameState: "waitingToStart",
         numberOfPlayers: Number(numberOfPlayers),
@@ -51,12 +24,16 @@ const startGame = (numberOfPlayers: number) => {
         canPickupWithWild: true,
         canLockDiscards: true,
         askRoundEnd: true,
-      } as IGameJson)
-    : ({
-        deck,
+        canDraw7: true,
+        minimumRoundNatural7: 4,
         players: {},
         teams: {},
+        messages: [],
         discard: [],
+        pickupPiles: [[], [], [], []],
+        deck: [],
+      } as IGameJson)
+    : ({
         pileIsLocked: false,
         gameState: "waitingToStart",
         numberOfPlayers: Number(numberOfPlayers),
@@ -76,6 +53,14 @@ const startGame = (numberOfPlayers: number) => {
         canPickupWithWild: false,
         canLockDiscards: false,
         askRoundEnd: false,
+        canDraw7: true,
+        minimumRoundNatural7: 4,
+        messages: [],
+        players: {},
+        teams: {},
+        discard: [],
+        deck: [],
+        pickupPiles: [[], [], [], []],
       } as IGameJson);
 };
 
