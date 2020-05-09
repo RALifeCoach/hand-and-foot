@@ -2,15 +2,13 @@ import { IGameJson, ICard } from "Game";
 import sortCards from "../utils/sortCards";
 const pinCard = (game: IGameJson, playerId: number, cardId: number) => {
   const player = game.players[playerId];
-  if (!player) {
-    throw new Error("player is missing");
-  }
-
   const cards = player.isInHand ? player.hand : player.foot;
   const newCards: ICard[] = JSON.parse(JSON.stringify(cards));
+
   const updateCard = newCards.find((findCard) => findCard.cardId === cardId);
   if (!updateCard) {
-    throw new Error("cad not found");
+    console.log(cardId, newCards);
+    throw new Error("card not found");
   }
 
   if (updateCard.pinValue) {

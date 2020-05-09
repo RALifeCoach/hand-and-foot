@@ -19,6 +19,7 @@ const TeamMelds = ({ team, game, isCurrentPlayer, selectedCards }: IProps) => {
   const dirty = Object.values(team.melds).filter(meld => meld.type === 'dirty');
   const runs = Object.values(team.melds).filter(meld => meld.type === 'run');
   const wild = Object.values(team.melds).filter(meld => meld.type === 'wild');
+
   const selectedCardsScore = scoreCards(game, selectedCards);
 
   return (
@@ -27,8 +28,9 @@ const TeamMelds = ({ team, game, isCurrentPlayer, selectedCards }: IProps) => {
       <FlexRow>
         <FlexColumn style={{ minWidth: 100 }}>
           <div>Selected: {selectedCardsScore}</div>
+          <div>On Table: {team.scoreOnTable}</div>
           <div>Minimum: {game.minimumPoints}</div>
-          <div>Score: {team.scoreBase + team.scoreCards}</div>
+          <div>Score: {team.scoreBase}</div>
         </FlexColumn>
         <FlexColumn>
           <TeamMeld

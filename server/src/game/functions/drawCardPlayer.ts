@@ -2,16 +2,11 @@ import { IGameJson } from "Game";
 import drawCards from "../utils/drawCards";
 const drawCardPlayer = (
   game: IGameJson,
-  playerId: number,
   pileIndex: number
 ) => {
-  const player = game.players[playerId];
-  if (!player) {
-    console.log(playerId, game.players);
-    throw new Error("player is missing");
-  }
-
+  const player = game.players[game.currentPlayerId];
   const cards = player.isInHand ? player.hand : player.foot;
+
   cards.push(...drawCards(game.pickupPiles[pileIndex], 1));
   player.numberOfCardsToDraw--;
   if (player.playerState === "draw" && player.numberOfCardsToDraw === 0) {

@@ -6,6 +6,7 @@ import pinCard from "./functions/pinCard";
 import drawCardPlayer from "./functions/drawCardPlayer";
 import discardCard from "./functions/discardCard";
 import playCards from "./functions/playCards";
+import draw7 from "./functions/draw7";
 
 const socketHandler = (game: IGameJson, gameId: number, action: IAction): Promise<object|null> => {
   return new Promise(resolve => {
@@ -32,16 +33,18 @@ const socketHandler = (game: IGameJson, gameId: number, action: IAction): Promis
       case "setPin":
         resolve(pinCard(game, action.value.playerId, action.value.cardId));
       case "drawCard":
-        resolve(drawCardPlayer(game, action.value.playerId, action.value.pileIndex));
+        resolve(drawCardPlayer(game, action.value.pileIndex));
+        break;
+      case "draw7":
+        draw7(game, gameId, resolve);
         break;
       case "discardCard":
-        discardCard(gameId, game, action.value.playerId, action.value.toDiscard, resolve);
+        discardCard(gameId, game, action.value.toDiscard, resolve);
         break;
       case "playCards":
         playCards(
           gameId,
           game,
-          action.value.playerId,
           action.value.cardIds,
           action.value.meldId,
           action.value.meldType,

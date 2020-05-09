@@ -1,15 +1,8 @@
 import { IGameJson } from "Game";
 import sortCards from "../utils/sortCards";
 
-const setSortOrder = (
-  game: IGameJson,
-  playerId: string,
-  sortOrder: string
-) => {
+const setSortOrder = (game: IGameJson, playerId: string, sortOrder: string) => {
   const player = game.players[playerId];
-  if (!player) {
-    throw new Error("player is missing");
-  }
 
   player.sortOrder = sortOrder;
   if (player.isInHand) {

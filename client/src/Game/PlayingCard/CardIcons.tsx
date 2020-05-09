@@ -3,8 +3,19 @@ import IconRank from './IconRank';
 import IconSuit from './IconSuit';
 import IconPin from './IconPin';
 import IconMove from './IconMove';
+import { ICard } from 'Game';
 
-export default function CardIcons({card, imageLocation, showIcons, onPinned, onMoved, config}) {
+interface IProps {
+  card: ICard;
+  selected: boolean;
+  imageLocation: string;
+  showIcons: boolean;
+  onPinned: () => void;
+  onMoved: (event: any) => void;
+  config: any;
+}
+
+export default function CardIcons({ card, imageLocation, showIcons, onPinned, onMoved, config, selected }: IProps) {
   return (
     <div>
       <IconRank
@@ -34,14 +45,14 @@ export default function CardIcons({card, imageLocation, showIcons, onPinned, onM
         key={3}
       />
       <IconPin
-        selected={card.selected}
+        selected={selected}
         showIcons={showIcons}
         pinValue={card.pinValue}
         onPinned={onPinned}
         config={config}
       />
       <IconMove
-        selected={card.selected}
+        selected={selected}
         showIcons={showIcons}
         onMoved={onMoved}
         config={config}

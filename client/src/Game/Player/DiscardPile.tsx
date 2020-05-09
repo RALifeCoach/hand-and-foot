@@ -15,32 +15,38 @@ interface IProps {
 
 const DiscardPile = ({ game, selected }: IProps) => {
   const canDiscard = useCanDiscard(game, selected);
-  const canDraw7 = useCanDrawFromPile(game);
+  const canDraw7 = useCanDrawFromPile();
   const sendMessage = useSendMessage();
   const selectedCards = useSelectedCards(game.currentPlayer.cards, selected);
   const [error, setError] = useState('');
 
   const handleClick = useCallback(() => {
-    if (canDraw7) {
-      sendMessage('draw7', {});
-      return;
+    if (game.currentPlayer.playerState === 'draw7') {
+      return setError("You cannot discard while still drawing 7");
+    }
+    const drawMessage: string | null = canDraw7(game);
+    if (drawMessage === '') {
+      return sendMessage('draw7', {});
+    }
+    if (drawMessage !== null) {
+      return setError(drawMessage);
     }
     const message = canDiscard();
     if (!message) {
-      sendMessage('discardCard', { toDiscard: selectedCards[0].cardId });
-      return;
-    } else {
-      setError(message);
+      return sendMessage('discardCard', { toDiscard: selectedCards[0].cardId });
     }
-  }, [canDiscard, canDraw7, sendMessage, selectedCards]);
+    setError(message);
+  }, [canDiscard, canDraw7, sendMessage, selectedCards, game]);
 
   return (
     <>
       <div style={{ position: 'relative', zIndex: 500 }} >
         <PlayingCard
-          card={game.discardCard === null
-            ? { cardText: 'Empty' }
-            : game.discardCard
+          card={game.currentPlayer.playerState === 'draw7'
+            ? { cardText: 'Draw 7' }
+            : game.discardCard === null
+              ? { cardText: 'Empty' }
+              : game.discardCard
           }
           imageLocation="below"
           left={0}

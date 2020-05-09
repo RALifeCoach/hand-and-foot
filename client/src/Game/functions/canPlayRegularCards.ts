@@ -42,7 +42,7 @@ const canPlayRegularCards = (
 
     return checkRunCards(cards)
       ? {
-          meldType: "wild",
+          meldType: "run",
           error: "",
         }
       : { error: "The run either has duplicates or a gap" };

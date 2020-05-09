@@ -85,8 +85,9 @@ export default function PlayingCard(
         )
         : (
           <CardIcons
-            card={card}
+            card={card as ICard}
             config={config}
+            selected={selected}
             {...props}
           />
         )

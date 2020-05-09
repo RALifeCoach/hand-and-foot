@@ -9,7 +9,7 @@ const startNewRound = (game: IGameJson) => {
   game.deck = dealCards();
   if (game.roundSequence === "random") {
     const unplayedRounds = game.rounds.filter((round) => !round.played);
-    const roundIndex = Math.max(
+    const roundIndex = Math.min(
       Math.floor(Math.random() * unplayedRounds.length),
       unplayedRounds.length - 1
     );

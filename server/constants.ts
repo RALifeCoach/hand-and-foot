@@ -95,6 +95,11 @@ export const ACTION_RESPONSE: {
     canUndo: false,
     sendToAll: true,
   },
+  draw7: {
+    logIt: true,
+    canUndo: true,
+    sendToAll: false,
+  },
   discardCard: {
     logIt: true,
     canUndo: false,

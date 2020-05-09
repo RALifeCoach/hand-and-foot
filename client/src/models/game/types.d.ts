@@ -19,7 +19,7 @@ declare module "Game" {
     | "inPlay"
     | "finished"
     | "waitingToReStart";
-  export type IPlayerState = "playing" | "waiting" | "draw";
+  export type IPlayerState = "playing" | "waiting" | "draw" | "draw7";
   export type IPosition = 0 | 1 | 2 | 3;
   export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
 
@@ -29,6 +29,7 @@ declare module "Game" {
     rank: IRank;
     pinValue: number;
     cardText?: string;
+    isFromPile?: boolean;
   }
 
   export interface IDummyCard {
@@ -51,6 +52,7 @@ declare module "Game" {
     melds: { [meldId: string]: IMeld };
     scoreBase: number;
     scoreCards: number;
+    scoreOnTable: number;
   }
 
   export interface IPlayerCurrent {
@@ -62,6 +64,7 @@ declare module "Game" {
     isPlayerTurn: boolean;
     isInHand: boolean;
     teamId: string;
+    sortOrder: string;
   }
 
   export interface IPlayerOther {

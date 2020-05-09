@@ -5,11 +5,13 @@ import isBlackThree from "./isBlackThree";
 import canPlayFindExistingMelds from "./canPlayFindExistingMelds";
 import mapCards from "./mapCards";
 
-const canDiscard = (
-  game: IGame,
-  card: ICard,
-) => {
-  if (game.gameState !== 'inPlay' || !game.currentPlayer.isPlayerTurn || game.currentPlayer.numberOfCardsToDraw) {
+const canDiscard = (game: IGame, card: ICard) => {
+  debugger;
+  if (
+    game.gameState !== "inPlay" ||
+    !game.currentPlayer.isPlayerTurn ||
+    game.currentPlayer.numberOfCardsToDraw
+  ) {
     return "It's not time to discard";
   }
   const toDiscard = card;
@@ -18,11 +20,11 @@ const canDiscard = (
     if (game.redThreeScore > 0) {
       return "Cannot discard red 3's";
     }
-    return '';
+    return "";
   }
   // can always disacrd black thress
   if (isBlackThree(card)) {
-    return '';
+    return "";
   }
   // cannot discard wild cards if not allowed
   if (isWildCard(toDiscard) && !game.canLockDiscards) {
@@ -40,10 +42,10 @@ const canDiscard = (
   if (existingMelds.length > 0) {
     return isWildCard(toDiscard) &&
       !existingMelds.some((meld) => meld.type === "wild")
-      ? ''
+      ? ""
       : "The card is playable";
   }
-  return '';
+  return "";
 };
 
 export default canDiscard;

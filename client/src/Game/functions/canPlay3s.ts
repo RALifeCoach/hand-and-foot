@@ -21,7 +21,7 @@ const canPlay3s = (
   if (mapping.others.red3) {
     return redThreeScore > 0
       ? { meldType: "3s", error: "" }
-      : { error: "Red threes cannot be discarded" };
+      : { error: "Red threes cannot be played" };
   }
 
   // black 3's - okay only when the player is in their foot and have 1 card left and the card is a valid discard

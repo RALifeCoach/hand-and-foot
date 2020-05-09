@@ -1,5 +1,6 @@
 import { IGameJson, ICard } from "Game";
 import sortCards from "../utils/sortCards";
+import rePinCards from "./rePinCards";
 
 const buildNewCards = (
   cards: ICard[],
@@ -10,6 +11,7 @@ const buildNewCards = (
   const sourceIndex = newCards.findIndex((findCard) => {
     return findCard.cardId === sourceCardId;
   });
+  newCards[sourceIndex].pinValue = 0;
   if (!destCardId) {
     return [
       ...newCards.slice(0, sourceIndex),
@@ -48,30 +50,13 @@ const buildNewCards = (
   return newCards;
 };
 
-const rePinCards = (cards: ICard[]) => {
-  const newCards = JSON.parse(JSON.stringify(cards));
-  const lastPinnedCardReverseIndex = cards
-    .reverse()
-    .findIndex((card) => card.pinValue);
-  if (lastPinnedCardReverseIndex > -1) {
-    const lastPinnedCardIndex = cards.length - lastPinnedCardReverseIndex;
-    for (let i = 0; i < lastPinnedCardIndex; i++) {
-      newCards[i].pinValue = i + 1;
-    }
-  }
-  return newCards;
-};
-
 const moveCard = (
   game: IGameJson,
-  playerId: string,
+  playerId: number,
   sourceCardId: number,
   destCardId: number
 ) => {
   const player = game.players[playerId];
-  if (!player) {
-    throw new Error("player is missing");
-  }
 
   if (player.isInHand) {
     player.hand = rePinCards(

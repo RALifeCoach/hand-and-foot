@@ -1,5 +1,6 @@
 import { IMeld } from "Game";
 import { RANK_NAMES, SUIT_NAMES, SUIT_IMAGES } from "../../constants";
+import isWildCard from "./isWildCard";
 
 const buildMeldDisplay = (meld: IMeld) => {
   const { cards, type } = meld;
@@ -13,7 +14,7 @@ const buildMeldDisplay = (meld: IMeld) => {
     case "clean":
     case "dirty":
       return `${RANK_NAMES[(meld?.rank as string) || "A"]}: ${cards
-        .map((card) => SUIT_IMAGES[card.suit].image)
+        .map((card) => SUIT_IMAGES[isWildCard(card) ? "J" : card.suit].image)
         .join(", ")}`;
     case "run":
       return `${SUIT_NAMES[(cards[0].suit as string) || "S"]}: ${cards

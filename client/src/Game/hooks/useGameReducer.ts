@@ -3,6 +3,7 @@ import useSelectCard from "./useSelectCard";
 import { IAction } from "General";
 import { IGameContextState } from "../GameContext";
 import { ReadyState } from "react-use-websocket";
+import { ICard } from "Game";
 
 const useGameReducer = (gameId: number, playerId: number) => {
   const selectCard = useSelectCard();
@@ -57,6 +58,13 @@ const useGameReducer = (gameId: number, playerId: number) => {
             }
             return { ...state, currentMessage: JSON.stringify(message) };
           }
+          const card: ICard = action.value;
+          if (card.isFromPile) {
+            return {
+              ...state,
+              error: "You cannot deselect the card drawn from the pile",
+            };
+          }
           return {
             ...state,
             selected: selectCard(state.selected, action.value),
@@ -76,14 +84,26 @@ const useGameReducer = (gameId: number, playerId: number) => {
                 message.game.gameState === "inPlay"
                   ? message.game.messages
                   : [];
+              const currentPlayer = message.game.currentPlayer;
+              const newSelected = { ...state.selected };
+              if (currentPlayer.playerState === "draw7") {
+                debugger;
+                const drawnCard = currentPlayer.cards.find(
+                  (card: ICard) => card.isFromPile
+                );
+                if (drawnCard) {
+                  newSelected[drawnCard.cardId] = true;
+                }
+              }
               return {
                 ...state,
                 lastMessage: action.value,
                 game: message.game,
-                sortOrder: message.game.currentPlayer.sortOrder,
+                sortOrder: currentPlayer.sortOrder,
                 messages: [...state.messages, ...newMessages],
                 newMessages: state.newMessages || newMessages.length > 0,
                 messageId: message.messageId,
+                selected: newSelected,
               };
             case "sortOrder":
               const newSortOrder = message.value.sortOrder;
@@ -99,7 +119,18 @@ const useGameReducer = (gameId: number, playerId: number) => {
                 },
               };
             case "moveCard":
-              return { ...state, cardMoving: null, cards: message.value.cards };
+              return {
+                ...state,
+                game: {
+                  ...state.game,
+                  currentPlayer: {
+                    ...state?.game?.currentPlayer,
+                    cards: message.value.cards,
+                  },
+                },
+                cardMoving: null,
+                selected: {},
+              };
             case "pinCard":
               return {
                 ...state,
@@ -110,6 +141,7 @@ const useGameReducer = (gameId: number, playerId: number) => {
                     cards: message.value.cards,
                   },
                 },
+                selected: {},
               };
             case "unmetMin":
               return {

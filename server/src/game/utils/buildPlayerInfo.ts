@@ -64,6 +64,7 @@ const buildPlayerInfo = (
     canOverFillMeld: game.canOverFillMeld,
     redThreeScore: game.redThreeScore,
     wildCardMeldScore: game.wildCardMeldScore,
+    canDraw7: game.canDraw7,
     messages: isCurrentPlayer ? messages : [],
   } as IPlayerInfo;
 };

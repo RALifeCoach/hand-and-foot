@@ -35,7 +35,7 @@ const Meld = ({ meld, game, isCurrentPlayer, selectedCards }: IProps) => {
       case 'dirty':
         return `${rank}-${cards.length} (${mappedMeld.naturals}/${mappedMeld.wild})`;
       case 'run':
-        return `${cards[0].suit}-${cards.length} (${cards[cards.length - 1].rank}/${cards[0].rank})`;
+        return `${cards[0].suit} (${cards[0].rank}-${cards[cards.length - 1].rank})`;
       case 'wild':
         return `${cards.length}`;
     }

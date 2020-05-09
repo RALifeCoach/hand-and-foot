@@ -24,13 +24,19 @@ declare module "Game" {
   export type IPlayerState = "playing" | "waiting" | "draw" | "draw7";
   export type IRoundSequence = "random" | "sequential";
   export type IMeldType = "3s" | "clean" | "dirty" | "run" | "wild";
-  export type IMessageType = 'started' | 'added' | 'completed' | 'foot';
+  export type IMessageType =
+    | "started"
+    | "added"
+    | "completed"
+    | "foot"
+    | "draw7";
 
   export interface ICard {
     cardId: number;
     suit: ISuit;
     rank?: IRank;
     pinValue: number;
+    isFromPile?: boolean;
   }
 
   export interface IPlayer {
@@ -60,6 +66,7 @@ declare module "Game" {
     melds: { [meldId: string]: IMeld };
     scoreBase: number;
     scoreCards: number;
+    scoreOnTable: number;
   }
 
   export interface IRound {
@@ -80,7 +87,7 @@ declare module "Game" {
   }
 
   export interface IMessage {
-    isSent: boolean,
+    isSent: boolean;
     type: IMessageType;
     playerName: string;
     text: string;

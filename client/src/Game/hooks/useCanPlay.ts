@@ -21,7 +21,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
     (cards: ICard[]): ICanPlayReturn => {
       if (
         game.gameState !== "inPlay" ||
-        game.currentPlayer.playerState !== "playing" ||
+        ['playing', 'draw7'].indexOf(game.currentPlayer.playerState) === -1 ||
         game.currentPlayer.numberOfCardsToDraw > 0
       ) {
         return { error: "Not at this time", meldId: null };
