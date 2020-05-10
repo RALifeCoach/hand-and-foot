@@ -3,7 +3,7 @@ import { IconButton, Drawer, Typography } from '@material-ui/core';
 import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import NotificationsActiveOutlinedIcon from '@material-ui/icons/NotificationsActiveOutlined';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import GameContext from './GameContext';
+import GameContext from '../Game/GameContext';
 import FlexColumn from '../shared/flex-grid/FlexColumn';
 import FlexRow from '../shared/flex-grid/FlexRow';
 

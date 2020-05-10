@@ -1,3 +1,3 @@
 var drpacConfig = {
-  API_URL: "http://localhost:3010/api",
+  API_URL: "http://localhost:3010",
 };

@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
+import { ICard } from 'Game';
 
-export default function IconRank({card, reversed, config}) {
-    const styleRank = {
+interface IProps {
+  card: ICard;
+  reversed: boolean;
+  config: any;
+}
+
+export default function IconRank({card, reversed, config}: IProps) {
+    const styleRank: CSSProperties = {
         fontSize: config.cardMarkFontSize,
         position: 'absolute',
         fontWeight: 'bold',
         top: config.baseTopMark,
         left: config.baseLeftMark,
     };
-    const styleRankReversed = {
+    const styleRankReversed: CSSProperties = {
         fontSize: config.cardMarkFontSize,
         position: 'absolute',
         fontWeight: 'bold',

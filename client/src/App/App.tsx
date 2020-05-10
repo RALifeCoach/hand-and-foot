@@ -1,10 +1,14 @@
-import React, { memo, useEffect, useState } from "react";
-import MainProvider from "./MainProvider";
+import React, { memo, useEffect, useState, useContext } from "react";
 import Game from "../Game/Game";
 import GameProvider from "../Game/GameProvider";
 import useFetchGet from "../hooks/useFetchGet";
 import FetchHandling from "../shared/FetchHandling";
 import QueryString from 'query-string';
+import ApplicationBar from "./ApplicationBar";
+import MainContext from "./MainContext";
+import AppDisplayComponent from "./AppDisplayComponent";
+import Login from "../Login/Login";
+import SetPassword from "../Login/SetPassword";
 
 const PLAYERS4 = [
   {
@@ -47,16 +51,18 @@ const PLAYERS3 = [
 ];
 
 const App = () => {
+  const { mainState: { menu, user } } = useContext(MainContext);
   const queryParams = QueryString.parse(window.location.search);
   const [gameId, setGameId] = useState(queryParams.game_id);
   const isTest = queryParams.test === 'true';
   const players = queryParams.players || 4;
   const [gameStatus, getGame] = useFetchGet();
+
   useEffect(() => {
-    if (!gameId) {
-      getGame(`game/restart/TestGame/${players}`);
+    if (!gameId && isTest) {
+      getGame(`api/game/restart/TestGame/${players}`);
     }
-  }, [getGame, gameId, players]);
+  }, [getGame, gameId, players, isTest]);
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
@@ -65,7 +71,18 @@ const App = () => {
     }
   }, [gameStatus]);
 
-  if (!gameId) {
+  if (queryParams.id) {
+    return (
+      <>
+        <ApplicationBar tabValue={menu} notifications={false} />
+        <SetPassword
+          id={queryParams.id as string}
+        />
+      </>
+    );
+  }
+
+  if (!gameId && isTest) {
     return (
       <FetchHandling status={gameStatus} title="Fetching game" />
     );
@@ -74,34 +91,36 @@ const App = () => {
   if (isTest) {
     return (
       <>
-        <MainProvider>
-          {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (
-            <GameProvider
-              gameId={Number(gameId)}
-              playerId={player.playerId}
-              teamId={player.teamId}
-              position={player.position}
-              key={player.playerId}
-              rules={{
-                canDraw7: true,
-                redThreeScore: 100,
-                canDiscardWild: true,
-                start7MinRound: 4,
-                wildCardMeldScore: 2000,
-                canOverfillMeld: false,
-
-              }}
-            >
-              <Game />
-            </GameProvider>
-          ))}
-        </MainProvider>
+        {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (
+          <GameProvider
+            gameId={Number(gameId)}
+            playerId={player.playerId}
+            teamId={player.teamId}
+            position={player.position}
+            key={player.playerId}
+          >
+            <Game />
+          </GameProvider>
+        ))}
       </>
     );
   }
 
   return (
-    <div>Not test</div>
+    <>
+      <ApplicationBar
+        tabValue={menu}
+        notifications={false}
+      />
+      {Boolean(user)
+        ? (
+          <AppDisplayComponent />
+        )
+        : (
+          <Login />
+        )
+      }
+    </>
   );
 };
 

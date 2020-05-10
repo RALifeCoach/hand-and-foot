@@ -2,7 +2,6 @@ import React, { useEffect, memo, ReactNode } from 'react';
 import GameContext from "./GameContext";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import useGameReducer from './hooks/useGameReducer';
-import { IRules } from 'Game';
 import SnackMessage from '../shared/SnackMessage';
 
 const STATIC_OPTIONS = {
@@ -15,10 +14,9 @@ interface IProps {
   playerId: number;
   teamId: string;
   position: number;
-  rules: IRules;
 }
 
-const GameProvider = ({ children, gameId, playerId, teamId, position, rules }: IProps) => {
+const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) => {
   const [state, dispatch] = useGameReducer(gameId, playerId);
 
   const socketUrl = 'ws://localhost:3010';
@@ -65,7 +63,6 @@ const GameProvider = ({ children, gameId, playerId, teamId, position, rules }: I
           gameState: state,
           gameId: gameId,
           playerId: playerId,
-          rules
         }}
       >
         {children}

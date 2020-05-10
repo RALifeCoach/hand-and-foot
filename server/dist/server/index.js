@@ -26,7 +26,6 @@ app.use(ipMiddleware);
 app.use("/", AuthenticationRoutes_1.default());
 app.use("/api", ApiRoutes_1.default());
 app.use(function (req, res, next) {
-    console.log(req);
     res.status(404).send("Sorry can't find that!");
 });
 const server = http.createServer(app);

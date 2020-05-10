@@ -103,20 +103,4 @@ declare module "Game" {
     wildCardMeldScore: number;
     canDraw7: boolean;
   }
-
-  export type IRuleType =
-    | "canDraw7"
-    | "canDiscardWild"
-    | "redThreeScore"
-    | "start7MinRound"
-    | "wildCardMeldScore"
-    | "canOverfillMeld";
-  export interface IRules {
-    canDraw7: boolean;
-    redThreeScore: number;
-    canDiscardWild: boolean;
-    start7MinRound: number;
-    wildCardMeldScore: number;
-    canOverfillMeld: boolean;
-  }
 }

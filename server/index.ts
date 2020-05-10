@@ -30,7 +30,6 @@ app.use(ipMiddleware);
 app.use("/", AuthenticationRoutes());
 app.use("/api", ApiRoutes());
 app.use(function (req, res, next) {
-  console.log(req);
   res.status(404).send("Sorry can't find that!");
 });
 

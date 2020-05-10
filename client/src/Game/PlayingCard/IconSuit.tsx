@@ -1,41 +1,49 @@
-import React from "react";
+import React, { CSSProperties } from "react";
+import { ICard } from "Game";
 
-export default function IconSuit({ card, imageLocation, reversed, config }) {
-  const styleSuitBase = {
+interface IProps {
+  card: ICard;
+  imageLocation: string;
+  reversed: boolean;
+  config: any;
+}
+
+export default function IconSuit({ card, imageLocation, reversed, config }: IProps) {
+  const styleSuitBase: CSSProperties = {
     fontFamily: '"Lucida Sans Unicode", "Lucida Grande", "sans-serif"',
     position: "absolute",
     fontWeight: "bold",
   };
-  const styleSuit = {
+  const styleSuit: CSSProperties = {
     ...styleSuitBase,
     top:
       card.suit === "J"
         ? config.baseTopMark
         : imageLocation === "below"
-        ? config.belowOffsetTop
-        : config.baseTopSuit,
+          ? config.belowOffsetTop
+          : config.baseTopSuit,
     left:
       card.suit === "J"
         ? config.baseLeftMark
         : imageLocation === "below"
-        ? config.baseLeftMark
-        : config.besideOffsetLeft,
+          ? config.baseLeftMark
+          : config.besideOffsetLeft,
   };
-  const styleSuitReversed = {
+  const styleSuitReversed: CSSProperties = {
     ...styleSuitBase,
     transform: "rotate(180deg)",
     bottom:
       card.suit === "J"
         ? config.baseTopMark
         : imageLocation === "below"
-        ? config.belowOffsetTop
-        : config.baseTopSuit,
+          ? config.belowOffsetTop
+          : config.baseTopSuit,
     right:
       card.suit === "J"
         ? config.baseLeftMark
         : imageLocation === "below"
-        ? config.baseLeftMark
-        : config.besideOffsetLeft,
+          ? config.baseLeftMark
+          : config.besideOffsetLeft,
   };
 
   if (!config.SUIT_IMAGES[card.suit]) debugger;
