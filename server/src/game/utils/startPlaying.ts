@@ -1,32 +1,33 @@
-import { IGameJson } from "Game";
+import { IGamePlay, IGameRules } from "Game";
 import { IGameController } from "../../socket/socketManager";
 import startNewRound from "../functions/startNewRound";
 
 const startPlaying = (
   sendToAll: boolean,
-  game: IGameJson,
+  gamePlay: IGamePlay,
+  gameRules: IGameRules,
   gameController: IGameController,
   gameId: number
 ) => {
-  if (!sendToAll || game.gameState !== "waitingToStart") {
+  if (!sendToAll || gamePlay.gameState !== "waitingToStart") {
     return;
   }
-  const numberOfPlayers = game.numberOfPlayers;
+  const numberOfPlayers = gameRules.numberOfPlayers;
   if (numberOfPlayers !== Object.keys(gameController[gameId].players).length) {
     return;
   }
-  if (Object.keys(game.players).length !== numberOfPlayers) {
+  if (Object.keys(gamePlay.players).length !== numberOfPlayers) {
     return;
   }
-  let currentPlayerIndex = Math.floor(Math.random() * game.numberOfPlayers);
-  if (currentPlayerIndex >= game.numberOfPlayers) {
+  let currentPlayerIndex = Math.floor(Math.random() * gameRules.numberOfPlayers);
+  if (currentPlayerIndex >= gameRules.numberOfPlayers) {
     currentPlayerIndex = 0;
   }
-  game.currentPlayerId = Object.values(game.players)[
+  gamePlay.currentPlayerId = Object.values(gamePlay.players)[
     currentPlayerIndex
   ].playerId;
-  game.gameState = "inPlay";
-  startNewRound(game);
+  gamePlay.gameState = "inPlay";
+  startNewRound(gamePlay, gameRules);
 };
 
 export default startPlaying;

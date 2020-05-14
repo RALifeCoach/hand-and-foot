@@ -1,12 +1,12 @@
 
-import { IGameJson, IMeldType } from "Game";
+import { IGamePlay, IMeldType } from "Game";
 import getMessageTypeText from "./getMessageTypeText";
 
-const addMessageCompleted = (game: IGameJson, type: IMeldType) => {
-  game.messages.push({
+const addMessageCompleted = (gamePlay: IGamePlay, type: IMeldType) => {
+  gamePlay.messages.push({
     isSent: false,
     type: "completed",
-    playerName: game.players[game.currentPlayerId].playerName,
+    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
     text: `completed a ${getMessageTypeText(type)}`,
   });
 };

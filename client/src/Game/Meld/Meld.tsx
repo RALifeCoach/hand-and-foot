@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { IGame, IMeld, ICard } from 'Game';
+import { IGamePlay, IMeld, ICard, IGameBase } from 'Game';
 import mapMeldCards from '../functions/mapMeldCards';
 import { Paper, Tooltip, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -16,13 +16,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface IProps {
   options: any;
-  game: IGame,
+  gamePlay: IGamePlay,
+  gameBase: IGameBase,
   meld: IMeld,
   isCurrentPlayer?: boolean;
   selectedCards: ICard[];
 }
 
-const Meld = ({ meld, game, isCurrentPlayer, selectedCards }: IProps) => {
+const Meld = ({ meld, gamePlay, gameBase, isCurrentPlayer, selectedCards }: IProps) => {
   const { cards, rank, type } = meld;
   const mappedMeld = mapMeldCards(cards);
   const [isOver, setIsOver] = useState(false);
@@ -41,7 +42,7 @@ const Meld = ({ meld, game, isCurrentPlayer, selectedCards }: IProps) => {
     }
   }, [type, cards, rank, mappedMeld]);
 
-  const getPlayValues = useCanPlay(game, meld);
+  const getPlayValues = useCanPlay(gamePlay, gameBase, meld);
   const sendMessage = useSendMessage();
 
   const handleClick = useCallback((event) => {

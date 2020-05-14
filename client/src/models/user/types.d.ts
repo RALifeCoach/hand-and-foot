@@ -1,9 +1,9 @@
-declare module 'User' {
+declare module "User" {
   export interface User {
     token: string;
     role: string;
-    UserName: string;
-    UserEmail: string;
-    UserId: number;
+    userName: string;
+    userEmail: string;
+    userId: number;
   }
 }

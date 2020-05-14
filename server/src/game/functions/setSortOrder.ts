@@ -1,8 +1,8 @@
-import { IGameJson } from "Game";
+import { IGamePlay } from "Game";
 import sortCards from "../utils/sortCards";
 
-const setSortOrder = (game: IGameJson, playerId: string, sortOrder: string) => {
-  const player = game.players[playerId];
+const setSortOrder = (gamePlay: IGamePlay, playerId: string, sortOrder: string) => {
+  const player = gamePlay.players[playerId];
 
   player.sortOrder = sortOrder;
   if (player.isInHand) {

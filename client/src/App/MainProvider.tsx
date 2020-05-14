@@ -12,16 +12,24 @@ const MainProvider = ({ children, config }: IProps) => {
   const [mainState, mainDispatch] = useReducer((state: IMainContextState, action: IAction) => {
     if (action.type === 'user') {
       if (action.value) {
-        const menu = action.value.role === 'admin' ? 'users' : 'trips';
+        const menu = action.value.role === 'admin' ? 'users' : 'games';
         return { ...state, [action.type]: action.value, menu };
       }
       return { ...state, [action.type]: action.value };
+    }
+    if (action.type === 'play') {
+      return {
+        ...state,
+        gameId: action.value.gameId,
+        menu: `game:${action.value.position}:${action.value.teamId}`,
+      }
     }
     return { ...state, [action.type]: action.value };
   }, {
     user: null,
     menu: '',
     windowSize: getWindowSize(window.innerWidth),
+    gameId: 0,
   } as IMainContextState);
 
   const onWindowResize = useCallback(event => {
@@ -40,7 +48,7 @@ const MainProvider = ({ children, config }: IProps) => {
   }, [onWindowResize]);
 
   useEffect(() => {
-    const user = localStorage.getItem('toptal:user');
+    const user = localStorage.getItem('handf:user');
     if (user) {
       mainDispatch({ type: 'user', value: JSON.parse(user) });
     }

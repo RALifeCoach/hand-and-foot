@@ -16,9 +16,9 @@ const UsersRow = ({ user, refreshUsers }: IProps) => {
   return (
     <>
       <TableRow>
-        <TableCell><Typography variant="body1">{user.UserId}</Typography></TableCell>
-        <TableCell><Typography variant="body1">{user.UserEmail}</Typography></TableCell>
-        <TableCell><Typography variant="body1">{user.UserName}</Typography></TableCell>
+        <TableCell><Typography variant="body1">{user.userId}</Typography></TableCell>
+        <TableCell><Typography variant="body1">{user.userEmail}</Typography></TableCell>
+        <TableCell><Typography variant="body1">{user.userName}</Typography></TableCell>
         <TableCell><Typography variant="body1">{user.role}</Typography></TableCell>
         <UsersRowButtons user={user} refreshUsers={refreshUsers} />
       </TableRow>

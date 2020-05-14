@@ -1,4 +1,4 @@
-import { IGameJson, IMeldType } from "Game";
+import { IMeldType } from "Game";
 
 const getMessageTypeText = (type: IMeldType): string => {
   switch (type) {

@@ -6,6 +6,7 @@ export interface IMainContextState {
   user: null | User;
   menu: string;
   windowSize: string;
+  gameId: number;
 }
 
 export interface IMainContext {

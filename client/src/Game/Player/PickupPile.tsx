@@ -1,28 +1,28 @@
 import React, { memo, useState, useCallback } from "react";
-import { IGame } from "Game";
+import { IGamePlay } from "Game";
 import useSendMessage from "../hooks/useSendMessage";
 import PlayingCard from "../PlayingCard/PlayingCard";
 import SnackMessage from "../../shared/SnackMessage";
 
 interface IProps {
-  game: IGame;
+  gamePlay: IGamePlay;
   pickupPile: number;
   pileIndex: number;
 }
 
-const PickupPile = ({ game, pickupPile, pileIndex }: IProps) => {
+const PickupPile = ({ gamePlay, pickupPile, pileIndex }: IProps) => {
   const sendMessage = useSendMessage();
   const [error, setError] = useState('');
   const handleClick = useCallback(() => {
-    if (game.gameState !== 'inPlay' || !game.currentPlayer.isPlayerTurn) {
+    if (gamePlay.gameState !== 'inPlay' || !gamePlay.currentPlayer.isPlayerTurn) {
       setError("It isn't your turn");
       return;
     }
-    if (game.currentPlayer.numberOfCardsToDraw === 0) {
+    if (gamePlay.currentPlayer.numberOfCardsToDraw === 0) {
       setError("It isn't time to draw cards");
     }
     sendMessage('drawCard', { pileIndex });
-  }, [game, sendMessage, pileIndex]);
+  }, [gamePlay, sendMessage, pileIndex]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { IGame, ICard, IMeld, IMeldType, IRank } from "Game";
+import { IGamePlay, IGameBase, ICard, IMeld, IMeldType, IRank } from "Game";
 import mapCards from "../functions/mapCards";
 import { useCallback } from "react";
 import canPlayFindExistingMelds from "../functions/canPlayFindExistingMelds";
@@ -16,31 +16,31 @@ export interface ICanPlayReturn extends ICanPlay {
   meldId: string | null;
 }
 
-const useCanPlay = (game: IGame, meld: IMeld | null) => {
+const useCanPlay = (gamePlay: IGamePlay, gameBase: IGameBase, meld: IMeld | null) => {
   return useCallback(
     (cards: ICard[]): ICanPlayReturn => {
       if (
-        game.gameState !== "inPlay" ||
-        ['playing', 'draw7'].indexOf(game.currentPlayer.playerState) === -1 ||
-        game.currentPlayer.numberOfCardsToDraw > 0
+        gamePlay.gameState !== "inPlay" ||
+        ['playing', 'draw7'].indexOf(gamePlay.currentPlayer.playerState) === -1 ||
+        gamePlay.currentPlayer.numberOfCardsToDraw > 0
       ) {
         return { error: "Not at this time", meldId: null };
       }
 
-      if (!game.canOverFillMeld && cards.length > 7) {
+      if (!gameBase.canOverFillMeld && cards.length > 7) {
         return { error: "Too many cards", meldId: null };
       }
 
       const mapping = mapCards(cards);
       if (mapping.others.red3 || mapping.others.black3) {
         return {
-          ...canPlay3s(game, mapping, game.redThreeScore as number),
+          ...canPlay3s(gamePlay, gameBase, mapping),
           meldId: meld?.meldId || null,
         };
       }
 
       const existingMelds = canPlayFindExistingMelds(
-        game,
+        gamePlay,
         meld,
         cards,
         mapping
@@ -55,7 +55,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
       const processMeld = existingMelds.length === 1 ? existingMelds[0] : null;
 
       if (
-        !game.canOverFillMeld &&
+        !gameBase.canOverFillMeld &&
         (processMeld?.cards?.length || 0) + cards.length > 7
       ) {
         return { error: "Too many cards", meldId: null };
@@ -64,7 +64,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
       // this is true if only wild cards (3's were dealt with above)
       if (Object.keys(mapping.suits).length === 0) {
         return {
-          ...canPlayWildOnly(processMeld, cards, game.wildCardMeldScore as number),
+          ...canPlayWildOnly(processMeld, cards, gameBase.wildCardMeldScore as number),
           meldId: processMeld?.meldId || null,
         };
       }
@@ -74,7 +74,7 @@ const useCanPlay = (game: IGame, meld: IMeld | null) => {
         meldId: processMeld?.meldId || null,
       };
     },
-    [game, meld]
+    [gamePlay, gameBase, meld]
   );
 };
 

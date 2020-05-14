@@ -1,30 +1,30 @@
-import { IGame } from "Game";
+import { IGamePlay, IGameBase } from "Game";
 import { useCallback } from "react";
 import mapCards from "../functions/mapCards";
 import isWildCard from "../functions/isWildCard";
 import canDrawFromPileRun from "../functions/canDrawFromPileRun";
 
 const useCanDrawFromPile = () => {
-  return useCallback((game: IGame): string | null => {
-    if (game.gameState !== "inPlay" || !game.currentPlayer.isPlayerTurn) {
+  return useCallback((gamePlay: IGamePlay, gameBase: IGameBase): string | null => {
+    if (gamePlay.gameState !== "inPlay" || !gamePlay.currentPlayer.isPlayerTurn) {
       return "It isn't your turn";
     }
-    if (game.currentPlayer.playerState !== "draw") {
+    if (gamePlay.currentPlayer.playerState !== "draw") {
       return null;
     }
 
-    const player = game.currentPlayer;
+    const player = gamePlay.currentPlayer;
     if (player.numberOfCardsToDraw < 2) {
       return "You can only draw from the pile on the first draw";
     }
-    if (game.discardCard === null) {
+    if (gamePlay.discardCard === null) {
       return "You cannot draw from an empty pile";
     }
-    if (!game.canDraw7) {
+    if (!gameBase.canDraw7) {
       return "You cannot draw from the pile";
     }
 
-    const discardCard = game.discardCard;
+    const discardCard = gamePlay.discardCard;
     if (discardCard.rank === "3") {
       return "You cannot draw a 3";
     }
@@ -37,8 +37,8 @@ const useCanDrawFromPile = () => {
     if (mapping.ranks[discardCard.rank] > 1) {
       return "";
     }
-    const team = game.teams[player.teamId];
-    if (!game.pileIsLocked && game.canPickupWithWild && team.isDown) {
+    const team = gamePlay.teams[player.teamId];
+    if (!gamePlay.pileIsLocked && gameBase.canPickupWithWild && team.isDown) {
       if (mapping.others.wild && mapping.ranks[discardCard.rank] === 1) {
         return "";
       }

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { IMeld, IGame, ICard } from 'Game';
+import { IMeld, IGamePlay, ICard, IGameBase } from 'Game';
 import FlexRow from '../../shared/flex-grid/FlexRow';
 import Meld from './Meld';
 import { Tooltip } from '@material-ui/core';
@@ -9,12 +9,13 @@ import buildMeldDisplay from '../functions/buildMeldDisplay';
 interface IProps {
   melds: IMeld[];
   title: string;
-  game: IGame;
+  gamePlay: IGamePlay;
+  gameBase: IGameBase;
   isCurrentPlayer?: boolean;
   selectedCards: ICard[];
 }
 
-const TeamMeld = ({ melds, game, title, isCurrentPlayer, selectedCards }: IProps) => {
+const TeamMeld = ({ melds, gamePlay, gameBase, title, isCurrentPlayer, selectedCards }: IProps) => {
   const complete = melds.filter(meld => meld.isComplete);
   const incomplete = melds.filter(meld => !meld.isComplete);
 
@@ -49,7 +50,8 @@ const TeamMeld = ({ melds, game, title, isCurrentPlayer, selectedCards }: IProps
         </Tooltip>
         {incomplete.map(meld => (
           <Meld
-            game={game}
+            gamePlay={gamePlay}
+            gameBase={gameBase}
             options={{}}
             meld={meld}
             key={meld.meldId}

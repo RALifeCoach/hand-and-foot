@@ -38,15 +38,15 @@ const AuthenticationRoutes = () => {
           const expiry = new Date().getTime() + 24 * 60 * 60;
           const role = rows[0].role;
           const userName = rows[0].UserName;
-          const userId = req.body.userId;
-          const id = rows[0].UserId;
+          const userId = rows[0].UserId;
+          const userEmail = rows[0].UserEmail;
           const redisKey = uuid.v4();
           const redisBody = {
-            userId: userId,
+            userEmail: userEmail,
             userName: userName,
             expiry: expiry,
             role: role,
-            id: id,
+            userId: userId,
             ip: req.clientIp,
           };
           const token = jwt.sign(
@@ -61,7 +61,7 @@ const AuthenticationRoutes = () => {
             value: JSON.stringify(redisBody),
             expiry,
           });
-          res.send({ token, role, userName, userId, id });
+          res.send({ token, role, userName, userId, userEmail });
         }
       );
     });

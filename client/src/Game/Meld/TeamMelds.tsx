@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { ITeam, IGame, ICard } from 'Game';
+import { ITeam, IGamePlay, ICard, IGameBase } from 'Game';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import TeamMeld from './TeamMeld';
 import { Typography } from '@material-ui/core';
@@ -8,19 +8,20 @@ import scoreCards from '../functions/scoreCards';
 
 interface IProps {
   team: ITeam;
-  game: IGame;
+  gamePlay: IGamePlay;
+  gameBase: IGameBase;
   isCurrentPlayer?: boolean;
   selectedCards: ICard[],
 }
 
-const TeamMelds = ({ team, game, isCurrentPlayer, selectedCards }: IProps) => {
+const TeamMelds = ({ team, gamePlay, gameBase, isCurrentPlayer, selectedCards }: IProps) => {
   const redThrees = Object.values(team.melds).filter(meld => meld.type === '3s');
   const clean = Object.values(team.melds).filter(meld => meld.type === 'clean');
   const dirty = Object.values(team.melds).filter(meld => meld.type === 'dirty');
   const runs = Object.values(team.melds).filter(meld => meld.type === 'run');
   const wild = Object.values(team.melds).filter(meld => meld.type === 'wild');
 
-  const selectedCardsScore = scoreCards(game, selectedCards);
+  const selectedCardsScore = scoreCards(gameBase, selectedCards);
 
   return (
     <FlexColumn style={{ width: '100%' }}>
@@ -29,42 +30,47 @@ const TeamMelds = ({ team, game, isCurrentPlayer, selectedCards }: IProps) => {
         <FlexColumn style={{ minWidth: 100 }}>
           <div>Selected: {selectedCardsScore}</div>
           <div>On Table: {team.scoreOnTable}</div>
-          <div>Minimum: {game.minimumPoints}</div>
+          <div>Minimum: {gamePlay.minimumPoints}</div>
           <div>Score: {team.scoreBase}</div>
         </FlexColumn>
         <FlexColumn>
           <TeamMeld
+            gameBase={gameBase}
             melds={redThrees}
             title="Red Threes"
-            game={game}
+            gamePlay={gamePlay}
             isCurrentPlayer={isCurrentPlayer}
             selectedCards={selectedCards}
           />
           <TeamMeld
+            gameBase={gameBase}
             melds={clean}
             title="Clean Melds"
-            game={game}
+            gamePlay={gamePlay}
             isCurrentPlayer={isCurrentPlayer}
             selectedCards={selectedCards}
           />
           <TeamMeld
+            gameBase={gameBase}
             melds={dirty}
             title="Dirty Melds"
-            game={game}
+            gamePlay={gamePlay}
             isCurrentPlayer={isCurrentPlayer}
             selectedCards={selectedCards}
           />
           <TeamMeld
+            gameBase={gameBase}
             melds={runs}
             title="Runs"
-            game={game}
+            gamePlay={gamePlay}
             isCurrentPlayer={isCurrentPlayer}
             selectedCards={selectedCards}
           />
           <TeamMeld
+            gameBase={gameBase}
             melds={wild}
             title="Wild Cards"
-            game={game}
+            gamePlay={gamePlay}
             isCurrentPlayer={isCurrentPlayer}
             selectedCards={selectedCards}
           />

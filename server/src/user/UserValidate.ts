@@ -11,19 +11,19 @@ class UserValidate {
     const update = {
       type: 'object',
       required: [
-        'UserId',
-        'UserEmail',
-        'UserName',
+        'userId',
+        'userEmail',
+        'userName',
         'role',
       ],
       properties: {
-        UserId: {
+        userId: {
           type: 'integer',
         },
-        UserEmail: {
+        userEmail: {
           type: 'string',
         },
-        UserName: {
+        userName: {
           type: 'string',
         },
         role: {
@@ -36,17 +36,17 @@ class UserValidate {
     const insert = {
       type: 'object',
       required: [
-        'UserEmail',
-        'UserName',
+        'userEmail',
+        'userName',
         'role',
         'Password',
       ],
       properties: {
-        UserEmail: {
+        userEmail: {
           type: 'string',
           format: 'email',
         },
-        UserName: {
+        userName: {
           type: 'string',
         },
         role: {
@@ -62,10 +62,10 @@ class UserValidate {
     const deleteValidation = {
       type: 'object',
       required: [
-        'UserId',
+        'userId',
       ],
       properties: {
-        UserId: {
+        userId: {
           type: 'integer',
         },
       },

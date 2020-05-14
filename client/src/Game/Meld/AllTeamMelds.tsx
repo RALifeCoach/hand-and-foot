@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { IGame } from 'Game';
+import { IGamePlay, IGameBase } from 'Game';
 import FlexRow from '../../shared/flex-grid/FlexRow';
 import TeamMelds from './TeamMelds';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
@@ -9,14 +9,15 @@ import useSendMessage from '../hooks/useSendMessage';
 import SnackMessage from '../../shared/SnackMessage';
 
 interface IProps {
-  game: IGame;
+  gamePlay: IGamePlay;
+  gameBase: IGameBase;
   selected: { [cardId: string]: boolean };
 }
 
-const AllTeamMelds = ({ game, selected }: IProps) => {
+const AllTeamMelds = ({ gamePlay, gameBase, selected }: IProps) => {
   const [error, setError] = useState('');
-  const cards = useSelectedCards(game.currentPlayer.cards, selected);
-  const getPlayValues = useCanPlay(game, null);
+  const cards = useSelectedCards(gamePlay.currentPlayer.cards, selected);
+  const getPlayValues = useCanPlay(gamePlay, gameBase, null);
   const sendMessage = useSendMessage();
 
   const handlePlay = useCallback(() => {
@@ -39,14 +40,15 @@ const AllTeamMelds = ({ game, selected }: IProps) => {
           onClick={handlePlay}
         >
           <TeamMelds
-            team={game.teams[game.currentPlayer.teamId]}
-            game={game}
-            isCurrentPlayer={game.currentPlayer.isPlayerTurn}
+            gameBase={gameBase}
+            team={gamePlay.teams[gamePlay.currentPlayer.teamId]}
+            gamePlay={gamePlay}
+            isCurrentPlayer={gamePlay.currentPlayer.isPlayerTurn}
             selectedCards={cards}
           />
         </div>
-        {Object.values(game.teams)
-          .filter(team => team.teamId !== game.currentPlayer.teamId)
+        {Object.values(gamePlay.teams)
+          .filter(team => team.teamId !== gamePlay.currentPlayer.teamId)
           .map(team => (
             <FlexRow
               style={{
@@ -57,8 +59,9 @@ const AllTeamMelds = ({ game, selected }: IProps) => {
               key={team.teamId}
             >
               <TeamMelds
+                gameBase={gameBase}
                 team={team}
-                game={game}
+                gamePlay={gamePlay}
                 selectedCards={cards}
               />
             </FlexRow>

@@ -1,5 +1,4 @@
-import { IGameJson, ICard } from "Game";
-import sortCards from "../utils/sortCards";
+import { IGamePlay, ICard } from "Game";
 import rePinCards from "./rePinCards";
 
 const buildNewCards = (
@@ -51,12 +50,12 @@ const buildNewCards = (
 };
 
 const moveCard = (
-  game: IGameJson,
+  gamePlay: IGamePlay,
   playerId: number,
   sourceCardId: number,
   destCardId: number
 ) => {
-  const player = game.players[playerId];
+  const player = gamePlay.players[playerId];
 
   if (player.isInHand) {
     player.hand = rePinCards(

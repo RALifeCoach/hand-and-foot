@@ -83,9 +83,27 @@ declare module "Game" {
     text: string;
   }
 
-  export interface IGame {
+  export interface IGameBase {
     gameId: number;
     gameName: string;
+    numberOfPlayers: number;
+    numberOfRounds: number;
+    roundSequence: IRoundSequence;
+    wildCardMeldScore: number;
+    runScore: number;
+    cleanScore: number;
+    dirtyScore: number;
+    canPickupWithWild: boolean;
+    canLockDiscards: boolean;
+    askRoundEnd: boolean;
+    canOverFillMeld: boolean;
+    redThreeScore: number;
+    canDraw7: boolean;
+    minimumRoundNatural7: number;
+  }
+
+  export interface IGamePlay {
+    gameId: number;
     gameState: IGameState;
     currentPlayer: IPlayerCurrent;
     otherPlayers: IPlayerOther[];
@@ -96,11 +114,19 @@ declare module "Game" {
     pickupPiles: number[];
     pileIsLocked: boolean;
     minimumPoints: number;
-    canPickupWithWild: boolean;
-    canLockDiscards: boolean;
-    canOverFillMeld: boolean;
-    redThreeScore: number;
-    wildCardMeldScore: number;
-    canDraw7: boolean;
+  }
+
+  export interface IGameRow {
+    gameId?: number;
+    gameName: string;
+    numberOfPlayers: number;
+    gameState?: IGameState;
+    canPickupWithWild?: boolean;
+    canLockDiscards?: boolean;
+    canOverFillMeld?: boolean;
+    redThreeScore?: number;
+    wildCardMeldScore?: number;
+    canDraw7?: boolean;
+    players?: { [position: string]: { name: string; playerId: number } };
   }
 }

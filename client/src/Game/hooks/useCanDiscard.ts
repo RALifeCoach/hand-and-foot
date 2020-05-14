@@ -1,21 +1,21 @@
-import { IGame } from "Game";
+import { IGamePlay, IGameBase } from "Game";
 import useSelectedCards from "./useSelectedCards";
 import canDiscard from "../functions/canDiscard";
 import { useCallback } from "react";
 
-const useCanDiscard = (game: IGame, selected: { [cardId: string]: boolean }) => {
-  const cards = useSelectedCards(game.currentPlayer.cards, selected);
+const useCanDiscard = (gamePlay: IGamePlay, gameBase: IGameBase, selected: { [cardId: string]: boolean }) => {
+  const cards = useSelectedCards(gamePlay.currentPlayer.cards, selected);
   return useCallback(() => {
     if (
-      game.gameState !== "inPlay" ||
-      game.currentPlayer.playerState !== "playing" ||
+      gamePlay.gameState !== "inPlay" ||
+      gamePlay.currentPlayer.playerState !== "playing" ||
       cards.length !== 1
     ) {
       return "You cannot discard at this point in time";
     }
 
-    return canDiscard(game, cards[0]);
-  }, [game, cards])
+    return canDiscard(gamePlay, gameBase, cards[0]);
+  }, [gamePlay, gameBase, cards])
 };
 
 export default useCanDiscard;

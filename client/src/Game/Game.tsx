@@ -1,32 +1,59 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import GameContext from "./GameContext";
 import Player from "./Player/Player";
 import { IPlayerCurrent } from "Game";
 import ApplicationBar from "../App/ApplicationBar";
 import MainContext from "../App/MainContext";
+import useFetchGet from "../hooks/useFetchGet";
+import FetchHandling from "../shared/FetchHandling";
+import useSendMessage from "./hooks/useSendMessage";
 
-const Game = () => {
-  const { mainState: { menu } } = useContext(MainContext);
-  const { gameState: { game, selected, sortOrder, cardMoving } } = useContext(GameContext);
-  if (!game) {
+interface IProps {
+  position: number;
+  teamId: string;
+}
+
+const Game = ({ position, teamId }: IProps) => {
+  const { mainState: { gameId } } = useContext(MainContext);
+  const {
+    gameState: { gamePlay, gameBase, selected, sortOrder, cardMoving, playerId },
+    gameDispatch
+  } = useContext(GameContext);
+  const [gameStatus, getGame] = useFetchGet();
+  const sendMessage = useSendMessage();
+
+  useEffect(() => {
+    getGame(`api/game/query/${gameId}`);
+  }, [getGame, gameId]);
+
+  useEffect(() => {
+    if (gameStatus.status === 'success') {
+      console.log(gameStatus.data);
+      gameDispatch({ type: 'gameBase', value: gameStatus.data });
+      sendMessage('addPlayer', { position, teamId })
+    }
+  }, [gameStatus, gameDispatch, playerId, sendMessage, gameId, position, teamId]);
+
+  if (!gamePlay || !gameBase) {
     return null;
   }
   return (
     <>
       <ApplicationBar
-        tabValue={menu}
         notifications
       />
-      {Boolean(game?.currentPlayer) && (
+      {Boolean(gamePlay?.currentPlayer) && (
         <Player
-          player={game.currentPlayer as IPlayerCurrent}
-          game={game}
+          player={gamePlay.currentPlayer as IPlayerCurrent}
+          gameBase={gameBase}
+          gamePlay={gamePlay}
           selected={selected}
           sortOrder={sortOrder}
           cardMoving={cardMoving}
-          key={game?.currentPlayer.playerId}
+          key={gamePlay?.currentPlayer.playerId}
         />
       )}
+      <FetchHandling status={gameStatus} title="Fetching the game..." />
     </>
   )
 };

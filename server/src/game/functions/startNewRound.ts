@@ -1,41 +1,41 @@
-import { IGameJson } from "Game";
+import { IGamePlay, IGameRules } from "Game";
 import startNewTurn from "./startNewTurn";
 import drawCards from "../utils/drawCards";
 import dealCards from "./dealCards";
 
 const ROUND_MINIMUM = [50, 90, 120, 150, 190, 220, 250, 290];
 
-const startNewRound = (game: IGameJson) => {
-  game.deck = dealCards();
-  if (game.roundSequence === "random") {
-    const unplayedRounds = game.rounds.filter((round) => !round.played);
+const startNewRound = (gamePlay: IGamePlay, gameRules: IGameRules) => {
+  gamePlay.deck = dealCards();
+  if (gameRules.roundSequence === "random") {
+    const unplayedRounds = gamePlay.rounds.filter((round) => !round.played);
     const roundIndex = Math.min(
       Math.floor(Math.random() * unplayedRounds.length),
       unplayedRounds.length - 1
     );
-    game.currentRound = roundIndex;
+    gamePlay.currentRound = roundIndex;
   } else {
-    game.currentRound = game.currentRound + 1;
+    gamePlay.currentRound = gamePlay.currentRound + 1;
   }
-  Object.keys(game.players).forEach((playerId) => {
-    game.players[playerId].hand = drawCards(game.deck, 11);
-    game.players[playerId].foot = drawCards(game.deck, 11);
+  Object.keys(gamePlay.players).forEach((playerId) => {
+    gamePlay.players[playerId].hand = drawCards(gamePlay.deck, 11);
+    gamePlay.players[playerId].foot = drawCards(gamePlay.deck, 11);
   });
-  game.minimumPoints = ROUND_MINIMUM[game.currentRound];
-  Object.keys(game.teams).forEach((teamId) => {
-    const team = game.teams[teamId];
+  gamePlay.minimumPoints = ROUND_MINIMUM[gamePlay.currentRound];
+  Object.keys(gamePlay.teams).forEach((teamId) => {
+    const team = gamePlay.teams[teamId];
     team.isDown = false;
     team.melds = {};
     team.scoreBase = 0;
     team.scoreCards = 0;
   });
-  game.pickupPiles = [[], [], [], []];
+  gamePlay.pickupPiles = [[], [], [], []];
   do {
     const pileIndex = Math.min(Math.floor(Math.random() * 4), 3);
-    game.pickupPiles[pileIndex].push(...drawCards(game.deck, 1));
-  } while (game.deck.length > 0);
+    gamePlay.pickupPiles[pileIndex].push(...drawCards(gamePlay.deck, 1));
+  } while (gamePlay.deck.length > 0);
 
-  startNewTurn(game);
+  startNewTurn(gamePlay, gameRules);
 };
 
 export default startNewRound;

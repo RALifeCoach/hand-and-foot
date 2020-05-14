@@ -1,10 +1,10 @@
-import { IGameJson, ITeam } from "Game";
+import { IGamePlay, ITeam, IGameRules } from "Game";
 
-const canGoDown = (game: IGameJson, team: ITeam, points: number): boolean => {
-  if (points > 0 && points < game.minimumPoints) {
+const canGoDown = (gamePlay: IGamePlay, gameRules: IGameRules, team: ITeam, points: number): boolean => {
+  if (points > 0 && points < gamePlay.minimumPoints) {
     return true;
   }
-  if (game.currentRound < game.minimumRoundNatural7) {
+  if (gamePlay.currentRound < gameRules.minimumRoundNatural7) {
     return false;
   }
   if (Object.keys(team.melds).length !== 1) {

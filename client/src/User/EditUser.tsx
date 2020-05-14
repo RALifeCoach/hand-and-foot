@@ -42,20 +42,20 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
     roleError: '',
   });
 
-  const { UserId, UserEmail, emailError, UserName, nameError, role, roleError } = state;
+  const { userId, userEmail, emailError, userName, nameError, role, roleError } = state;
 
   useEffect(() => {
-    if (!UserEmail) {
+    if (!userEmail) {
       dispatch({ type: 'emailError', value: 'Required' });
       return;
     }
-    const validEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(UserEmail);
-    dispatch({ type: 'emailError', value: validEmail || UserEmail === 'admin' ? '' : 'Not a valid email' });
-  }, [dispatch, UserEmail]);
+    const validEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(userEmail);
+    dispatch({ type: 'emailError', value: validEmail || userEmail === 'admin' ? '' : 'Not a valid email' });
+  }, [dispatch, userEmail]);
 
   useEffect(() => {
-    dispatch({ type: 'nameError', value: Boolean(UserName) ? '' : 'Required' });
-  }, [dispatch, UserName]);
+    dispatch({ type: 'nameError', value: Boolean(userName) ? '' : 'Required' });
+  }, [dispatch, userName]);
 
   useEffect(() => {
     dispatch({ type: 'roleError', value: Boolean(role) ? '' : 'Required' });
@@ -63,17 +63,17 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
 
   const [status, performUpdate] = useFetchSave();
   const handleUpdate = useCallback((state) => {
-    const { UserId, UserEmail, emailError, UserName, nameError, role, roleError } = state;
+    const { userId, userEmail, emailError, userName, nameError, role, roleError } = state;
     if (emailError || nameError || roleError) {
       return;
     }
     const body = {
-      UserEmail,
-      UserName,
+      userEmail,
+      userName,
       role,
     } as any;
-    if (UserId) {
-      body.UserId = UserId;;
+    if (userId) {
+      body.userId = userId;;
     } else {
       body.password = uuidV4().toString();
       alert(`For initial login use url: ${window.location.origin}/?id=${body.password}`);
@@ -110,7 +110,7 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
       >
         <DialogTitle>
           <Typography variant="h2">
-            {Boolean(UserId) ? 'Edit User' : 'Add User'}
+            {Boolean(userId) ? 'Edit User' : 'Add User'}
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -118,16 +118,16 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
             <Divider style={{ width: '100%' }} />
             <Typography variant={"subtitle1"}>User Id</Typography>
             <TextField
-              value={UserEmail}
+              value={userEmail}
               onChange={event => dispatch({ type: 'UserEmail', value: event.target.value })}
               error={Boolean(emailError)}
               helperText={emailError}
-              disabled={UserEmail === 'admin'}
+              disabled={userEmail === 'admin'}
             />
             <Spacer height={16} />
             <Typography variant={"subtitle1"}>User Name</Typography>
             <TextField
-              value={UserName}
+              value={userName}
               onChange={event => dispatch({ type: 'userName', value: event.target.value })}
               error={Boolean(nameError)}
               helperText={nameError}

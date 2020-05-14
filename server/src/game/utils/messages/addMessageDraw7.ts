@@ -1,10 +1,10 @@
-import { IGameJson, ICard } from "Game";
+import { IGamePlay, ICard } from "Game";
 
-const addMessageDraw7 = (game: IGameJson, card: ICard) => {
-  game.messages.push({
+const addMessageDraw7 = (gamePlay: IGamePlay, card: ICard) => {
+  gamePlay.messages.push({
     isSent: false,
     type: "draw7",
-    playerName: game.players[game.currentPlayerId].playerName,
+    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
     text: `drew the ${card.suit}-${card.rank}`,
   });
 };

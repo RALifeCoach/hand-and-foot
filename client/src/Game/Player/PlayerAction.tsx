@@ -1,23 +1,23 @@
 import React, { memo, useMemo } from "react";
-import { IGame } from "Game";
+import { IGamePlay } from "Game";
 import { Button } from "@material-ui/core";
 import useSendMessage from "../hooks/useSendMessage";
 import FlexColumn from "../../shared/flex-grid/FlexColumn";
 
 interface IProps {
-  game: IGame;
+  gamePlay: IGamePlay;
 }
 
-const PlayerAction = ({ game }: IProps) => {
+const PlayerAction = ({ gamePlay }: IProps) => {
   const sendMessage = useSendMessage();
   const canDraw = useMemo(() => {
-    if (game.gameState !== 'inPlay' || !game.currentPlayer.isPlayerTurn) {
+    if (gamePlay.gameState !== 'inPlay' || !gamePlay.currentPlayer.isPlayerTurn) {
       return false;
     }
-    return game.currentPlayer.numberOfCardsToDraw > 0;
-  }, [game.gameState, game.currentPlayer.isPlayerTurn, game.currentPlayer.numberOfCardsToDraw]);
+    return gamePlay.currentPlayer.numberOfCardsToDraw > 0;
+  }, [gamePlay.gameState, gamePlay.currentPlayer.isPlayerTurn, gamePlay.currentPlayer.numberOfCardsToDraw]);
 
-  const canPlay = game.gameState === 'inPlay' && game.currentPlayer.isPlayerTurn;
+  const canPlay = gamePlay.gameState === 'inPlay' && gamePlay.currentPlayer.isPlayerTurn;
 
   if (canDraw) {
     return (
@@ -27,7 +27,7 @@ const PlayerAction = ({ game }: IProps) => {
       >
         <FlexColumn>
           <div style={{ fontSize: 18 }}>Draw</div>
-          <div style={{ fontSize: 14 }}>{game.currentPlayer.numberOfCardsToDraw}</div>
+          <div style={{ fontSize: 14 }}>{gamePlay.currentPlayer.numberOfCardsToDraw}</div>
         </FlexColumn>
       </Button>
     );

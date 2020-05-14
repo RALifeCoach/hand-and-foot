@@ -1,12 +1,12 @@
-import { IGameJson, IPlayer, ITeam, ICard } from "Game";
+import { IGamePlay, IPlayer, ITeam, ICard } from "Game";
 
 const addPlayer = (
-  game: IGameJson,
+  gamePlay: IGamePlay,
   playerId: number,
   teamId: string,
   position: number,
 ) => {
-  const player = game.players[playerId];
+  const player = gamePlay.players[playerId];
   if (player) {
     if (player.teamId !== teamId || player.position !== position) {
       throw new Error(
@@ -15,14 +15,14 @@ const addPlayer = (
     }
     return null;
   }
-  const positionExists = Object.values(game.players).some(
+  const positionExists = Object.values(gamePlay.players).some(
     (player) => player.position === position
   );
   if (positionExists) {
     throw new Error("that position is already filled");
   }
 
-  game.players[playerId] = {
+  gamePlay.players[playerId] = {
     playerId,
     teamId,
     position,
@@ -33,8 +33,8 @@ const addPlayer = (
     isInHand: true,
   } as IPlayer;
 
-  if (!game.teams[teamId]) {
-    game.teams[teamId] = {
+  if (!gamePlay.teams[teamId]) {
+    gamePlay.teams[teamId] = {
       teamId,
       isDown: false,
       melds: {},

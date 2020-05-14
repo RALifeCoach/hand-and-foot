@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  Icon,
   IconButton,
   Menu,
   MenuItem,
@@ -11,7 +10,6 @@ import { Delete, Edit, VpnKey } from '@material-ui/icons';
 import Spacer from "../shared/Spacer";
 import { User } from "User";
 import FlexRow from "../shared/flex-grid/FlexRow";
-import MainContext from "../App/MainContext";
 import WarningDialog from "../shared/WarningDialog";
 import useFetchSave from "../hooks/useFetchSave";
 import EditUser from "./EditUser";
@@ -25,7 +23,6 @@ interface IProps {
 }
 
 const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
-  const { mainState: { windowSize } } = useContext(MainContext);
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [openReset, setOpenReset] = useState(false);
@@ -39,13 +36,13 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
   const [deleteStatus, performDelete] = useFetchSave();
   const [resetStatus, performReset] = useFetchSave();
   const handleDelete = useCallback(() => {
-    const body = { id: user.UserId };
+    const body = { id: user.userId };
     performDelete(body, 'api/users/delete');
   }, [user, performDelete]);
 
   const handleReset = useCallback(() => {
     const body = {
-      id: user?.UserId || 0,
+      id: user?.userId || 0,
       password: uuidV4().toString(),
     };
     alert(`To reset the password use url: ${window.location.origin}/?id=${body.password}`);
@@ -84,7 +81,7 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
               <Edit style={{ width: 30, height: 30 }} />
             </Tooltip>
           </IconButton>
-          {user.UserEmail !== 'admin' && (
+          {user.userEmail !== 'admin' && (
             <>
               <Spacer />
               <IconButton

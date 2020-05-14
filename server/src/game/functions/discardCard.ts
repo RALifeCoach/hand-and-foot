@@ -1,4 +1,4 @@
-import { IGameJson } from "Game";
+import { IGamePlay, IGameRules } from "Game";
 import startNewTurn from "./startNewTurn";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
 import logGameState from "../../socket/logGameState";
@@ -9,25 +9,26 @@ import rePinCards from "./rePinCards";
 
 const discardCard = (
   gameId: number,
-  game: IGameJson,
+  gamePlay: IGamePlay,
+  gameRules: IGameRules,
   toDiscardId: number,
   resolve: any
 ) => {
-  const player = game.players[game.currentPlayerId];
-  const team = game.teams[player.teamId];
-  const points = computeTeamCardPoints(game, team);
+  const player = gamePlay.players[gamePlay.currentPlayerId];
+  const team = gamePlay.teams[player.teamId];
+  const points = computeTeamCardPoints(gameRules, team);
   if (!team.isDown) {
     const melds = Object.keys(team.melds).filter(
       (meldId) => team.melds[meldId].type !== "3s"
     );
-    if (melds.length > 0 && !canGoDown(game, team, points)) {
+    if (melds.length > 0 && !canGoDown(gamePlay, gameRules, team, points)) {
       resolve({
         type: "unmetMin",
         value: { cards: player.isInHand ? player.hand : player.foot },
       });
     }
   }
-  logGameState(gameId, game, false).then(() => {
+  logGameState(gameId, gamePlay, false).then(() => {
     if (!team.isDown && points > 0) {
       team.isDown = true;
     }
@@ -41,10 +42,10 @@ const discardCard = (
     }
     const card = cards[discardCardIndex];
     card.pinValue === 0;
-    game.discard.unshift(...cards.splice(discardCardIndex, 1));
+    gamePlay.discard.unshift(...cards.splice(discardCardIndex, 1));
     if (cards.length === 0) {
       player.isInHand = false;
-      addMessageFoot(game, false);
+      addMessageFoot(gamePlay, false);
     } else {
       rePinCards(cards);
     }
@@ -65,16 +66,16 @@ const discardCard = (
         (meld) => meld.type === "dirty"
       );
       if (hasClean && hasDirty) {
-        if (game.askRoundEnd) {
-          game.gameState = "askRoundEnd";
+        if (gameRules.askRoundEnd) {
+          gamePlay.gameState = "askRoundEnd";
         } else {
-          endRound(game);
+          endRound(gamePlay, gameRules);
         }
         resolve(null);
       }
     }
 
-    startNewTurn(game);
+    startNewTurn(gamePlay, gameRules);
 
     resolve(null);
   });

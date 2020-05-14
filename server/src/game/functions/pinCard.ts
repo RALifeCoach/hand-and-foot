@@ -1,7 +1,7 @@
-import { IGameJson, ICard } from "Game";
+import { IGamePlay, ICard } from "Game";
 import sortCards from "../utils/sortCards";
-const pinCard = (game: IGameJson, playerId: number, cardId: number) => {
-  const player = game.players[playerId];
+const pinCard = (gamePlay: IGamePlay, playerId: number, cardId: number) => {
+  const player = gamePlay.players[playerId];
   const cards = player.isInHand ? player.hand : player.foot;
   const newCards: ICard[] = JSON.parse(JSON.stringify(cards));
 

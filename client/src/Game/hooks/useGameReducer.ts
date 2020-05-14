@@ -73,6 +73,8 @@ const useGameReducer = (gameId: number, playerId: number) => {
           return { ...state, error: "" };
         case "messagesSeen":
           return { ...state, newMessages: false };
+        case "gameBase":
+          return { ...state, gameBase: action.value };
         case "setLastMessage":
           const message = action.value;
           switch (message.type) {
@@ -98,7 +100,7 @@ const useGameReducer = (gameId: number, playerId: number) => {
               return {
                 ...state,
                 lastMessage: action.value,
-                game: message.game,
+                gamePlay: message.game,
                 sortOrder: currentPlayer.sortOrder,
                 messages: [...state.messages, ...newMessages],
                 newMessages: state.newMessages || newMessages.length > 0,
@@ -110,10 +112,10 @@ const useGameReducer = (gameId: number, playerId: number) => {
               return {
                 ...state,
                 sortOrder: newSortOrder,
-                game: {
-                  ...state.game,
+                gamePlay: {
+                  ...state.gamePlay,
                   currentPlayer: {
-                    ...state?.game?.currentPlayer,
+                    ...state?.gamePlay?.currentPlayer,
                     cards: message.value.cards,
                   },
                 },
@@ -121,10 +123,10 @@ const useGameReducer = (gameId: number, playerId: number) => {
             case "moveCard":
               return {
                 ...state,
-                game: {
-                  ...state.game,
+                gamePlay: {
+                  ...state.gamePlay,
                   currentPlayer: {
-                    ...state?.game?.currentPlayer,
+                    ...state?.gamePlay?.currentPlayer,
                     cards: message.value.cards,
                   },
                 },
@@ -134,10 +136,10 @@ const useGameReducer = (gameId: number, playerId: number) => {
             case "pinCard":
               return {
                 ...state,
-                game: {
-                  ...state.game,
+                gamePlay: {
+                  ...state.gamePlay,
                   currentPlayer: {
-                    ...state?.game?.currentPlayer,
+                    ...state?.gamePlay?.currentPlayer,
                     cards: message.value.cards,
                   },
                 },
@@ -164,7 +166,7 @@ const useGameReducer = (gameId: number, playerId: number) => {
               throw new Error(`unknown message type ${action.value.type}`);
           }
         default:
-          return state;
+          throw new Error("Unknown action type");
       }
     },
     {
@@ -174,12 +176,14 @@ const useGameReducer = (gameId: number, playerId: number) => {
       currentMessage: null,
       messages: [],
       newMessages: false,
-      game: null,
+      gameBase: null,
+      gamePlay: null,
       selected: {},
       sortOrder: "",
       cardMoving: null,
       error: "",
       messageId: "",
+      playerId,
     } as IGameContextState
   );
 };

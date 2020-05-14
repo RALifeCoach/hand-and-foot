@@ -1,10 +1,10 @@
-import { IGameJson, IMeldType } from "Game";
+import { IGamePlay } from "Game";
 
-const addMessageFoot = (game: IGameJson, stillPlaying: boolean) => {
-  game.messages.push({
+const addMessageFoot = (gamePlay: IGamePlay, stillPlaying: boolean) => {
+  gamePlay.messages.push({
     isSent: false,
     type: "foot",
-    playerName: game.players[game.currentPlayerId].playerName,
+    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
     text: `went into their foot${stillPlaying ? ' and still playing' : ''}`,
   });
 };

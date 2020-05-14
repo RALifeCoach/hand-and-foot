@@ -1,4 +1,4 @@
-import { ICard, IRank, IGame } from "Game";
+import { ICard, IRank, IGameBase } from "Game";
 import isRedThree from "./isRedThree";
 
 const CARD_POINTS = {
@@ -17,9 +17,9 @@ const CARD_POINTS = {
   A: 20,
 };
 
-const getCardPoints = (game: IGame, card: ICard) => {
+const getCardPoints = (gameBase: IGameBase, card: ICard) => {
   if (isRedThree(card)) {
-    return Math.abs(game.redThreeScore);
+    return Math.abs(gameBase.redThreeScore);
   }
   return card.suit === "J" ? 50 : CARD_POINTS[card.rank as IRank];
 };

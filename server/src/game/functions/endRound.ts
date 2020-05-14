@@ -1,27 +1,27 @@
-import { IGameJson } from "Game";
+import { IGamePlay, IGameRules } from "Game";
 import scoreTeam from "../utils/scoreTeam";
 import scoreCards from "../utils/scoreCards";
 import endGame from "./endGame";
 
-const endRound = (game: IGameJson) => {
-  const currentRound = game.rounds[game.currentRound];
-  Object.keys(game.teams).forEach(teamId => {
-    const team = game.teams[teamId];
-    const scores = scoreTeam(game, team);
+const endRound = (gamePlay: IGamePlay, gameRules: IGameRules) => {
+  const currentRound = gamePlay.rounds[gamePlay.currentRound];
+  Object.keys(gamePlay.teams).forEach(teamId => {
+    const team = gamePlay.teams[teamId];
+    const scores = scoreTeam(gameRules, team);
     // deduct cards left in players hand
-    Object.keys(game.players)
-      .filter(playerId => game.players[playerId].teamId === teamId)
+    Object.keys(gamePlay.players)
+      .filter(playerId => gamePlay.players[playerId].teamId === teamId)
       .forEach(playerId => {
-        scores.scoreCards -= scoreCards(game, game.players[playerId].hand);
-        scores.scoreCards -= scoreCards(game, game.players[playerId].foot);
+        scores.scoreCards -= scoreCards(gameRules, gamePlay.players[playerId].hand);
+        scores.scoreCards -= scoreCards(gameRules, gamePlay.players[playerId].foot);
       });
     currentRound.teams[teamId] = scores;
     team.scoreBase += scores.scoreBase;
     team.scoreCards += scores.scoreCards;
   });
-  const completedRounds = game.rounds.filter(round => !round.played);
+  const completedRounds = gamePlay.rounds.filter(round => !round.played);
   if (completedRounds.length === 0) {
-    endGame(game);
+    endGame(gamePlay);
   }
 };
 

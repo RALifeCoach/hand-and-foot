@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import FlexRow from '../shared/flex-grid/FlexRow';
 import MenuIcon from "@material-ui/icons/Menu";
 import Notifications from "./Notifications";
 import ApplicationBarButtons from './ApplicationBarButtons';
+import MainContext from './MainContext';
 
 interface IProps {
-  tabValue: string;
   notifications: boolean;
 }
 
-const ApplicationBar = ({tabValue, notifications}: IProps) => {
+const ApplicationBar = ({ notifications }: IProps) => {
+  const { mainState: { menu } } = useContext(MainContext);
   return (
     <AppBar position="static" style={{ width: '100%' }}>
       <Toolbar style={{ width: '100%' }}>
@@ -21,7 +22,7 @@ const ApplicationBar = ({tabValue, notifications}: IProps) => {
           <Typography variant="h2" style={{ color: '#FFF', marginTop: 12 }}>
             {'Hand & Foot (brought to the family by Bob White)'}
           </Typography>
-          <ApplicationBarButtons tabValue={tabValue} />
+          <ApplicationBarButtons tabValue={menu} />
           {notifications && (
             <Notifications />
           )}

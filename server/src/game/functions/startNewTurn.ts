@@ -1,18 +1,18 @@
-import { IGameJson, IPlayer } from "Game";
+import { IGamePlay, IPlayer, IGameRules } from "Game";
 
-const startNewTurn = (game: IGameJson) => {
-  const currentPlayer = game.players[game.currentPlayerId];
+const startNewTurn = (gamePlay: IGamePlay, gameRules: IGameRules) => {
+  const currentPlayer = gamePlay.players[gamePlay.currentPlayerId];
   currentPlayer.playerState = "waiting";
 
-  const playerIds = Object.values(game.players)
+  const playerIds = Object.values(gamePlay.players)
     .sort((a: IPlayer, b: IPlayer) => a.position - b.position)
     .map((player) => player.playerId);
-  let currentPlayerIndex = playerIds.indexOf(game.currentPlayerId);
-  if (++currentPlayerIndex === game.numberOfPlayers) {
+  let currentPlayerIndex = playerIds.indexOf(gamePlay.currentPlayerId);
+  if (++currentPlayerIndex === gameRules.numberOfPlayers) {
     currentPlayerIndex = 0;
   }
-  game.currentPlayerId = playerIds[currentPlayerIndex];
-  const nextPlayer = game.players[game.currentPlayerId];
+  gamePlay.currentPlayerId = playerIds[currentPlayerIndex];
+  const nextPlayer = gamePlay.players[gamePlay.currentPlayerId];
   nextPlayer.playerState = "draw";
   nextPlayer.numberOfCardsToDraw = 2;
 };

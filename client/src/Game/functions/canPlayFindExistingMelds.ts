@@ -1,17 +1,17 @@
-import { ICard, IMeld, IGame } from "Game";
+import { ICard, IMeld, IGamePlay } from "Game";
 import isWildCard from "./isWildCard";
 import checkRunCards from "./checkRunCards";
 import { ICardMapping } from "./mapCards";
 
 const canPlayFindExistingMelds = (
-  game: IGame,
+  gamePlay: IGamePlay,
   meld: IMeld | null,
   cards: ICard[],
   mapping: ICardMapping,
 ) => {
   if (meld === null) {
     return Object.values(
-      game.teams[game.currentPlayer.teamId].melds
+      gamePlay.teams[gamePlay.currentPlayer.teamId].melds
     ).filter((meld) => {
       if (meld.isComplete) {
         return false;

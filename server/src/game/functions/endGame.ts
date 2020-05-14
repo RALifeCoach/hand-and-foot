@@ -1,6 +1,6 @@
-import { IGameJson } from "Game";
+import { IGamePlay } from "Game";
 
-const endGame = (game: IGameJson) => {
+const endGame = (gamePlay: IGamePlay) => {
 };
 
 export default endGame;

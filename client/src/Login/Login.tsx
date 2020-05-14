@@ -45,7 +45,7 @@ const Login = () => {
 
   useEffect(() => {
     if (login.status === 'success') {
-      localStorage.setItem('toptal:user', JSON.stringify(login.response));
+      localStorage.setItem('handf:user', JSON.stringify(login.response));
       mainDispatch({ type: 'user', value: login.response });
     }
   }, [login, mainDispatch]);

@@ -1,16 +1,16 @@
-import { IGameJson, IMeldType, ICard } from "Game";
+import { IGamePlay, IMeldType, ICard } from "Game";
 import getMessageTypeText from "./getMessageTypeText";
 
 const addMessageAdded = (
-  game: IGameJson,
+  gamePlay: IGamePlay,
   type: IMeldType,
   cards: ICard[]
 ) => {
   if (type === "3s") {
-    game.messages.push({
+    gamePlay.messages.push({
       isSent: false,
       type: "added",
-      playerName: game.players[game.currentPlayerId].playerName,
+      playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
       text: `added ${cards.length} ${getMessageTypeText(type)}${
         cards.length > 1 ? "s" : ""
       }`,
@@ -22,10 +22,10 @@ const addMessageAdded = (
       return card.suit === "J" ? "*" : `${card.suit}-${card.rank}`;
     })
     .join(", ");
-  game.messages.push({
+  gamePlay.messages.push({
     isSent: false,
     type: "added",
-    playerName: game.players[game.currentPlayerId].playerName,
+    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
     text: `added ${cardDisplays} to a ${getMessageTypeText(type)}`,
   });
 };

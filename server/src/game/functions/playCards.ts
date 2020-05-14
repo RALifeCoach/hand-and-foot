@@ -1,4 +1,4 @@
-import { IGameJson, IMeldType, IRank, ICard } from "Game";
+import { IGamePlay, IMeldType, IRank, ICard, IGameRules } from "Game";
 import * as uuid from "uuid";
 import logGameState from "../../socket/logGameState";
 import isRedThree from "../utils/isRedThree";
@@ -14,21 +14,22 @@ import rePinCards from "./rePinCards";
 
 const playCards = (
   gameId: number,
-  game: IGameJson,
+  gamePlay: IGamePlay,
+  gameRules: IGameRules,
   cardIds: number[],
   meldId: string,
   meldType: IMeldType,
   meldRank: IRank | undefined,
   resolve: any
 ) => {
-  const player = game.players[game.currentPlayerId];
-  const team = game.teams[game.players[game.currentPlayerId].teamId];
+  const player = gamePlay.players[gamePlay.currentPlayerId];
+  const team = gamePlay.teams[gamePlay.players[gamePlay.currentPlayerId].teamId];
   if (!team) {
     throw new Error("team not found");
   }
 
-  completeDraw7(game, gameId)
-    .then(() => logGameState(gameId, game, true))
+  completeDraw7(gamePlay, gameRules, gameId)
+    .then(() => logGameState(gameId, gamePlay, true))
     .then(() => {
       const cards = player.isInHand ? player.hand : player.foot;
       let thisMeldId = meldId;
@@ -44,7 +45,7 @@ const playCards = (
         selectedCards.push(card);
         if (!thisMeldId || isRedThree(card)) {
           if (!isRedThree(card)) {
-            addMessageStarted(game, meldType);
+            addMessageStarted(gamePlay, meldType);
           }
           thisMeldId = uuid.v4();
           team.melds[thisMeldId] = {
@@ -82,21 +83,21 @@ const playCards = (
         return cardA.suit < cardB.suit ? -1 : 1;
       });
 
-      addMessageAdded(game, meld.type, selectedCards);
+      addMessageAdded(gamePlay, meld.type, selectedCards);
 
-      if (!game.canOverFillMeld && team.melds[thisMeldId].cards.length > 6) {
+      if (!gameRules.canOverFillMeld && team.melds[thisMeldId].cards.length > 6) {
         team.melds[thisMeldId].isComplete = true;
-        addMessageCompleted(game, team.melds[thisMeldId].type);
+        addMessageCompleted(gamePlay, team.melds[thisMeldId].type);
       }
 
       if (cards.length === 0 && player.playerState !== "draw7") {
         player.isInHand = false;
-        addMessageFoot(game, true);
+        addMessageFoot(gamePlay, true);
       } else {
         rePinCards(cards);
       }
 
-      const score = scoreTeam(game, team);
+      const score = scoreTeam(gameRules, team);
       team.scoreBase = score.scoreBase;
       team.scoreCards = score.scoreCards;
       team.scoreOnTable = score.scoreOnTable;

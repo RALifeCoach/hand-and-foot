@@ -1,13 +1,13 @@
-import { IGameJson } from "Game";
+import { IGamePlay } from "Game";
 import drawCards from "../utils/drawCards";
 const drawCardPlayer = (
-  game: IGameJson,
+  gamePlay: IGamePlay,
   pileIndex: number
 ) => {
-  const player = game.players[game.currentPlayerId];
+  const player = gamePlay.players[gamePlay.currentPlayerId];
   const cards = player.isInHand ? player.hand : player.foot;
 
-  cards.push(...drawCards(game.pickupPiles[pileIndex], 1));
+  cards.push(...drawCards(gamePlay.pickupPiles[pileIndex], 1));
   player.numberOfCardsToDraw--;
   if (player.playerState === "draw" && player.numberOfCardsToDraw === 0) {
     player.playerState = "playing";

@@ -1,8 +1,9 @@
-import React, { useEffect, memo, ReactNode } from 'react';
+import React, { useEffect, memo, ReactNode, useContext } from 'react';
 import GameContext from "./GameContext";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import useGameReducer from './hooks/useGameReducer';
 import SnackMessage from '../shared/SnackMessage';
+import MainContext from '../App/MainContext';
 
 const STATIC_OPTIONS = {
   shouldReconnect: () => true, //Will attempt to reconnect on all close events, such as server shutting down
@@ -10,26 +11,15 @@ const STATIC_OPTIONS = {
 
 interface IProps {
   children: ReactNode;
-  gameId: number;
   playerId: number;
-  teamId: string;
-  position: number;
 }
 
-const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) => {
+const GameProvider = ({ children, playerId }: IProps) => {
+  const { mainState: { gameId } } = useContext(MainContext);
   const [state, dispatch] = useGameReducer(gameId, playerId);
 
   const socketUrl = 'ws://localhost:3010';
   const [sendMessage, lastMessage, readyState] = useWebSocket(socketUrl, STATIC_OPTIONS);
-
-  useEffect(() => {
-    dispatch({
-      type: 'sendMessage', value: {
-        type: 'addPlayer',
-        value: { gameId, playerId, teamId, position }
-      }
-    })
-  }, [dispatch, gameId, playerId, position, teamId]);
 
   useEffect(() => {
     dispatch({ type: 'setReadyState', value: readyState });
@@ -70,7 +60,7 @@ const GameProvider = ({ children, gameId, playerId, teamId, position }: IProps) 
           open={Boolean(state.error)}
           message={state.error}
           type="error"
-          onClose={() => dispatch({type: 'clearError', value: null})}
+          onClose={() => dispatch({ type: 'clearError', value: null })}
         />
       </GameContext.Provider>
     </>

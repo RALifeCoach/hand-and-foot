@@ -6,7 +6,7 @@ import userValidate from '../../user/UserValidate';
 const UserRoutes = () => {
   const router = express.Router();
   router.get('/query', (req, res) => {
-    const sql = 'Select UserId, UserEmail, UserName, role from user';
+    const sql = 'Select UserId as userId, UserEmail as userEmail, UserName as userName, role from user';
     Database.query(sql, (rows: any[]) => {
       res.json(rows);
     });
@@ -17,7 +17,7 @@ const UserRoutes = () => {
       res.json({status: 'failure', message: 'Invalid message body'});
       return;
     }
-    const sql = `Delete from user where UserId = ${req.body.id}`;
+    const sql = `Delete from user where UserId = ${req.body.userId}`;
     Database.exec(sql, (err: Error | null) => {
       if (err) {
         res.json({status: 'failure', message: err});
@@ -28,20 +28,20 @@ const UserRoutes = () => {
   });
 
   router.post('/update', (req, res) => {
-    if (req.body.id && !userValidate.isValidUpdate(req.body)) {
+    if (req.body.userId && !userValidate.isValidUpdate(req.body)) {
       res.json({status: 'failure', message: 'Invalid message body'});
       return;
     }
-    if (!req.body.id && !userValidate.isValidInsert(req.body)) {
+    if (!req.body.userId && !userValidate.isValidInsert(req.body)) {
       res.json({status: 'failure', message: 'Invalid message body'});
       return;
     }
     const sql = req.body.id
       ? `Update user
-      set userId = '${req.body.userId}',
+      set userEmail = '${req.body.userEmail}',
           userName = '${req.body.userName}',
           role = '${req.body.role}'
-      where id = ${req.body.id}`
+      where id = ${req.body.userId}`
       : `insert into user
       (userId, userName, role, password) values
       (

@@ -1,4 +1,4 @@
-import { IGameJson } from "Game";
+import { IGamePlay, IGameRules } from "Game";
 import { IGameController } from "./socketManager";
 import Database from "../Database";
 import undoTransaction from "./undoTransaction";
@@ -30,28 +30,45 @@ const processMessages = (
       console.log(sqlGame);
       throw new Error("game does not exist");
     }
-    const game: IGameJson = JSON.parse(games[0].GameJson);
+    const gamePlay: IGamePlay = JSON.parse(games[0].GamePlay);
+    const gameRules: IGameRules = JSON.parse(games[0].GameRules);
 
-    new Promise<{ newGame: IGameJson; message: string }>((resolve) => {
+    new Promise<{ newGamePlay: IGamePlay; message: string }>((resolve) => {
       if (data.type === "undo") {
-        undoTransaction(game, resolve);
+        undoTransaction(gamePlay, resolve);
       } else {
-        doTransaction(game, data, gameController, gameId, resolve);
+        doTransaction(
+          gamePlay,
+          gameRules,
+          data,
+          gameController,
+          gameId,
+          resolve
+        );
       }
-    }).then(({ newGame, message }: { newGame: IGameJson; message: string }) => {
-      sendResponse(
-        newGame,
+    }).then(
+      ({
+        newGamePlay,
         message,
-        gameController,
-        data.value.gameId,
-        data.value.playerId,
-        data.type
-      );
-      messageStack.splice(0, 1);
-      if (messageStack.length) {
-        processMessages(messageStack, gameController);
+      }: {
+        newGamePlay: IGamePlay;
+        message: string;
+      }) => {
+        sendResponse(
+          newGamePlay,
+          gameRules,
+          message,
+          gameController,
+          data.value.gameId,
+          data.value.playerId,
+          data.type
+        );
+        messageStack.splice(0, 1);
+        if (messageStack.length) {
+          processMessages(messageStack, gameController);
+        }
       }
-    });
+    );
   });
 };
 

@@ -1,9 +1,9 @@
-import { ICard, IGameJson } from "Game";
+import { ICard, IGameRules } from "Game";
 import getCardPoints from "./getCardPoints";
 
-const scoreCards = (game: IGameJson, cards: ICard[]): number => {
+const scoreCards = (gameRules: IGameRules, cards: ICard[]): number => {
   return cards.reduce((cardPoints, card) => {
-    return cardPoints + getCardPoints(game, card);
+    return cardPoints + getCardPoints(gameRules, card);
   }, 0);
 };
 

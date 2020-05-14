@@ -1,48 +1,48 @@
-import { ITeam, IGameJson } from "Game";
+import { ITeam, IGameRules } from "Game";
 import computeTeamCardPoints from "./computeTeamCardPoints";
 import scoreCards from "./scoreCards";
 
 const scoreTeam = (
-  game: IGameJson,
+  gameRules: IGameRules,
   team: ITeam
 ): { scoreBase: number; scoreCards: number; scoreOnTable: number } => {
   const score = {
     scoreBase: 0,
-    scoreCards: computeTeamCardPoints(game, team),
+    scoreCards: computeTeamCardPoints(gameRules, team),
     scoreOnTable: 0,
   };
   Object.values(team.melds).forEach((meld) => {
     switch (meld.type) {
       case "3s":
-        score.scoreBase += game.redThreeScore;
+        score.scoreBase += gameRules.redThreeScore;
         break;
       case "wild":
         if (meld.isComplete) {
-          score.scoreBase += game.wildCardMeldScore;
+          score.scoreBase += gameRules.wildCardMeldScore;
         } else {
-          score.scoreBase -= game.wildCardMeldScore;
+          score.scoreBase -= gameRules.wildCardMeldScore;
         }
-        score.scoreOnTable += scoreCards(game, meld.cards);
+        score.scoreOnTable += scoreCards(gameRules, meld.cards);
         break;
       case "run":
         if (meld.isComplete) {
-          score.scoreBase += game.runScore;
+          score.scoreBase += gameRules.runScore;
         } else {
-          score.scoreBase -= game.runScore;
+          score.scoreBase -= gameRules.runScore;
         }
-        score.scoreOnTable += scoreCards(game, meld.cards);
+        score.scoreOnTable += scoreCards(gameRules, meld.cards);
         break;
       case "clean":
         if (meld.isComplete) {
-          score.scoreBase += game.cleanScore;
+          score.scoreBase += gameRules.cleanScore;
         }
-        score.scoreOnTable += scoreCards(game, meld.cards);
+        score.scoreOnTable += scoreCards(gameRules, meld.cards);
         break;
       case "dirty":
         if (meld.isComplete) {
-          score.scoreBase += game.dirtyScore;
+          score.scoreBase += gameRules.dirtyScore;
         }
-        score.scoreOnTable += scoreCards(game, meld.cards);
+        score.scoreOnTable += scoreCards(gameRules, meld.cards);
         break;
     }
   });

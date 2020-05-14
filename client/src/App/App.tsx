@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useState, useContext } from "react";
+import React, { memo, useEffect, useContext } from "react";
 import Game from "../Game/Game";
 import GameProvider from "../Game/GameProvider";
-import useFetchGet from "../hooks/useFetchGet";
+import useFetchSave from "../hooks/useFetchSave";
 import FetchHandling from "../shared/FetchHandling";
 import QueryString from 'query-string';
 import ApplicationBar from "./ApplicationBar";
@@ -51,30 +51,29 @@ const PLAYERS3 = [
 ];
 
 const App = () => {
-  const { mainState: { menu, user } } = useContext(MainContext);
+  const { mainState: { user, gameId }, mainDispatch } = useContext(MainContext);
   const queryParams = QueryString.parse(window.location.search);
-  const [gameId, setGameId] = useState(queryParams.game_id);
   const isTest = queryParams.test === 'true';
   const players = queryParams.players || 4;
-  const [gameStatus, getGame] = useFetchGet();
+  const [gameStatus, getGame] = useFetchSave();
 
   useEffect(() => {
     if (!gameId && isTest) {
-      getGame(`api/game/restart/TestGame/${players}`);
+      getGame({}, `api/game/restart/TestGame/${players}`);
     }
   }, [getGame, gameId, players, isTest]);
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
-      console.log(gameStatus.data);
-      setGameId(gameStatus.data.gameId);
+      console.log(gameStatus.response);
+      mainDispatch({ type: 'gameId', value: gameStatus.response.gameId });
     }
-  }, [gameStatus]);
+  }, [gameStatus, mainDispatch]);
 
   if (queryParams.id) {
     return (
       <>
-        <ApplicationBar tabValue={menu} notifications={false} />
+        <ApplicationBar notifications={false} />
         <SetPassword
           id={queryParams.id as string}
         />
@@ -93,13 +92,13 @@ const App = () => {
       <>
         {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (
           <GameProvider
-            gameId={Number(gameId)}
             playerId={player.playerId}
-            teamId={player.teamId}
-            position={player.position}
             key={player.playerId}
           >
-            <Game />
+            <Game
+              position={player.position}
+              teamId={player.teamId}
+            />
           </GameProvider>
         ))}
       </>
@@ -108,10 +107,6 @@ const App = () => {
 
   return (
     <>
-      <ApplicationBar
-        tabValue={menu}
-        notifications={false}
-      />
       {Boolean(user)
         ? (
           <AppDisplayComponent />
