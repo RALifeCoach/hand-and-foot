@@ -9,7 +9,7 @@ import theme from "./theme";
 
 // @ts-ignore
 const config = {
-  API_URL: 'http://localhost:3010'
+  API_URL: 'http://server:3010'
 };
 
 ReactDOM.render(

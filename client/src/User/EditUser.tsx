@@ -116,10 +116,10 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
         <DialogContent>
           <FlexColumn>
             <Divider style={{ width: '100%' }} />
-            <Typography variant={"subtitle1"}>User Id</Typography>
+            <Typography variant={"subtitle1"}>User Email</Typography>
             <TextField
               value={userEmail}
-              onChange={event => dispatch({ type: 'UserEmail', value: event.target.value })}
+              onChange={event => dispatch({ type: 'userEmail', value: event.target.value })}
               error={Boolean(emailError)}
               helperText={emailError}
               disabled={userEmail === 'admin'}
@@ -160,13 +160,13 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
             <Button
               onClick={onClose}
             >
-              Cancel
+              <Typography variant="subtitle1">Cancel</Typography>
             </Button>
             <Button
               variant="outlined"
               onClick={() => handleUpdate(state)}
             >
-              Save
+              <Typography variant="subtitle1">Save</Typography>
             </Button>
           </FlexRow>
         </DialogActions>

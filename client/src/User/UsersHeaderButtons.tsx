@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 import EditUser from "./EditUser";
 
 interface IProps {
@@ -15,7 +15,7 @@ const UsersHeaderButtons = ({refreshUsers}: IProps) => {
         onClick={() => setNewOpen(true)}
         variant="outlined"
       >
-        New User
+        <Typography variant="subtitle1">New User</Typography>
       </Button>
       {newOpen && (
         <EditUser

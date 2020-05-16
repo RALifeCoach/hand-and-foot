@@ -1,5 +1,6 @@
 import * as WebSocket from "ws";
 import processMessages from "./processMessages";
+import isAuthorized from "../routes/authentication/isAuthorized";
 
 export interface IGameController {
   [gameId: string]: {
@@ -18,17 +19,28 @@ const socketManager = (server: any) => {
     let gameId = "";
     let playerId = "";
     socket.on("message", (message: string) => {
-      const data: { type: string; value: any } = JSON.parse(message);
+      const data: { type: string; value: any; token: string } = JSON.parse(
+        message
+      );
 
-      gameId = data.value.gameId;
-      playerId = data.value.playerId;
+      new Promise<any>((resolve: (user: any) => void, reject: () => void) => {
+        isAuthorized(data.token, "", resolve, reject);
+      })
+        .then((user: any) => {
+          gameId = data.value.gameId;
+          playerId = data.value.playerId;
 
-      messageStack.push({ ...data, socket });
-      if (messageStack.length > 1) {
-        return;
-      }
+          messageStack.push({ ...data, socket });
+          if (messageStack.length > 1) {
+            return;
+          }
 
-      processMessages(messageStack, gameController);
+          processMessages(messageStack, gameController);
+        })
+        .catch(() => {
+          const message = JSON.stringify({ type: "authFailure" });
+          socket.send(message);
+        });
     });
     wss.on("close", () => {
       socket.removeAllListeners();

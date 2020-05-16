@@ -4,7 +4,7 @@ import MainContext from "../../App/MainContext";
 
 const useSendMessage = () => {
   const {
-    mainState: { gameId },
+    mainState: { gameId, user },
   } = useContext(MainContext);
   const {
     gameState: { playerId },
@@ -17,6 +17,7 @@ const useSendMessage = () => {
         type: "sendMessage",
         value: {
           type,
+          token: user!.token,
           value: {
             ...value,
             gameId: gameId,
@@ -25,7 +26,7 @@ const useSendMessage = () => {
         },
       });
     },
-    [gameDispatch, gameId, playerId]
+    [gameDispatch, gameId, playerId, user]
   );
 };
 

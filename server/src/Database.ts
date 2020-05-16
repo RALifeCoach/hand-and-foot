@@ -1,7 +1,7 @@
-const mysql = require('mysql');
+const mysql = require("mysql");
 
 class Database {
-  private connection:any;
+  private connection: any;
   constructor() {
     this.connection = {};
   }
@@ -12,8 +12,9 @@ class Database {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
+      port: process.env.DB_PORT,
     });
-    this.connection.connect(function (err:Error) {
+    this.connection.connect(function (err: Error) {
       if (err) {
         console.log(err);
         throw err;
@@ -22,7 +23,7 @@ class Database {
     });
   }
 
-  query(sql: string, callback: (rows:any) => void) {
+  query(sql: string, callback: (rows: any) => void) {
     this.connection.query(sql, (err: Error, rows: any[]) => {
       if (err) {
         console.log(err);
@@ -33,7 +34,7 @@ class Database {
     });
   }
 
-  exec(sql: string, callback:any) {
+  exec(sql: string, callback: any) {
     this.connection.query(sql, (err: Error, rows: any[]) => {
       callback(err);
     });

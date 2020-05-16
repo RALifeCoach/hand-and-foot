@@ -1,35 +1,38 @@
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import redis from '../../Redis';
+import * as jwt from "jsonwebtoken";
+import * as fs from "fs";
+import redis from "../../Redis";
 
-function isAuthorized(req: any, res: any, next: any) {
-  if (typeof req.headers.authorization !== "undefined") {
-    const token = req.headers.authorization;
-    const privateKey = fs.readFileSync('./private.pem', 'utf8');
-    jwt.verify(token, privateKey, {algorithms: ["HS256"]}, (err: Error | null, redisBody: any) => {
+const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => void, reject: () => void) => {
+  const privateKey = fs.readFileSync("./private.pem", "utf8");
+  jwt.verify(
+    token,
+    privateKey,
+    { algorithms: ["HS256"] },
+    (err: Error | null, redisBody: any) => {
       if (err) {
-        res.status(500).json({error: "Not Authorized"});
-        throw new Error("Not Authorized");
+        return reject();
       }
       redis.redisGet(redisBody.redisKey, (userStr: string) => {
         const user = JSON.parse(userStr);
         if (!user) {
-          res.json({status: 'failure', message: 'Token Expired'});
-          return;
+          return reject();
         }
-        if (user.ip !== req.clientIp) {
-          res.json({status: 'failure', message: 'Token Expired'});
-          return;
+        if (clientIp && user.ip !== clientIp) {
+          return reject();
         }
-        req.role = user.role;
-        req.userId = user.id;
-        return next();
-      });
-    });
-  } else {
-    res.status(500).json({error: "Not Authorized"});
-    throw new Error("Not Authorized");
-  }
-}
 
-export default  isAuthorized;
+        // rewrite the token with a new expiry
+        const expiry = new Date().getTime() + 1 * 60 * 60;
+        redis.redisSet({
+          key: redisBody.redisKey,
+          value: JSON.stringify(redisBody),
+          expiry,
+        });
+
+        resolve(user);
+      });
+    }
+  );
+};
+
+export default isAuthorized;

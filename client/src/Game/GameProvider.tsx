@@ -15,8 +15,8 @@ interface IProps {
 }
 
 const GameProvider = ({ children, playerId }: IProps) => {
-  const { mainState: { gameId } } = useContext(MainContext);
-  const [state, dispatch] = useGameReducer(gameId, playerId);
+  const { mainState: { gameId, user } } = useContext(MainContext);
+  const [state, dispatch] = useGameReducer(gameId, user, playerId);
 
   const socketUrl = 'ws://localhost:3010';
   const [sendMessage, lastMessage, readyState] = useWebSocket(socketUrl, STATIC_OPTIONS);

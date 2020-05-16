@@ -10,6 +10,7 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const requestIp = require("request-ip");
 const Database_1 = require("./src/Database");
+const AuthCheckMiddleware_1 = require("./src/routes/authentication/AuthCheckMiddleware");
 const bodyParser = require("body-parser");
 const ipMiddleware = function (req, res, next) {
     req.clientIp = requestIp.getClientIp(req);
@@ -24,7 +25,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(ipMiddleware);
 app.use("/", AuthenticationRoutes_1.default());
-app.use("/api", ApiRoutes_1.default());
+app.use("/api", AuthCheckMiddleware_1.default, ApiRoutes_1.default());
 app.use(function (req, res, next) {
     res.status(404).send("Sorry can't find that!");
 });

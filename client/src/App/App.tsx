@@ -4,7 +4,6 @@ import GameProvider from "../Game/GameProvider";
 import useFetchSave from "../hooks/useFetchSave";
 import FetchHandling from "../shared/FetchHandling";
 import QueryString from 'query-string';
-import ApplicationBar from "./ApplicationBar";
 import MainContext from "./MainContext";
 import AppDisplayComponent from "./AppDisplayComponent";
 import Login from "../Login/Login";
@@ -73,7 +72,6 @@ const App = () => {
   if (queryParams.id) {
     return (
       <>
-        <ApplicationBar notifications={false} />
         <SetPassword
           id={queryParams.id as string}
         />

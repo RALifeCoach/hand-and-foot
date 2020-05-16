@@ -35,7 +35,7 @@ const AuthenticationRoutes = () => {
           }
 
           const privateKey = fs.readFileSync("./private.pem", "utf8");
-          const expiry = new Date().getTime() + 24 * 60 * 60;
+          const expiry = new Date().getTime() + 1 * 60 * 60;
           const role = rows[0].role;
           const userName = rows[0].UserName;
           const userId = rows[0].UserId;
@@ -72,21 +72,18 @@ const AuthenticationRoutes = () => {
     const sql = `SELECT * FROM user where password = '${req.body.password}'`;
     console.log(sql);
     Database.query(sql, (rows) => {
-      console.log(rows);
       if (rows.length !== 1) {
         res.status(500).json({ error: "Not Authorized" });
         return;
       }
 
       const sql = `Update user set password = '${newPassword}' where UserId = ${rows[0].UserId}`;
-      console.log(sql);
       Database.exec(sql, (err: Error) => {
         if (err) {
-          console.log("failed");
+          console.log(sql);
           res.json({ status: "failure", message: err });
           return;
         }
-        console.log("success");
         res.json({ status: "success" });
       });
     });

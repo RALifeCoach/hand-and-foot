@@ -1,0 +1,78 @@
+version: "3.5"
+
+x-common-variables: &common-variables
+  MYSQL_USER: root
+  MYSQL_ROOT_PASSWORD: topher123
+  MYSQL_PASSWORD: topher123
+  MYSQL_DATABASE: handf
+  REACT_APP_SERVER_PORT: 3000
+
+services:
+  mysql:
+    build: ./database
+    environment:
+      <<: *common-variables
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    volumes:
+      - ./handf-db/startup.sql:/docker-entrypoint-initdb.d/startup.sql
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    links:
+      - mysql:mysql
+    ports:
+      - 8080:80
+    restart: always
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./config/redis.conf:/redis.conf
+    command: ["redis-server", "/redis.conf"]
+    hostname: redis
+  server:
+    build: ./server
+    depends_on:
+      - mysql
+    expose:
+      - 3010
+    environment:
+      PORT: 3010
+      DB_USER: root
+      DB_HOST: mysql
+      DB_PASSWORD: topher123
+      DB_DATABASE: handf
+      REDIS: redis://redis:6379
+    expose:
+      - 3000
+    ports:
+      - 3010:3010
+    volumes:
+      - ./handf-server:/app
+    links:
+      - mysql
+      - redis
+    command: node index.js
+    restart: always
+  client:
+    build: ./client
+    environment:
+      <<: *common-variables
+      NODE_PATH: src
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./handf-client/src:/app/src
+    links:
+      - server
+    command: npm run start
+    restart: always
+    stdin_open: true

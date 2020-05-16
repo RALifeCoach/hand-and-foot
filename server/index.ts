@@ -6,9 +6,9 @@ import * as cors from "cors";
 import AuthenticationRoutes from "./src/routes/authentication/AuthenticationRoutes";
 import * as dotenv from "dotenv";
 import * as helmet from "helmet";
-import isAuthorized from "./src/routes/authentication/isAuthorized";
 import * as requestIp from "request-ip";
 import Database from "./src/Database";
+import AuthCheckMiddleware from "./src/routes/authentication/AuthCheckMiddleware";
 
 const bodyParser = require("body-parser");
 
@@ -28,7 +28,7 @@ app.use(cors());
 app.use(ipMiddleware);
 
 app.use("/", AuthenticationRoutes());
-app.use("/api", ApiRoutes());
+app.use("/api", AuthCheckMiddleware, ApiRoutes());
 app.use(function (req, res, next) {
   res.status(404).send("Sorry can't find that!");
 });

@@ -12,12 +12,13 @@ const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: numbe
   return new Promise(resolve => {
     switch (action.type) {
       case "addPlayer":
-        resolve(addPlayer(
+        addPlayer(
           gamePlay,
           action.value.playerId,
           action.value.teamId,
-          action.value.position
-        ));
+          action.value.position,
+          resolve,
+        );
         break;
       case "setSortOrder":
         resolve(setSortOrder(gamePlay, action.value.playerId, action.value.sortOrder));

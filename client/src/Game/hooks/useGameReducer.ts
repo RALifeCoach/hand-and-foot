@@ -5,7 +5,7 @@ import { IGameContextState } from "../GameContext";
 import { ReadyState } from "react-use-websocket";
 import { ICard } from "Game";
 
-const useGameReducer = (gameId: number, playerId: number) => {
+const useGameReducer = (gameId: number, user: any, playerId: number) => {
   const selectCard = useSelectCard();
   return useReducer(
     (state: IGameContextState, action: IAction) => {

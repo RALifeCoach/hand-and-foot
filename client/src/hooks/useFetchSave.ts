@@ -1,5 +1,6 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useReducer, useContext } from "react";
 import { IAction } from "General";
+import MainContext from "../App/MainContext";
 
 interface ISaveState {
   response: any;
@@ -10,6 +11,7 @@ interface ISaveState {
 const useFetchSave = () => {
   // @ts-ignore
   const config = window.drpacConfig;
+  const { mainState: { user } } = useContext(MainContext);
 
   const [state, dispatch] = useReducer(
     (state: ISaveState, action: IAction) => {
@@ -45,6 +47,7 @@ const useFetchSave = () => {
           fetch(fullUrl, {
             method: type,
             headers: new Headers({
+              Authorization: user?.token || "",
               "Content-Type": "application/json;charset=UTF-8",
               Accept: "application/json",
             }),
@@ -84,7 +87,7 @@ const useFetchSave = () => {
           dispatch({ type: "failure", value: ex });
         }
       },
-      [config.API_URL]
+      [config.API_URL, user]
     ) as any,
     dispatch as any,
   ];

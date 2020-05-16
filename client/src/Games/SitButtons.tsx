@@ -21,18 +21,19 @@ const SitButtons = ({ game }: IProps) => {
     if (userPosition !== undefined && Number(userPosition) !== position) {
       return setError(`You are already sitting in position ${userPosition}`);
     }
-    if (!game?.players?.[position]) {
-      mainDispatch(
-        {
-          type: 'play',
-          value: {
-            gameId: game.gameId,
-            position: 1,
-            teamId: game.numberOfPlayers === 4 ? 'North-South' : user!.userName
-          }
-        }
-      );
+    if (Number(userPosition) !== position && game?.players?.[position]) {
+      return setError('someone else is already sitting there');
     }
+    mainDispatch(
+      {
+        type: 'play',
+        value: {
+          gameId: game.gameId,
+          position,
+          teamId: game.numberOfPlayers === 4 ? 'North-South' : user!.userName
+        }
+      }
+    );
   };
 
   return (

@@ -6,9 +6,9 @@ class Redis {
   public setAsync: (key: string, value: string) => any;
   public expireAsync: (key: string, expiry: number) => any;
   constructor() {
-    const client = redis.createClient();
+    const client = redis.createClient(process.env.REDIS as any);
 
-    client.on("error", function(error) {
+    client.on("error", function (error: any) {
       console.error(error);
     });
 
@@ -18,19 +18,30 @@ class Redis {
   }
 
   redisGet(key: string, callback: any) {
-    this.getAsync(key).then((value: string) => callback(value)).catch(console.log);
+    this.getAsync(key)
+      .then((value: string) => callback(value))
+      .catch(console.log);
   }
 
-  redisSet({key, value, expiry, callback}: {key:string, value: string, expiry: number, callback?:any}) {
+  redisSet({
+    key,
+    value,
+    expiry,
+    callback,
+  }: {
+    key: string;
+    value: string;
+    expiry: number;
+    callback?: any;
+  }) {
     this.setAsync(key, value)
       .then(() => {
         if (expiry) {
-          this.expireAsync(key, expiry)
-            .then(() => {
-              if (callback) {
-                callback(null);
-              }
-            });
+          this.expireAsync(key, expiry).then(() => {
+            if (callback) {
+              callback(null);
+            }
+          });
           return;
         }
         if (callback) {
