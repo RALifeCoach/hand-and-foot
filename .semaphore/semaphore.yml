@@ -12,4 +12,3 @@ blocks:
           commands:
             - checkout
             - docker-compose up -d
-            - docker-machine ip
