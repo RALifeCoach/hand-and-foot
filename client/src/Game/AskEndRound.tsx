@@ -16,10 +16,9 @@ interface IProps {
   user: User;
   open: boolean;
   onClose: () => void;
-  refreshUsers: () => void;
 }
 
-const AskEndRound = ({ user, open, onClose, refreshUsers }: IProps) => {
+const AskEndRound = ({ user, open, onClose }: IProps) => {
   const width = 350;
   const height = 600;
   return (
