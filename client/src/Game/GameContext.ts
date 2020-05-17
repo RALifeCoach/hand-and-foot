@@ -17,6 +17,7 @@ export interface IGameContextState {
   newMessages: boolean;
   messageId: string;
   playerId: number;
+  askRoundEnd: "";
 }
 
 export interface IGameContext {

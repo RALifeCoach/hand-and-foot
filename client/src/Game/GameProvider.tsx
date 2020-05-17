@@ -18,7 +18,9 @@ const GameProvider = ({ children, playerId }: IProps) => {
   const { mainState: { gameId, user } } = useContext(MainContext);
   const [state, dispatch] = useGameReducer(gameId, user, playerId);
 
-  const socketUrl = 'ws://localhost:3010';
+  // @ts-ignore
+  const config = window.handfConfig;
+  const socketUrl = config.WS_URL;
   const [sendMessage, lastMessage, readyState] = useWebSocket(socketUrl, STATIC_OPTIONS);
 
   useEffect(() => {

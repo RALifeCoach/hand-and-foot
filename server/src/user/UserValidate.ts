@@ -1,4 +1,4 @@
-import * as Ajv from 'ajv';
+import * as Ajv from "ajv";
 
 class UserValidate {
   private validateUpdate: any;
@@ -7,79 +7,65 @@ class UserValidate {
   private validateReset: any;
 
   constructor() {
-    const ajv = new Ajv({allErrors: true});
+    const ajv = new Ajv({ allErrors: true });
     const update = {
-      type: 'object',
-      required: [
-        'userId',
-        'userEmail',
-        'userName',
-        'role',
-      ],
+      type: "object",
+      required: ["userId", "userEmail", "userName", "role"],
       properties: {
         userId: {
-          type: 'integer',
+          type: "integer",
         },
         userEmail: {
-          type: 'string',
+          type: "string",
         },
         userName: {
-          type: 'string',
+          type: "string",
         },
         role: {
-          type: 'string',
+          type: "string",
         },
       },
     };
     this.validateUpdate = ajv.compile(update);
 
     const insert = {
-      type: 'object',
-      required: [
-        'userEmail',
-        'userName',
-        'role',
-        'Password',
-      ],
+      type: "object",
+      required: ["userEmail", "userName", "role", "password"],
       properties: {
         userEmail: {
-          type: 'string',
-          format: 'email',
+          type: "string",
+          format: "email",
         },
         userName: {
-          type: 'string',
+          type: "string",
         },
         role: {
-          type: 'string',
+          type: "string",
         },
-        Password: {
-          type: 'string',
+        password: {
+          type: "string",
         },
       },
     };
     this.validateInsert = ajv.compile(insert);
 
     const deleteValidation = {
-      type: 'object',
-      required: [
-        'userId',
-      ],
+      type: "object",
+      required: ["userId"],
       properties: {
         userId: {
-          type: 'integer',
+          type: "integer",
         },
       },
     };
     this.validateDelete = ajv.compile(deleteValidation);
 
     const reset = {
-      type: 'object',
-      required: [
-        'password',
-      ],
+      type: "object",
+      required: ["password"],
       properties: {
         password: {
-          type: 'string',
+          type: "string",
         },
       },
     };

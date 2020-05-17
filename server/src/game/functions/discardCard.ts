@@ -1,4 +1,4 @@
-import { IGamePlay, IGameRules } from "Game";
+import { IGamePlay, IGameRules, ITeam } from "Game";
 import startNewTurn from "./startNewTurn";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
 import logGameState from "../../socket/logGameState";
@@ -68,6 +68,17 @@ const discardCard = (
       if (hasClean && hasDirty) {
         if (gameRules.askRoundEnd) {
           gamePlay.gameState = "askRoundEnd";
+          const playerTeam = gamePlay.teams[player.teamId];
+          const otherTeam = Object.values(gamePlay.teams).find((team: ITeam) => team.teamId !== player.teamId);
+          return {
+            newGame: gamePlay,
+            message: {
+              type: 'askRoundEnd',
+              value: `${player.playerName} has asked to end this round. If ended ${playerTeam.teamId} will
+                score ${playerTeam.scoreBase} base points and ${otherTeam} will score ${otherTeam?.scoreBase}
+                base points.`,
+            }
+          };
         } else {
           endRound(gamePlay, gameRules);
         }

@@ -9,7 +9,7 @@ interface IFetchState {
 }
 const useFetchGet = () => {
   // @ts-ignore
-  const config = window.drpacConfig;
+  const config = window.handfConfig;
   const { mainState: { user } } = useContext(MainContext);
 
   const [state, dispatch] = useReducer((state: IFetchState, action: IAction) => {

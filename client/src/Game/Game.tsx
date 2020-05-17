@@ -16,7 +16,7 @@ interface IProps {
 const Game = ({ position, teamId }: IProps) => {
   const { mainState: { gameId } } = useContext(MainContext);
   const {
-    gameState: { gamePlay, gameBase, selected, sortOrder, cardMoving, playerId },
+    gameState: { gamePlay, gameBase, selected, sortOrder, cardMoving, playerId, askRoundEnd },
     gameDispatch
   } = useContext(GameContext);
   const [gameStatus, getGame] = useFetchGet();
@@ -37,6 +37,11 @@ const Game = ({ position, teamId }: IProps) => {
   if (!gamePlay || !gameBase) {
     return null;
   }
+
+  if (askRoundEnd) {
+
+  }
+
   return (
     <>
       <ApplicationBar

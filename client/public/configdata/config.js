@@ -1,3 +1,4 @@
-var drpacConfig = {
-  API_URL: "http://192.168.99.100:3010",
+var handfConfig = {
+  API_URL: "http://localhost:3010",
+  WS_URL: "ws://localhost:3010",
 };

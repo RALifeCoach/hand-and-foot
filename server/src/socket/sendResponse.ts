@@ -26,10 +26,11 @@ const sendResponse = (
   const sql = `update game set GamePlay = '${newGamePlayStr}' where GameId = '${gameId}'`;
   Database.exec(sql, (err: Error | null) => {
     if (err) {
+      console.log(sql);
       throw err;
     }
     const messageId = uuid.v4();
-    if (ACTION_RESPONSE[transactionType].sendToAll) {
+    if (gamePlay.gameState === 'askRoundEnd' || ACTION_RESPONSE[transactionType].sendToAll) {
       try {
         (Object.values(gamePlay.players) as IPlayer[]).forEach((player) => {
           const playerInfo =

@@ -83,11 +83,12 @@ const Login = () => {
               helperText={passwordError}
             />
           </FlexRow>
+          <Spacer height={16} />
           <Button
             type="submit"
             variant="outlined"
           >
-            LOGIN
+            <Typography variant="subtitle1">LOGIN</Typography>
           </Button>
         </form>
       </Paper>

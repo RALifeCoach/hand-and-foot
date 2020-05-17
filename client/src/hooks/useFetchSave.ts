@@ -10,7 +10,7 @@ interface ISaveState {
 
 const useFetchSave = () => {
   // @ts-ignore
-  const config = window.drpacConfig;
+  const config = window.handfConfig;
   const { mainState: { user } } = useContext(MainContext);
 
   const [state, dispatch] = useReducer(

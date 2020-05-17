@@ -3,9 +3,9 @@ import { IAction } from "General";
 import { Button, Paper, TextField, Typography } from "@material-ui/core";
 import Spacer from "../shared/Spacer";
 import useFetchSave from "../hooks/useFetchSave";
-import UpdateHandling from "../shared/UpdateHandling";
 import FlexColumn from "../shared/flex-grid/FlexColumn";
 import SnackMessage from "../shared/SnackMessage";
+import Loading from "../shared/Loading";
 
 interface ISetPasswordState {
   new1Password: string;
@@ -67,7 +67,6 @@ const SetPassword = ({ id }: IProps) => {
   }, [performUpdate, id]);
 
   useEffect(() => {
-    debugger;
     if (setPassword.status === 'success') {
       window.location.href = window.location.origin;
     }
@@ -116,11 +115,11 @@ const SetPassword = ({ id }: IProps) => {
           </FlexColumn>
         </form>
       </Paper>
-      <UpdateHandling status={setPassword} title="Login..." />
+      <Loading open={setPassword.status === 'in progress'} title="Login..." />
       <SnackMessage
         open={openPasswordError}
         onClose={() => setOpenPasswordError(false)}
-        message="This key is already been used."
+        message="This key has already been used."
         type="error"
       />
     </>

@@ -120,6 +120,11 @@ const useGameReducer = (gameId: number, user: any, playerId: number) => {
                   },
                 },
               };
+            case "askRoundEnd":
+              return {
+                ...state,
+                askRoundEnd: action.value,
+              };
             case "moveCard":
               return {
                 ...state,
@@ -184,6 +189,7 @@ const useGameReducer = (gameId: number, user: any, playerId: number) => {
       error: "",
       messageId: "",
       playerId,
+      askRoundEnd: "",
     } as IGameContextState
   );
 };

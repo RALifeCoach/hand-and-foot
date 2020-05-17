@@ -69,18 +69,20 @@ const AuthenticationRoutes = () => {
 
   router.post("/setPassword/", (req, res) => {
     const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-    const sql = `SELECT * FROM user where password = '${req.body.password}'`;
-    console.log(sql);
+    const sql = `SELECT * FROM user where Password = '${req.body.password}'`;
     Database.query(sql, (rows) => {
+      console.log("query complete", rows.length);
       if (rows.length !== 1) {
+        console.log("err");
         res.status(500).json({ error: "Not Authorized" });
         return;
       }
 
       const sql = `Update user set password = '${newPassword}' where UserId = ${rows[0].UserId}`;
+      console.log(sql);
       Database.exec(sql, (err: Error) => {
         if (err) {
-          console.log(sql);
+          console.log(sql, err);
           res.json({ status: "failure", message: err });
           return;
         }
