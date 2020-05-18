@@ -32,6 +32,25 @@ const discardCard = (
     if (!team.isDown && points > 0) {
       team.isDown = true;
     }
+
+    // check to see if this discard ends the round
+    // if so and ask end round is true - then send ask message
+    const hasClean = Object.values(team.melds).some(
+      (meld) => meld.type === "clean"
+    );
+    const hasDirty = Object.values(team.melds).some(
+      (meld) => meld.type === "dirty"
+    );
+    const canEndRound =
+      !player.isInHand && player.foot.length === 1 && hasClean && hasDirty;
+    if (canEndRound) {
+      if (gameRules.askRoundEnd) {
+        gamePlay.gameState = "askRoundEnd";
+        gamePlay.toDiscardId = toDiscardId;
+        return resolve(null);
+      }
+    }
+
     const cards = player.isInHand ? player.hand : player.foot;
     const discardCardIndex = cards.findIndex(
       (card) => card.cardId === toDiscardId
@@ -58,32 +77,9 @@ const discardCard = (
     });
 
     // check to see if this discard ends the round
-    if (!player.isInHand && player.foot.length === 0) {
-      const hasClean = Object.values(team.melds).some(
-        (meld) => meld.type === "clean"
-      );
-      const hasDirty = Object.values(team.melds).some(
-        (meld) => meld.type === "dirty"
-      );
-      if (hasClean && hasDirty) {
-        if (gameRules.askRoundEnd) {
-          gamePlay.gameState = "askRoundEnd";
-          const playerTeam = gamePlay.teams[player.teamId];
-          const otherTeam = Object.values(gamePlay.teams).find((team: ITeam) => team.teamId !== player.teamId);
-          return {
-            newGame: gamePlay,
-            message: {
-              type: 'askRoundEnd',
-              value: `${player.playerName} has asked to end this round. If ended ${playerTeam.teamId} will
-                score ${playerTeam.scoreBase} base points and ${otherTeam} will score ${otherTeam?.scoreBase}
-                base points.`,
-            }
-          };
-        } else {
-          endRound(gamePlay, gameRules);
-        }
-        resolve(null);
-      }
+    if (canEndRound) {
+      endRound(gamePlay, gameRules);
+      return resolve(null);
     }
 
     startNewTurn(gamePlay, gameRules);

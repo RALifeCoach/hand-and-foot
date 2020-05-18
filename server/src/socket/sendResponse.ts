@@ -1,4 +1,4 @@
-import { IGamePlay, IPlayer, IMessage, IGameRules } from "Game";
+import { IGamePlay, IPlayer, IMessage, IGameRules, ITeam } from "Game";
 import Database from "../Database";
 import { ACTION_RESPONSE } from "../../constants";
 import buildPlayerInfo from "../game/utils/buildPlayerInfo";
@@ -29,8 +29,55 @@ const sendResponse = (
       console.log(sql);
       throw err;
     }
+    /*
+          const playerTeam = gamePlay.teams[player.teamId];
+          const otherTeam = Object.values(gamePlay.teams).find((team: ITeam) => team.teamId !== player.teamId);
+          return {
+            newGame: gamePlay,
+            message: {
+              type: 'serverQuestion',
+              value: `${player.playerName} has asked to end this round. If ended ${playerTeam.teamId} will
+                score ${playerTeam.scoreBase} base points and ${otherTeam} will score ${otherTeam?.scoreBase}
+                base points.`,
+            }
+          };
+    */
     const messageId = uuid.v4();
-    if (gamePlay.gameState === 'askRoundEnd' || ACTION_RESPONSE[transactionType].sendToAll) {
+    if (gamePlay.gameState === "askRoundEnd") {
+      try {
+        const team = gamePlay.teams[gamePlay.players[playerId].teamId];
+        (Object.values(gamePlay.players) as IPlayer[]).forEach((player) => {
+          const playerTeam = gamePlay.teams[player.teamId];
+          const otherTeam = Object.values(gamePlay.teams).find(
+            (team: ITeam) => team.teamId !== player.teamId
+          );
+          const message = `${player.playerName} has asked to end this round. If ended ${playerTeam.teamId} will
+                score ${playerTeam.scoreBase} base points and ${otherTeam} will score ${otherTeam?.scoreBase}
+                base points.`;
+          const buttons =
+            player.playerId === playerId || player.teamId === team.teamId
+              ? []
+              : [
+                  {
+                    text: "End Round",
+                    sendType: "endRound",
+                    sendValue: true,
+                  },
+                  {
+                    text: "End Round",
+                    sendType: "endRound",
+                    sendValue: false,
+                  },
+                ];
+          if (gameController[gameId].players[player.playerId]) {
+            gameController[gameId].players[player.playerId].send(message);
+          }
+        });
+      } catch (ex) {
+        console.log(ex);
+        console.log("failed to send");
+      }
+    } else if (ACTION_RESPONSE[transactionType].sendToAll) {
       try {
         (Object.values(gamePlay.players) as IPlayer[]).forEach((player) => {
           const playerInfo =
@@ -61,7 +108,14 @@ const sendResponse = (
         JSON.stringify({
           type: "updateGame",
           messageId,
-          game: buildPlayerInfo(gamePlay, gameRules, gameId, playerId, [], false),
+          game: buildPlayerInfo(
+            gamePlay,
+            gameRules,
+            gameId,
+            playerId,
+            [],
+            false
+          ),
         });
       gameController[gameId].players[playerId].send(playerInfo);
     }

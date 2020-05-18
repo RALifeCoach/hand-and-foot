@@ -1,5 +1,4 @@
 import React from "react";
-import { User } from "User";
 import {
   Button,
   Dialog,
@@ -11,20 +10,27 @@ import {
 } from "@material-ui/core";
 import FlexColumn from "../shared/flex-grid/FlexColumn";
 import FlexRow from "../shared/flex-grid/FlexRow";
+import { IServerQuestion, IServerQuestionButton } from "Game";
+import Spacer from "../shared/Spacer";
+import useSendMessage from "./hooks/useSendMessage";
 
 interface IProps {
-  user: User;
-  open: boolean;
-  onClose: () => void;
+  serverQuestion: IServerQuestion;
 }
 
-const AskEndRound = ({ user, open, onClose }: IProps) => {
+const ServerQuestion = ({ serverQuestion }: IProps) => {
+  const sendMessage = useSendMessage();
+
+  const handleClick = (button: IServerQuestionButton) => () => {
+    sendMessage(button.sendType, button.sendValue);
+  };
+
   const width = 350;
   const height = 600;
   return (
     <>
       <Dialog
-        open={open}
+        open={true}
         disableBackdropClick
         disableEscapeKeyDown
         PaperProps={{
@@ -37,31 +43,30 @@ const AskEndRound = ({ user, open, onClose }: IProps) => {
             minHeight: height,
           },
         }}
-        onClose={onClose}
       >
         <DialogTitle>
           <Typography variant="h2">
-            Round End
+            {serverQuestion.title}
           </Typography>
         </DialogTitle>
         <DialogContent>
           <FlexColumn>
             <Divider style={{ width: '100%' }} />
+            <div>{serverQuestion.message}</div>
           </FlexColumn>
         </DialogContent>
         <DialogActions>
           <FlexRow justify="flex-end">
-            <Button
-              onClick={onClose}
-            >
-              <Typography variant="subtitle1">Cancel</Typography>
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => { }}
-            >
-              <Typography variant="subtitle1">Save</Typography>
-            </Button>
+            {serverQuestion.buttons.map((button, index) => (
+              <div key={index}>
+                <Button
+                  onClick={handleClick(button)}
+                >
+                  {button.text}
+                </Button>
+                <Spacer />
+              </div>
+            ))}
           </FlexRow>
         </DialogActions>
       </Dialog>
@@ -69,4 +74,4 @@ const AskEndRound = ({ user, open, onClose }: IProps) => {
   );
 };
 
-export default AskEndRound;
+export default ServerQuestion;

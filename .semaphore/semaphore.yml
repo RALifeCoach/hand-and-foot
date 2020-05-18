@@ -11,4 +11,4 @@ blocks:
         - name: docker build
           commands:
             - checkout
-            - docker-compose up -d
+            - docker-compose up build -d

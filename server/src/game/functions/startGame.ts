@@ -56,6 +56,7 @@ const startGame = (numberOfPlayers: number) => {
       discard: [],
       pickupPiles: [[], [], [], []],
       deck: [],
+      toDiscardId: 0,
     } as IGamePlay,
   } as IGame;
 };

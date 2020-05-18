@@ -7,6 +7,7 @@ import MainContext from "../App/MainContext";
 import useFetchGet from "../hooks/useFetchGet";
 import FetchHandling from "../shared/FetchHandling";
 import useSendMessage from "./hooks/useSendMessage";
+import ServerQuestion from "./ServerQuestion";
 
 interface IProps {
   position: number;
@@ -16,7 +17,7 @@ interface IProps {
 const Game = ({ position, teamId }: IProps) => {
   const { mainState: { gameId } } = useContext(MainContext);
   const {
-    gameState: { gamePlay, gameBase, selected, sortOrder, cardMoving, playerId, askRoundEnd },
+    gameState: { gamePlay, gameBase, selected, sortOrder, cardMoving, playerId, serverQuestion },
     gameDispatch
   } = useContext(GameContext);
   const [gameStatus, getGame] = useFetchGet();
@@ -38,8 +39,12 @@ const Game = ({ position, teamId }: IProps) => {
     return null;
   }
 
-  if (askRoundEnd) {
-
+  if (serverQuestion) {
+    return (
+      <ServerQuestion
+        serverQuestion={serverQuestion}
+      />
+    );
   }
 
   return (

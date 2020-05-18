@@ -111,6 +111,7 @@ declare module "Game" {
     transactionLog: ILogEntry[];
     messages: IMessage[];
     minimumPoints: number;
+    toDiscardId: number;
   }
 
   export interface IGameRules {

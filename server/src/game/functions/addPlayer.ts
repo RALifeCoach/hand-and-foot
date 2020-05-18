@@ -51,7 +51,6 @@ const addPlayer = (
       } as ITeam;
     }
 
-    console.log("add complete", position, teamId);
     resolve(null);
   });
 };

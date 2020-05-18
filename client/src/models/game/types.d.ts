@@ -83,6 +83,18 @@ declare module "Game" {
     text: string;
   }
 
+  export interface IServerQuestionButton {
+    text: string;
+    sendType: string;
+    sendValue: any;
+  }
+
+  export interface IServerQuestion {
+    title: string;
+    message: string;
+    buttons: IServerQuestionButton[];
+  }
+
   export interface IGameBase {
     gameId: number;
     gameName: string;

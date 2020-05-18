@@ -1,6 +1,6 @@
 import React from "react";
 import { IDispatch } from "General";
-import { IGameBase, IGamePlay, ICard, IMessage } from "Game";
+import { IGameBase, IGamePlay, ICard, IMessage, IServerQuestion } from "Game";
 
 export interface IGameContextState {
   lastMessage: string | null;
@@ -17,7 +17,7 @@ export interface IGameContextState {
   newMessages: boolean;
   messageId: string;
   playerId: number;
-  askRoundEnd: "";
+  serverQuestion: IServerQuestion | null;
 }
 
 export interface IGameContext {
