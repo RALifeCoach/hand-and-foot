@@ -7,6 +7,7 @@ import drawCardPlayer from "./functions/drawCardPlayer";
 import discardCard from "./functions/discardCard";
 import playCards from "./functions/playCards";
 import draw7 from "./functions/draw7";
+import endRoundResponse from "./functions/endRoundResponse";
 
 const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: number, action: IAction): Promise<object|null> => {
   return new Promise(resolve => {
@@ -17,19 +18,23 @@ const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: numbe
           action.value.playerId,
           action.value.teamId,
           action.value.position,
-          resolve,
+          resolve
         );
         break;
       case "setSortOrder":
-        resolve(setSortOrder(gamePlay, action.value.playerId, action.value.sortOrder));
+        resolve(
+          setSortOrder(gamePlay, action.value.playerId, action.value.sortOrder)
+        );
         break;
       case "moveCard":
-        resolve(moveCard(
-          gamePlay,
-          action.value.playerId,
-          action.value.movingCardId,
-          action.value.destCardId
-        ));
+        resolve(
+          moveCard(
+            gamePlay,
+            action.value.playerId,
+            action.value.movingCardId,
+            action.value.destCardId
+          )
+        );
         break;
       case "setPin":
         resolve(pinCard(gamePlay, action.value.playerId, action.value.cardId));
@@ -40,7 +45,16 @@ const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: numbe
         draw7(gamePlay, gameId, resolve);
         break;
       case "discardCard":
-        discardCard(gameId, gamePlay, gameRules, action.value.toDiscard, resolve);
+        discardCard(
+          gameId,
+          gamePlay,
+          gameRules,
+          action.value.toDiscard,
+          resolve
+        );
+        break;
+      case "endRound":
+        resolve(endRoundResponse(gamePlay, gameRules, action.value));
         break;
       case "playCards":
         playCards(
@@ -51,7 +65,7 @@ const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: numbe
           action.value.meldId,
           action.value.meldType,
           action.value.meldRank,
-          resolve,
+          resolve
         );
         break;
       case "disconnect":
