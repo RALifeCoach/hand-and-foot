@@ -4,6 +4,7 @@ import scoreCards from "../utils/scoreCards";
 import endGame from "./endGame";
 
 const endRound = (gamePlay: IGamePlay, gameRules: IGameRules) => {
+  console.debug('end round');
   const currentRound = gamePlay.rounds[gamePlay.currentRound];
   Object.keys(gamePlay.teams).forEach(teamId => {
     const team = gamePlay.teams[teamId];
@@ -19,8 +20,8 @@ const endRound = (gamePlay: IGamePlay, gameRules: IGameRules) => {
     team.scoreBase += scores.scoreBase;
     team.scoreCards += scores.scoreCards;
   });
-  const completedRounds = gamePlay.rounds.filter(round => !round.played);
-  if (completedRounds.length === 0) {
+  const incompleteRounds = gamePlay.rounds.filter(round => !round.played);
+  if (incompleteRounds.length === 0) {
     endGame(gamePlay);
   }
 };

@@ -37,6 +37,7 @@ const useGameReducer = (gameId: number, user: any, playerId: number) => {
           if (state.cardMoving) {
             const message = {
               type: "moveCard",
+              token: user.token,
               value: {
                 gameId,
                 playerId,

@@ -6,6 +6,7 @@ import dealCards from "./dealCards";
 const ROUND_MINIMUM = [50, 90, 120, 150, 190, 220, 250, 290];
 
 const startNewRound = (gamePlay: IGamePlay, gameRules: IGameRules) => {
+  console.debug("start new round");
   gamePlay.deck = dealCards();
   if (gameRules.roundSequence === "random") {
     const unplayedRounds = gamePlay.rounds.filter((round) => !round.played);

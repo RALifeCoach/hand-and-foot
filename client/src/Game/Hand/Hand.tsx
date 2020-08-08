@@ -70,7 +70,6 @@ const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
                   setMagicCard(cardIndex);
                 } : undefined}
                 onMouseEnter={Boolean(cardMoving) ? () => {
-                  console.log('enter')
                   setMagicCard(cardIndex);
                 } : undefined}
                 key={card.cardId}
@@ -83,7 +82,6 @@ const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
                 left={cards.length * config.offset + (cardMoving ? config.offset : 0)}
                 onSelect={() => gameDispatch({ type: 'select', value: { cardId: '' } })}
                 onMouseEnter={Boolean(cardMoving) ? () => {
-                  console.log('enter')
                   setMagicCard(cards.length);
                 } : undefined}
               />

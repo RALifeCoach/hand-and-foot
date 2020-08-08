@@ -2,6 +2,7 @@ import React, { memo, ReactNode, useCallback, useEffect, useReducer } from 'reac
 import MainContext, { IMainContextState } from "./MainContext";
 import { IAction } from "General";
 import getWindowSize from "./getWindowSize";
+import QueryString from 'query-string';
 
 interface IProps {
   children: ReactNode;
@@ -9,6 +10,7 @@ interface IProps {
 }
 
 const MainProvider = ({ children, config }: IProps) => {
+  const queryParams = QueryString.parse(window.location.search);
   const [mainState, mainDispatch] = useReducer((state: IMainContextState, action: IAction) => {
     if (action.type === 'user') {
       if (action.value) {
@@ -29,7 +31,7 @@ const MainProvider = ({ children, config }: IProps) => {
     user: null,
     menu: '',
     windowSize: getWindowSize(window.innerWidth),
-    gameId: 0,
+    gameId: queryParams.gameId || 0,
   } as IMainContextState);
 
   const onWindowResize = useCallback(event => {

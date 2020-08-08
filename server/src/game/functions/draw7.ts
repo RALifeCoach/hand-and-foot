@@ -3,6 +3,7 @@ import logGameState from "../../socket/logGameState";
 import addMessageDraw7 from "../utils/messages/addMessageDraw7";
 
 const draw7 = (gamePlay: IGamePlay, gameId: number, resolve: any) => {
+  console.debug('draw 7');
   const player = gamePlay.players[gamePlay.currentPlayerId];
 
   logGameState(gameId, gamePlay, true).then(() => {

@@ -17,7 +17,7 @@ const useSendMessage = () => {
         type: "sendMessage",
         value: {
           type,
-          token: user!.token,
+          token: user?.token,
           value: {
             ...value,
             gameId: gameId,

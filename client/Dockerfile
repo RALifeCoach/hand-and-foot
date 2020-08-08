@@ -14,11 +14,10 @@ RUN mkdir -p /client
 WORKDIR /client
 # Copy all the code in the local directory into the container’s working directory
 COPY ./ ./
-COPY ./public/configdata/configDocker.js ./public/configdata/config.js
 
 # Install dependencies (Make sure to add node_modules to your .dockerignore
 # in case you accidentally install locally.)
-RUN npm install
+RUN npm install --no-package-lock
 #
 
 EXPOSE 3000

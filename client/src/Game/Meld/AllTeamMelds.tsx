@@ -52,7 +52,6 @@ const AllTeamMelds = ({ gamePlay, gameBase, selected }: IProps) => {
           .map(team => (
             <FlexRow
               style={{
-                height: 120,
                 width: '100%',
                 position: 'relative',
               }}

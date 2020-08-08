@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react';
 import Debounce from '../../utils/debounce';
+import PinDropIcon from '@material-ui/icons/PinDrop';
 
 interface IProps {
   selected: boolean;
@@ -9,12 +10,12 @@ interface IProps {
   config: any;
 }
 
-export default function IconPin({selected, showIcons, pinValue, onPinned, config}: IProps) {
+export default function IconPin({ selected, showIcons, pinValue, onPinned, config }: IProps) {
   const stylePin: CSSProperties = {
     position: 'absolute',
     top: config.pinOffsetTop,
     left: config.baseLeftMark,
-    opacity: selected ? 1 : .2,
+    opacity: selected ? 1 : .4,
   };
 
   const pinDebounce = new Debounce(onPinned, 300, true);
@@ -25,11 +26,11 @@ export default function IconPin({selected, showIcons, pinValue, onPinned, config
     return null;
   }
   return (
-    <i
-      style={stylePin}
-      className="glyphicon glyphicon-pushpin"
-      onClick={onPinned ? event => pinDebounce.debounce(event) : undefined}
-    />
+    <div style={stylePin}>
+      <PinDropIcon
+        onClick={onPinned ? (event) => pinDebounce.debounce(event) : undefined}
+      />
+    </div>
   );
 }
 

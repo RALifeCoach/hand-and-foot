@@ -6,6 +6,7 @@ import endRound from "./endRound";
 import addMessageFoot from "../utils/messages/addMessageFoot";
 import canGoDown from "../utils/canGoDown";
 import rePinCards from "./rePinCards";
+import endTurn from "./endTurn";
 
 const discardCard = (
   gameId: number,
@@ -14,6 +15,7 @@ const discardCard = (
   toDiscardId: number,
   resolve: any
 ) => {
+  console.debug('discard card', toDiscardId);
   const player = gamePlay.players[gamePlay.currentPlayerId];
   const team = gamePlay.teams[player.teamId];
   const points = computeTeamCardPoints(gameRules, team);
@@ -36,10 +38,10 @@ const discardCard = (
     // check to see if this discard ends the round
     // if so and ask end round is true - then send ask message
     const hasClean = Object.values(team.melds).some(
-      (meld) => meld.type === "clean"
+      (meld) => meld.type === "clean" && meld.cards.length > 6
     );
     const hasDirty = Object.values(team.melds).some(
-      (meld) => meld.type === "dirty"
+      (meld) => meld.type === "dirty" && meld.cards.length > 6
     );
     const canEndRound =
       !player.isInHand && player.foot.length === 1 && hasClean && hasDirty;
@@ -62,19 +64,13 @@ const discardCard = (
     const card = cards[discardCardIndex];
     card.pinValue === 0;
     gamePlay.discard.unshift(...cards.splice(discardCardIndex, 1));
-    if (cards.length === 0) {
+    if (cards.length === 0 && player.isInHand) {
       player.isInHand = false;
       addMessageFoot(gamePlay, false);
-    } else {
-      rePinCards(cards);
     }
-    // check for any complete melds (can happen when overflow meld is true)
-    Object.keys(team.melds).forEach((meldId) => {
-      const meld = team.melds[meldId];
-      if (meld.cards.length > 6 && !meld.isComplete) {
-        meld.isComplete = true;
-      }
-    });
+    rePinCards(cards);
+
+    endTurn(team, player);
 
     // check to see if this discard ends the round
     if (canEndRound) {

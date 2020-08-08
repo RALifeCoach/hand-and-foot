@@ -6,6 +6,7 @@ import { IGame, IGamePlay, IGameRules } from "Game";
 const GameRoutes = () => {
   const router = express.Router();
   router.post("/restart/:gameName/:numberOfPlayers", (req: any, res: any) => {
+    console.debug("reset");
     const game = startGame(req.params.numberOfPlayers);
     new Promise((resolve) => {
       const sql = `truncate game`;
@@ -81,9 +82,9 @@ const GameRoutes = () => {
                 [player.position]: {
                   name: player.playerName || `Player: ${player.playerId}`,
                   playerId: player.playerId,
-                }
+                },
               }),
-            {} as { [position: string]: {name: string, playerId: number} }
+            {} as { [position: string]: { name: string; playerId: number } }
           ),
         }));
       res.json(games);

@@ -11,6 +11,8 @@ import addMessageFoot from "../utils/messages/addMessageFoot";
 import completeDraw7 from "./completeDraw7";
 import getCardValue from "../utils/getCardValue";
 import rePinCards from "./rePinCards";
+import startNewTurn from "./startNewTurn";
+import endTurn from "./endTurn";
 
 const playCards = (
   gameId: number,
@@ -23,7 +25,8 @@ const playCards = (
   resolve: any
 ) => {
   const player = gamePlay.players[gamePlay.currentPlayerId];
-  const team = gamePlay.teams[gamePlay.players[gamePlay.currentPlayerId].teamId];
+  const team =
+    gamePlay.teams[gamePlay.players[gamePlay.currentPlayerId].teamId];
   if (!team) {
     throw new Error("team not found");
   }
@@ -85,17 +88,24 @@ const playCards = (
 
       addMessageAdded(gamePlay, meld.type, selectedCards);
 
-      if (!gameRules.canOverFillMeld && team.melds[thisMeldId].cards.length > 6) {
+      if (
+        !gameRules.canOverFillMeld &&
+        team.melds[thisMeldId].cards.length > 6
+      ) {
         team.melds[thisMeldId].isComplete = true;
         addMessageCompleted(gamePlay, team.melds[thisMeldId].type);
       }
 
       if (cards.length === 0 && player.playerState !== "draw7") {
-        player.isInHand = false;
-        addMessageFoot(gamePlay, true);
-      } else {
-        rePinCards(cards);
+        if (player.isInHand) {
+          player.isInHand = false;
+          addMessageFoot(gamePlay, true);
+        } else {
+          endTurn(team, player);
+          startNewTurn(gamePlay, gameRules);
+        }
       }
+      rePinCards(cards);
 
       const score = scoreTeam(gameRules, team);
       team.scoreBase = score.scoreBase;

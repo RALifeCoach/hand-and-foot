@@ -14,7 +14,7 @@ services:
       <<: *common-variables
     ports:
       - 3306:3306
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./handf-db/startup.sql:/docker-entrypoint-initdb.d/startup.sql
   phpmyadmin:
@@ -48,7 +48,7 @@ services:
       DB_HOST: mysql
       DB_PASSWORD: topher123
       DB_DATABASE: handf
-      REDIS: redis://redis:6379
+      REDIS: redis
     expose:
       - 3000
     ports:

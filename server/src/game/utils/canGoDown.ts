@@ -1,7 +1,12 @@
 import { IGamePlay, ITeam, IGameRules } from "Game";
 
-const canGoDown = (gamePlay: IGamePlay, gameRules: IGameRules, team: ITeam, points: number): boolean => {
-  if (points > 0 && points < gamePlay.minimumPoints) {
+const canGoDown = (
+  gamePlay: IGamePlay,
+  gameRules: IGameRules,
+  team: ITeam,
+  points: number
+): boolean => {
+  if (points > 0 && points >= gamePlay.minimumPoints) {
     return true;
   }
   if (gamePlay.currentRound < gameRules.minimumRoundNatural7) {

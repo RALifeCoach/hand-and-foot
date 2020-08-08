@@ -15,11 +15,9 @@ interface IProps {
 }
 
 const GameProvider = ({ children, playerId }: IProps) => {
-  const { mainState: { gameId, user } } = useContext(MainContext);
+  const { mainState: { gameId, user }, config } = useContext(MainContext);
   const [state, dispatch] = useGameReducer(gameId, user, playerId);
 
-  // @ts-ignore
-  const config = window.handfConfig;
   const socketUrl = config.WS_URL;
   const [sendMessage, lastMessage, readyState] = useWebSocket(socketUrl, STATIC_OPTIONS);
 

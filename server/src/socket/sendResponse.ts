@@ -22,6 +22,7 @@ const sendResponse = (
     messages.push(...JSON.parse(JSON.stringify(newMessages)));
     newMessages.forEach((message) => (message.isSent = true));
   }
+
   const newGamePlayStr = JSON.stringify(gamePlay);
   const sql = `update game set GamePlay = '${newGamePlayStr}' where GameId = '${gameId}'`;
   Database.exec(sql, (err: Error | null) => {

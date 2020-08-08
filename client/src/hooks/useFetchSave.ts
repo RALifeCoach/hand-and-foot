@@ -9,9 +9,7 @@ interface ISaveState {
 }
 
 const useFetchSave = () => {
-  // @ts-ignore
-  const config = window.handfConfig;
-  const { mainState: { user } } = useContext(MainContext);
+  const { mainState: { user }, config } = useContext(MainContext);
 
   const [state, dispatch] = useReducer(
     (state: ISaveState, action: IAction) => {

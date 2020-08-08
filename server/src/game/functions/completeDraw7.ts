@@ -4,6 +4,7 @@ import canGoDown from "../utils/canGoDown";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
 
 const completeDraw7 = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: number) => {
+  console.debug('complete draw 7');
   const player = gamePlay.players[gamePlay.currentPlayerId];
   const team = gamePlay.teams[player.teamId];
   const points = computeTeamCardPoints(gameRules, team);

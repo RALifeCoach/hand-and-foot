@@ -27,10 +27,10 @@ const TeamMelds = ({ team, gamePlay, gameBase, isCurrentPlayer, selectedCards }:
     <FlexColumn style={{ width: '100%' }}>
       <Typography variant="h4">{team.teamId}</Typography>
       <FlexRow>
-        <FlexColumn style={{ minWidth: 100 }}>
+        <FlexColumn style={{ minWidth: 120 }}>
           <div>Selected: {selectedCardsScore}</div>
           <div>On Table: {team.scoreOnTable}</div>
-          <div>Minimum: {gamePlay.minimumPoints}</div>
+          <div>Minimum: <strong>{gamePlay.minimumPoints}</strong></div>
           <div>Score: {team.scoreBase}</div>
         </FlexColumn>
         <FlexColumn>

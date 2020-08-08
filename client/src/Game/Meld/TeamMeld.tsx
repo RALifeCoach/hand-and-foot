@@ -5,6 +5,7 @@ import Meld from './Meld';
 import { Tooltip } from '@material-ui/core';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import buildMeldDisplay from '../functions/buildMeldDisplay';
+import getCardValue from '../functions/getCardValue';
 
 interface IProps {
   melds: IMeld[];
@@ -17,7 +18,8 @@ interface IProps {
 
 const TeamMeld = ({ melds, gamePlay, gameBase, title, isCurrentPlayer, selectedCards }: IProps) => {
   const complete = melds.filter(meld => meld.isComplete);
-  const incomplete = melds.filter(meld => !meld.isComplete);
+  const incomplete = melds.filter(meld => !meld.isComplete).sort((meldA, meldB) =>
+    (getCardValue(meldA.rank) || 0) < (getCardValue(meldB.rank) || 0) ? 1 : -1);
 
   const completeMeldsDisplay = complete.map(meld =>
     buildMeldDisplay(meld)
@@ -43,8 +45,8 @@ const TeamMeld = ({ melds, gamePlay, gameBase, title, isCurrentPlayer, selectedC
         >
           <div>
             <FlexRow>
-              <div>{title}:&nbsp;</div>
-              <div>{complete.length}</div>
+              <div style={{ width: 100 }}>{title}:&nbsp;</div>
+              <div style={{ fontSize: 16, fontWeight: 'bold' }}>{complete.length}</div>
             </FlexRow>
           </div>
         </Tooltip>

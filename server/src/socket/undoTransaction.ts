@@ -11,7 +11,7 @@ const undoTransaction = (gamePlay: IGamePlay, resolve: any) => {
         throw new Error(`undo game does not exist ${undo.logId}`);
       }
       const undoGame: IGamePlay = JSON.parse(games[0].GamePlay);
-      resolve({ newGame: undoGame, message: "" });
+      resolve({ newGamePlay: undoGame, message: "" });
     });
   } else {
     resolve({
