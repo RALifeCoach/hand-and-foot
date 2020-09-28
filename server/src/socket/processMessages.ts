@@ -4,6 +4,7 @@ import Database from "../Database";
 import undoTransaction from "./undoTransaction";
 import doTransaction from "./doTransaction";
 import sendResponse from "./sendResponse";
+import logger from "../util/logger";
 
 const processMessages = (
   messageStack: any[],
@@ -17,17 +18,12 @@ const processMessages = (
   gameController[data.value.gameId].players[data.value.playerId] = data.socket;
 
   const gameId = data.value.gameId;
-  console.log(
-    "about to process",
-    data.type,
-    data.value.gameId,
-    data.value.playerId
-  );
+  logger.debug(`About to process ${data.type} for gameId ${data.value.gameId} and player ${data.value.playerId}`);
 
   const sqlGame = `select * from game where gameId = '${data.value.gameId}'`;
   Database.query(sqlGame, (games) => {
     if (games.length !== 1) {
-      console.log(sqlGame);
+      logger.error(`ProcessMessages: wrong number of games returned ${games.length} for query ${sqlGame}`)
       throw new Error("game does not exist");
     }
     const gamePlay: IGamePlay = JSON.parse(games[0].GamePlay);

@@ -13,6 +13,7 @@ import getCardValue from "../utils/getCardValue";
 import rePinCards from "./rePinCards";
 import startNewTurn from "./startNewTurn";
 import endTurn from "./endTurn";
+import logger from "../../util/logger";
 
 const playCards = (
   gameId: number,
@@ -24,6 +25,7 @@ const playCards = (
   meldRank: IRank | undefined,
   resolve: any
 ) => {
+  logger.debug('play cards')
   const player = gamePlay.players[gamePlay.currentPlayerId];
   const team =
     gamePlay.teams[gamePlay.players[gamePlay.currentPlayerId].teamId];
@@ -40,7 +42,7 @@ const playCards = (
       cardIds.forEach((cardId) => {
         const playCardIndex = cards.findIndex((card) => card.cardId === cardId);
         if (playCardIndex === -1) {
-          console.log(cards, cardId);
+          logger.error(`playCards: card not found ${JSON.stringify(cards)}, ${cardId}`);
           throw new Error("card not found");
         }
         const card = cards[playCardIndex];

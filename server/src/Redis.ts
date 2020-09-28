@@ -1,5 +1,6 @@
 import * as redis from "redis";
 import { promisify } from "util";
+import logger from "./util/logger";
 
 class Redis {
   public getAsync: (key: string) => any;
@@ -20,7 +21,7 @@ class Redis {
   redisGet(key: string, callback: any) {
     this.getAsync(key)
       .then((value: string) => callback(value))
-      .catch(console.log);
+      .catch(logger.error);
   }
 
   redisSet({
@@ -48,7 +49,7 @@ class Redis {
           callback(null);
         }
       })
-      .catch(console.log);
+      .catch(logger.error);
   }
 }
 

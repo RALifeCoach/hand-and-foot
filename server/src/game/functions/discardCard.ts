@@ -7,6 +7,7 @@ import addMessageFoot from "../utils/messages/addMessageFoot";
 import canGoDown from "../utils/canGoDown";
 import rePinCards from "./rePinCards";
 import endTurn from "./endTurn";
+import logger from "../../util/logger";
 
 const discardCard = (
   gameId: number,
@@ -58,7 +59,7 @@ const discardCard = (
       (card) => card.cardId === toDiscardId
     );
     if (discardCardIndex === -1) {
-      console.log(cards, toDiscardId);
+      logger.error(`Card not found ${JSON.stringify(cards)}, ${toDiscardId}`);
       throw new Error("card not found");
     }
     const card = cards[discardCardIndex];

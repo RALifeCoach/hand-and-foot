@@ -1,5 +1,6 @@
 import { IGamePlay, IGameRules } from "Game";
 import endRound from "./endRound";
+import logger from "../../util/logger";
 
 const endRoundResponse = (
   gamePlay: IGamePlay,
@@ -20,7 +21,7 @@ const endRoundResponse = (
     (card) => card.cardId === gamePlay.toDiscardId
   );
   if (discardCardIndex === -1) {
-    console.log(cards, gamePlay.toDiscardId);
+    logger.error(`Card not found ${JSON.stringify(cards)}, ${gamePlay.toDiscardId}`);
     throw new Error("card not found");
   }
 

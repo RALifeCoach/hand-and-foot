@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 import * as uuid from "uuid";
 import redis from "../../Redis";
+import logger from "../../util/logger";
 
 const AuthenticationRoutes = () => {
   const router = express.Router();
@@ -14,7 +15,7 @@ const AuthenticationRoutes = () => {
 
     Database.query(sql, (rows) => {
       if (rows.length !== 1) {
-        console.log("user not found");
+        logger.error(`user not found (${req.body.userId})`);
         res.status(500).json({ error: "Not Authorized" });
         return;
       }
@@ -24,12 +25,14 @@ const AuthenticationRoutes = () => {
         rows[0].Password,
         (err: Error, success: boolean) => {
           if (err) {
-            console.log(err);
+            logger.error(
+              `AuthenticationRoutes: error comparing the password ${err}`
+            );
             res.status(500).json({ error: "Not Authorized" });
             return;
           }
           if (!success) {
-            console.log("password not matched");
+            logger.error(`AuthenticationRoutes: password doesn't match`);
             res.status(500).json({ error: "Not Authorized" });
             return;
           }
@@ -71,21 +74,26 @@ const AuthenticationRoutes = () => {
     const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
     const sql = `SELECT * FROM user where Password = '${req.body.password}'`;
     Database.query(sql, (rows) => {
-      console.log("query complete", rows.length);
       if (rows.length !== 1) {
-        console.log("err");
+        logger.error(
+          `setPassword: wrong number of rows ${rows.length} for query ${sql}`
+        );
         res.status(500).json({ error: "Not Authorized" });
         return;
       }
 
-      const sql = `Update user set password = '${newPassword}' where UserId = ${rows[0].UserId}`;
-      console.log(sql);
-      Database.exec(sql, (err: Error) => {
+      const updateSql = `Update user set password = '${newPassword}' where UserId = ${rows[0].UserId}`;
+      Database.exec(updateSql, (err: Error) => {
         if (err) {
-          console.log(sql, err);
+          logger.error(
+            `setPassword: update failed ${JSON.stringify(
+              err
+            )} for query ${updateSql}`
+          );
           res.json({ status: "failure", message: err });
           return;
         }
+        logger.info(`User ${rows[0].UserId} successfully changed their password`);
         res.json({ status: "success" });
       });
     });

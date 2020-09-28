@@ -1,4 +1,5 @@
-const mysql = require("mysql");
+import * as mysql from "mysql";
+import logger from "./util/logger";
 
 class Database {
   private connection: any;
@@ -12,21 +13,21 @@ class Database {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      port: process.env.DB_PORT,
+      // port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 27010,
     });
     this.connection.connect(function (err: Error) {
       if (err) {
-        console.log(err);
+        logger.error(err);
         throw err;
       }
-      console.log("connected");
+      logger.debug("connected");
     });
   }
 
   query(sql: string, callback: (rows: any) => void) {
     this.connection.query(sql, (err: Error, rows: any[]) => {
       if (err) {
-        console.log(err);
+        logger.error(err);
         throw err;
       }
 

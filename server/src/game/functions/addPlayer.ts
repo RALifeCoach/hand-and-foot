@@ -1,5 +1,6 @@
 import { IGamePlay, IPlayer, ITeam, ICard } from "Game";
 import Database from "../../Database";
+import logger from "../../util/logger";
 
 const addPlayer = (
   gamePlay: IGamePlay,
@@ -11,7 +12,7 @@ const addPlayer = (
   const player = gamePlay.players[playerId];
   if (player) {
     if (player.position !== position) {
-      console.log(player.position, position);
+      logger.error(`Player is aleady present at a different position (${player.position}, ${position})`);
       throw new Error("player is already present at a different position");
     }
     resolve(null);
@@ -27,7 +28,7 @@ const addPlayer = (
   const sql = `select * from user where UserId = ${playerId}`;
   Database.query(sql, (rows) => {
     if (rows.length !== 1) {
-      console.log(sql);
+      logger.error(`user not found for query ${sql}`);
       throw new Error("user not found");
     }
 

@@ -8,6 +8,7 @@ import discardCard from "./functions/discardCard";
 import playCards from "./functions/playCards";
 import draw7 from "./functions/draw7";
 import endRoundResponse from "./functions/endRoundResponse";
+import logger from "../util/logger";
 
 const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: number, action: IAction): Promise<object|null> => {
   return new Promise(resolve => {
@@ -72,7 +73,7 @@ const socketHandler = (gamePlay: IGamePlay, gameRules: IGameRules, gameId: numbe
         gamePlay.gameState = "waitingToReStart";
         resolve(null);
       default:
-        console.log(action);
+        logger.error(`unknown action ${action}`);
         throw new Error("unknown action type");
     }
   });

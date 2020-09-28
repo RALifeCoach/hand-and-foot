@@ -54,13 +54,14 @@ const App = () => {
   const queryParams = QueryString.parse(window.location.search);
   const isTest = queryParams.test === 'true';
   const players = queryParams.players || 4;
+  const truncate = queryParams.truncate || 'no';
   const [gameStatus, getGame] = useFetchSave();
 
   useEffect(() => {
     if (!gameId && isTest) {
-      getGame({}, `api/game/restart/TestGame/${players}`);
+      getGame({}, `api/game/restart/TestGame/${players}/${truncate}`);
     }
-  }, [getGame, gameId, players, isTest]);
+  }, [getGame, gameId, players, isTest, truncate]);
 
   useEffect(() => {
     if (gameStatus.status === 'success') {

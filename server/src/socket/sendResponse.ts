@@ -4,6 +4,7 @@ import { ACTION_RESPONSE } from "../../constants";
 import buildPlayerInfo from "../game/utils/buildPlayerInfo";
 import { IGameController } from "./socketManager";
 import * as uuid from "uuid";
+import logger from "../util/logger";
 
 const sendResponse = (
   gamePlay: IGamePlay,
@@ -27,22 +28,12 @@ const sendResponse = (
   const sql = `update game set GamePlay = '${newGamePlayStr}' where GameId = '${gameId}'`;
   Database.exec(sql, (err: Error | null) => {
     if (err) {
-      console.log(sql);
+      logger.error(
+        `sendResponse: error in update ${JSON.stringify(err)} for sql ${sql}`
+      );
       throw err;
     }
-    /*
-          const playerTeam = gamePlay.teams[player.teamId];
-          const otherTeam = Object.values(gamePlay.teams).find((team: ITeam) => team.teamId !== player.teamId);
-          return {
-            newGame: gamePlay,
-            message: {
-              type: 'serverQuestion',
-              value: `${player.playerName} has asked to end this round. If ended ${playerTeam.teamId} will
-                score ${playerTeam.scoreBase} base points and ${otherTeam} will score ${otherTeam?.scoreBase}
-                base points.`,
-            }
-          };
-    */
+
     const messageId = uuid.v4();
     if (gamePlay.gameState === "askRoundEnd") {
       try {
@@ -75,8 +66,9 @@ const sendResponse = (
           }
         });
       } catch (ex) {
-        console.log(ex);
-        console.log("failed to send");
+        logger.error(
+          `sendResponse: failed to send response ${JSON.stringify(ex)}`
+        );
       }
     } else if (ACTION_RESPONSE[transactionType].sendToAll) {
       try {
@@ -100,8 +92,9 @@ const sendResponse = (
           }
         });
       } catch (ex) {
-        console.log(ex);
-        console.log("failed to send");
+        logger.error(
+          `sendResponse: failed to send response ${JSON.stringify(ex)}`
+        );
       }
     } else {
       const playerInfo =

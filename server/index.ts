@@ -9,6 +9,7 @@ import * as helmet from "helmet";
 import * as requestIp from "request-ip";
 import Database from "./src/Database";
 import AuthCheckMiddleware from "./src/routes/authentication/AuthCheckMiddleware";
+import logger from './src/util/logger';
 
 const bodyParser = require("body-parser");
 
@@ -35,7 +36,7 @@ app.use(function (req, res, next) {
 
 const server = http.createServer(app);
 server.listen(process.env.PORT || 8999, () => {
-  console.log(`Server started on port ${process.env.PORT || 8999} :)`);
+  logger.info(`Server started on port ${process.env.PORT || 8999} :)`);
 
   Database.connect();
   socketManager(server);

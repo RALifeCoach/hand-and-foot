@@ -1,5 +1,7 @@
 import { IGamePlay, ICard } from "Game";
 import sortCards from "../utils/sortCards";
+import logger from "../../util/logger";
+
 const pinCard = (gamePlay: IGamePlay, playerId: number, cardId: number) => {
   const player = gamePlay.players[playerId];
   const cards = player.isInHand ? player.hand : player.foot;
@@ -7,7 +9,7 @@ const pinCard = (gamePlay: IGamePlay, playerId: number, cardId: number) => {
 
   const updateCard = newCards.find((findCard) => findCard.cardId === cardId);
   if (!updateCard) {
-    console.log(cardId, newCards);
+    logger.error(`pinCard: card not found ${JSON.stringify(newCards)}, ${cardId}`);
     throw new Error("card not found");
   }
 

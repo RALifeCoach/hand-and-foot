@@ -11,6 +11,7 @@ const helmet = require("helmet");
 const requestIp = require("request-ip");
 const Database_1 = require("./src/Database");
 const AuthCheckMiddleware_1 = require("./src/routes/authentication/AuthCheckMiddleware");
+const logger_1 = require("./src/util/logger");
 const bodyParser = require("body-parser");
 const ipMiddleware = function (req, res, next) {
     req.clientIp = requestIp.getClientIp(req);
@@ -31,7 +32,7 @@ app.use(function (req, res, next) {
 });
 const server = http.createServer(app);
 server.listen(process.env.PORT || 8999, () => {
-    console.log(`Server started on port ${process.env.PORT || 8999} :)`);
+    logger_1.default.info(`Server started on port ${process.env.PORT || 8999} :)`);
     Database_1.default.connect();
     socketManager_1.default(server);
 });
