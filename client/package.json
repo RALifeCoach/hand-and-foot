@@ -28,7 +28,16 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "watch": "npm-watch"
+    },
+    "watch": {
+        "build": {
+          "patterns": [
+            "src"
+          ],
+          "extensions": "js,jsx,ts,tsx"
+        }
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -44,5 +53,8 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "npm-watch": "^0.7.0"
     }
 }

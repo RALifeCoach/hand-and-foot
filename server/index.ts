@@ -7,6 +7,7 @@ import AuthenticationRoutes from "./src/routes/authentication/AuthenticationRout
 import * as dotenv from "dotenv";
 import * as helmet from "helmet";
 import * as requestIp from "request-ip";
+import * as path from 'path';
 import Database from "./src/Database";
 import AuthCheckMiddleware from "./src/routes/authentication/AuthCheckMiddleware";
 import logger from './src/util/logger';
@@ -27,10 +28,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(ipMiddleware);
+app.use(express.static(path.join(__dirname, '../../../client/build')));
 
-app.use("/", AuthenticationRoutes());
+app.use("/login", AuthenticationRoutes());
 app.use("/api", AuthCheckMiddleware, ApiRoutes());
-app.use(function (req, res, next) {
+
+app.get('/', (req, res) => {
+  console.log('here')
+  res.sendFile(path.join(__dirname, '../../../client/build/index.html'))
+});
+
+app.use(function (req, res) {
   res.status(404).send("Sorry can't find that!");
 });
 

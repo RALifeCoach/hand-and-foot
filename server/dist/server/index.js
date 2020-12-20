@@ -9,6 +9,7 @@ const AuthenticationRoutes_1 = require("./src/routes/authentication/Authenticati
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const requestIp = require("request-ip");
+const path = require("path");
 const Database_1 = require("./src/Database");
 const AuthCheckMiddleware_1 = require("./src/routes/authentication/AuthCheckMiddleware");
 const logger_1 = require("./src/util/logger");
@@ -25,9 +26,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(ipMiddleware);
-app.use("/", AuthenticationRoutes_1.default());
+app.use(express.static(path.join(__dirname, '../../../client/build')));
+app.use("/login", AuthenticationRoutes_1.default());
 app.use("/api", AuthCheckMiddleware_1.default, ApiRoutes_1.default());
-app.use(function (req, res, next) {
+app.get('/', (req, res) => {
+    console.log('here');
+    res.sendFile(path.join(__dirname, '../../../client/build/index.html'));
+});
+app.use(function (req, res) {
     res.status(404).send("Sorry can't find that!");
 });
 const server = http.createServer(app);
