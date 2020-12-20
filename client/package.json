@@ -21,6 +21,7 @@
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.1",
         "react-use-websocket": "^1.7.2",
+        "recoil": "^0.1.2",
         "typescript": "^3.7.5",
         "uuid": "^8.0.0"
     },
@@ -33,10 +34,10 @@
     },
     "watch": {
         "build": {
-          "patterns": [
-            "src"
-          ],
-          "extensions": "js,jsx,ts,tsx"
+            "patterns": [
+                "src"
+            ],
+            "extensions": "js,jsx,ts,tsx"
         }
     },
     "eslintConfig": {
