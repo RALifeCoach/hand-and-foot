@@ -108,7 +108,9 @@ const App = () => {
     <>
       {Boolean(user)
         ? (
+          <_RecoilRoot_>
           <AppDisplayComponent />
+          </_RecoilRoot_>
         )
         : (
           <Login />
