@@ -18,7 +18,7 @@ const GameRoutes = () => {
           }', '${JSON.stringify(game.GamePlay)}', '${JSON.stringify(
             game.GameRules
           )}')`;
-          return new Promise((resolve) => {
+          return new Promise<void>((resolve) => {
             Database.exec(sql, (err: Error | null) => {
               if (err) {
                 throw err;
@@ -104,7 +104,7 @@ const GameRoutes = () => {
     }', '${JSON.stringify(game.GameRules)}', '${JSON.stringify(
       game.GamePlay
     )}')`;
-    new Promise((resolve) => {
+    new Promise<void>((resolve) => {
       Database.exec(sql, (err: Error | null) => {
         if (err) {
           throw err;

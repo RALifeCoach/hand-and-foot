@@ -2,7 +2,7 @@ import Database from "../../Database";
 import logger from "../../util/logger";
 
 const truncateDatabase = (truncate: string) => {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     if (truncate !== "yes") {
       return resolve();
     }

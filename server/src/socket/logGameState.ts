@@ -4,7 +4,7 @@ import Database from "../Database";
 import logger from "../util/logger";
 
 const logGameState = (gameId: number, gamePlay: IGamePlay, canUndo: boolean) => {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const logId = uuid.v4();
     const sql = `insert into game_log values ('${logId}', ${gameId}, '${JSON.stringify(
       gamePlay
