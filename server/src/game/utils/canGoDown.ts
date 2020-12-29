@@ -6,6 +6,7 @@ const canGoDown = (
   team: ITeam,
   points: number
 ): boolean => {
+  console.log('can go down', points, gamePlay.minimumPoints)
   if (points > 0 && points >= gamePlay.minimumPoints) {
     return true;
   }

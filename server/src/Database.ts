@@ -27,6 +27,7 @@ class Database {
   query(sql: string, callback: (rows: any) => void) {
     this.connection.query(sql, (err: Error, rows: any[]) => {
       if (err) {
+        console.log(sql, err);
         logger.error(err);
         throw err;
       }

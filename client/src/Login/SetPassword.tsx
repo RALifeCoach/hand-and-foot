@@ -63,7 +63,7 @@ const SetPassword = ({ id }: IProps) => {
       password: id,
       newPassword: new1Password,
     };
-    performUpdate(body, 'setPassword', 'POST');
+    performUpdate(body, 'login/setPassword', 'POST');
   }, [performUpdate, id]);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const SetPassword = ({ id }: IProps) => {
   return (
     <>
       <Paper elevation={1} style={{ margin: 'auto', width: 300, padding: 16, marginTop: 200 }}>
-        <Typography variant="h2">Toptal Travel Login</Typography>
+        <Typography variant="h2">Hand and Foot Login</Typography>
         <Spacer height={16} />
         <form onSubmit={event => handleSet(event, state)}>
           <FlexColumn>

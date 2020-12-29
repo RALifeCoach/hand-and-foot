@@ -20,6 +20,7 @@ const PickupPile = ({ gamePlay, pickupPile, pileIndex }: IProps) => {
     }
     if (gamePlay.currentPlayer.numberOfCardsToDraw === 0) {
       setError("It isn't time to draw cards");
+      return;
     }
     sendMessage('drawCard', { pileIndex });
   }, [gamePlay, sendMessage, pileIndex]);
@@ -30,7 +31,7 @@ const PickupPile = ({ gamePlay, pickupPile, pileIndex }: IProps) => {
         <PlayingCard
           card={{
             cardText: (
-              <div style={{ textAlign: 'center', fontSize: 12 }}>
+              <div style={{ textAlign: 'center', fontSize: 12 }} onClick={handleClick}>
                 Pickup<br /><span style={{ fontSize: 18, color: '#881111' }}>{pickupPile.toString()}</span>
               </div>
             )

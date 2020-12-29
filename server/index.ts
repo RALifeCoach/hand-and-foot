@@ -39,13 +39,15 @@ app.get('/', (req, res) => {
 });
 
 app.use(function (req, res) {
+  console.log('404')
+  console.log(req.url)
   res.status(404).send("Sorry can't find that!");
 });
 
 const server = http.createServer(app);
 server.listen(process.env.PORT || 8999, () => {
+  Database.connect();
   logger.info(`Server started on port ${process.env.PORT || 8999} :)`);
 
-  Database.connect();
   socketManager(server);
 });

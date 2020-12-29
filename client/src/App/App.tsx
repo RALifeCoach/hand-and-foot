@@ -65,7 +65,6 @@ const App = () => {
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
-      console.log(gameStatus.response);
       mainDispatch({ type: 'gameId', value: gameStatus.response.gameId });
     }
   }, [gameStatus, mainDispatch]);

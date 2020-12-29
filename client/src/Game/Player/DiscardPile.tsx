@@ -54,11 +54,11 @@ const DiscardPile = ({ gamePlay, gameBase, selected }: IProps) => {
           top={0}
           onSelect={handleClick}
         />
-        <div style={{ position: 'absolute', top: 22, left: 30 }}>
+        <div style={{ position: 'absolute', top: 22, left: 30 }} onClick={handleClick}>
           <span style={{ fontSize: 18, color: '#881111' }}>{gamePlay.discardCount.toString()}</span>
         </div>
         {gamePlay.pileIsLocked && (
-          <div style={{ position: 'absolute', top: 60, left: 22 }}>
+          <div style={{ position: 'absolute', top: 60, left: 22 }} onClick={handleClick}>
             <LockOutlined style={{ width: 25, height: 25 }} />
           </div>
         )}

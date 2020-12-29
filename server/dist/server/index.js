@@ -34,12 +34,14 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../client/build/index.html'));
 });
 app.use(function (req, res) {
+    console.log('404');
+    console.log(req.url);
     res.status(404).send("Sorry can't find that!");
 });
 const server = http.createServer(app);
 server.listen(process.env.PORT || 8999, () => {
-    logger_1.default.info(`Server started on port ${process.env.PORT || 8999} :)`);
     Database_1.default.connect();
+    logger_1.default.info(`Server started on port ${process.env.PORT || 8999} :)`);
     socketManager_1.default(server);
 });
 //# sourceMappingURL=index.js.map

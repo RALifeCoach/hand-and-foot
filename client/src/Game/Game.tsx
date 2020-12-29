@@ -29,7 +29,6 @@ const Game = ({ position, teamId }: IProps) => {
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
-      console.log(gameStatus.data);
       gameDispatch({ type: 'gameBase', value: gameStatus.data });
       sendMessage('addPlayer', { position, teamId })
     }

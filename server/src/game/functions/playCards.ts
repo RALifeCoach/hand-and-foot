@@ -33,8 +33,7 @@ const playCards = (
     throw new Error("team not found");
   }
 
-  completeDraw7(gamePlay, gameRules, gameId)
-    .then(() => logGameState(gameId, gamePlay, true))
+  logGameState(gameId, gamePlay, true)
     .then(() => {
       const cards = player.isInHand ? player.hand : player.foot;
       let thisMeldId = meldId;
@@ -107,14 +106,17 @@ const playCards = (
           startNewTurn(gamePlay, gameRules);
         }
       }
-      rePinCards(cards);
+      completeDraw7(gamePlay, gameRules, gameId)
+        .then(() => {
+          rePinCards(cards);
 
-      const score = scoreTeam(gameRules, team);
-      team.scoreBase = score.scoreBase;
-      team.scoreCards = score.scoreCards;
-      team.scoreOnTable = score.scoreOnTable;
+          const score = scoreTeam(gameRules, team);
+          team.scoreBase = score.scoreBase;
+          team.scoreCards = score.scoreCards;
+          team.scoreOnTable = score.scoreOnTable;
 
-      resolve(null);
+          resolve(null);
+        })
     });
 };
 

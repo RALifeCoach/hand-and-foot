@@ -39,7 +39,8 @@ const Login = () => {
   const handleLogin = useCallback((event: any) => {
     event.preventDefault();
     if (!idError && !passwordError) {
-      performLogin({ userId, password }, 'login');
+      debugger
+      performLogin({ userId, password }, 'login/login');
     }
   }, [userId, idError, password, passwordError, performLogin]);
 
