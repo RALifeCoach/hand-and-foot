@@ -26,6 +26,7 @@
         "uuid": "^8.0.0"
     },
     "scripts": {
+        "build:dev": "react-app-rewired build",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
@@ -56,6 +57,9 @@
         ]
     },
     "devDependencies": {
-        "npm-watch": "^0.7.0"
+        "dotenv-cli": "^4.0.0",
+        "npm-watch": "^0.7.0",
+        "react-app-rewire-build-dev": "^1.0.1",
+        "react-app-rewired": "^2.1.8"
     }
 }
