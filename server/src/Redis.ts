@@ -7,7 +7,11 @@ class Redis {
   public setAsync: (key: string, value: string) => any;
   public expireAsync: (key: string, expiry: number) => any;
   constructor() {
-    const client = redis.createClient(process.env.REDIS as any);
+    console.log(process.env.REDIS)
+    const client = redis.createClient({
+      host: process.env.REDIS as string,
+      port: 6379
+    });
 
     client.on("error", function (error: any) {
       console.error(error);

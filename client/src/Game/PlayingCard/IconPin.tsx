@@ -6,7 +6,7 @@ interface IProps {
   selected: boolean;
   showIcons: boolean;
   pinValue: number;
-  onPinned: () => void;
+  onPinned?: () => void;
   config: any;
 }
 

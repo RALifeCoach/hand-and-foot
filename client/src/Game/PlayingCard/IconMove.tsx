@@ -6,7 +6,7 @@ import { CSSProperties } from "react";
 interface IProps {
   showIcons: boolean;
   selected: boolean;
-  onMoved: (event: any) => void;
+  onMoved?: (event: any) => void;
   config: any;
 }
 

@@ -1,3 +1,5 @@
+USE handf;
+
 CREATE TABLE game (
   GameId int NOT NULL AUTO_INCREMENT,
   GamePlay json NOT NULL,
@@ -29,6 +31,9 @@ insert into user (
   UserName,
   role
 )
-values (
-  'admin', 'admin', 'admin', 'admin'
-)
+values
+  ('chris@mail.com', 'chris', 'Christopher', 'super'),
+  ('ronna@mail.com', 'ronna', 'Ronna', 'general'),
+  ('elayne@mail.com', 'elayne', 'Elayne', 'general'),
+  ('peter@mail.com', 'peter', 'Peter', 'general'),
+  ('admin', 'admin', 'admin', 'admin');
