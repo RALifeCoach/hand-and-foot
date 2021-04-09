@@ -28,19 +28,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(ipMiddleware);
+
+app.get('*', (req, res, next) => {
+  logger.info('received request', req.url)
+  next()
+})
+
 app.use(express.static(path.join(__dirname, '../../../client/build')));
 
 app.use("/login", AuthenticationRoutes());
 app.use("/api", AuthCheckMiddleware, ApiRoutes());
 
 app.get('/', (req, res) => {
-  console.log('here')
+  logger.info('here')
   res.sendFile(path.join(__dirname, '../../../client/build/index.html'))
 });
 
 app.use(function (req, res) {
-  console.log('404')
-  console.log(req.url)
+  logger.info('404')
+  logger.info(req.url)
   res.status(404).send("Sorry can't find that!");
 });
 

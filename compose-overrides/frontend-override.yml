@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  client:
+    image: marcnuri/port-forward
+    environment:
+      - REMOTE_HOST=docker.for.mac.localhost
+      - REMOTE_PORT=${HUNTER_FRONTEND_DEV_LOCAL_PORT:-3000}
+      - LOCAL_PORT=80

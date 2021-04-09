@@ -2,6 +2,7 @@ const useSortStyles = (sortOrder: string, config: any) => {
   const styleSort = {
     display: "block",
     padding: 10,
+    width: 62,
     border: `1px solid ${config.sortColor}`,
     fontSize: 18,
   };

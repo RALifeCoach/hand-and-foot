@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  staging-api:
+    image: marcnuri/port-forward
+    command: ''
+    environment:
+      - REMOTE_HOST=docker.for.mac.localhost
+      - REMOTE_PORT=${STAGING_API_DEV_LOCAL_PORT:-8000}
+      - LOCAL_PORT=80
