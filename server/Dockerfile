@@ -1,18 +1,9 @@
-# Start from node base image
-FROM  node:10-alpine
-
-# All subsequent commands will now be run from inside this folder
-RUN mkdir -p /server
-WORKDIR /server
-
-# Copy all the code in the local directory into the container’s working directory
-COPY ./dist/server ./
-COPY ./private.pem ./
-COPY ./package*.json ./
-COPY ./.env ./
-
-RUN apk add --virtual builds-deps build-base python
-
-RUN npm install
-
+# dockerfile
+FROM node:13.12.0-alpine
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY . /app
+RUN npm ci --loglevel verbose
+RUN npm run build
 EXPOSE 3010
+CMD [ "node", "./dist/index.js" ]

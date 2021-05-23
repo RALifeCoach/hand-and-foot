@@ -18,7 +18,7 @@ class Database {
     this.connection.connect(function (err: Error) {
       if (err) {
         logger.error(err);
-        throw err;
+        process.exit(1);
       }
       logger.debug("connected");
     });

@@ -28,15 +28,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(ipMiddleware);
-app.use(express.static(path.join(__dirname, '../../../client/build')));
+
+app.use(function (req, res, next) {
+  console.log('request', req.url)
+  next()
+});
 
 app.use("/login", AuthenticationRoutes());
 app.use("/api", AuthCheckMiddleware, ApiRoutes());
-
-app.get('/', (req, res) => {
-  console.log('here')
-  res.sendFile(path.join(__dirname, '../../../client/build/index.html'))
-});
 
 app.use(function (req, res) {
   console.log('404')

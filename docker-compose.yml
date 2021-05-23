@@ -1,79 +1,51 @@
-version: "3.5"
-
+# ./docker-compose/docker-compose.yml
+version: '3'
 services:
-  mysql:
-    build: ./database
-    environment:
-      MYSQL_ROOT_PASSWORD: topher123
-      MYSQL_PASSWORD: topher123
-      MYSQL_DATABASE: handf
-    ports:
-      - 3306:3306
-    restart: always
-    volumes:
-      - handf-data:/var/lib/mysql
-      - ./handf-db/createTables.sql:/docker-entrypoint-initdb.d/1.sql
-
-  phpmyadmin:
-    depends_on:
-      - mysql
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_HOST: mysql
-    links:
-      - mysql:mysql
-    ports:
-      - 8080:80
-    restart: always
-
-  redis:
-    image: redis:latest
-    command: ["redis-server", "--bind", "redis", "--port", "6379"]
-    ports:
-      - 6379:6379
-
-  server:
+  frontend:
+    build: ./client
+    image: "reactapp:1.0.0"
+    container_name: frontend
+    networks:
+      - hand-and-foot
+  backend:
     build: ./server
+    image: "expressapp:1.0.0"
+    container_name: backend
+    restart: always
     depends_on:
       - mysql
       - redis
-    expose:
-      - 3010
     environment:
-      PORT: 3010
-      DB_USER: root
       DB_HOST: mysql
+      DB_USER: root
       DB_PASSWORD: topher123
       DB_DATABASE: handf
       REDIS: redis
-    ports:
-      - 3010:3010
-    volumes:
-      - ./handf-server:/app
-    links:
-      - mysql:mysql
-      - redis:redis
-    command: node index.js
-    container_name: handf-server
-    restart: always
-
-  client:
-    build: ./client
+    networks:
+      - hand-and-foot
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    networks:
+      - hand-and-foot
+  mysql:
+    build: ./database
+    container_name: mysql
     environment:
-      REACT_APP_SERVER_PORT: 3010
-      REACT_APP_SERVER_HOST: localhost
-      NODE_PATH: src
-    expose:
-      - 3000
-    ports:
-      - 3000:3000
+      MYSQL_ROOT_PASSWORD: topher123
     volumes:
-      - ./handf-client/src:/app/src
-    links:
-      - server:server
-    command: npm run start
-    restart: always
-    stdin_open: true
-
+      - ./db_data:/var/lib/mysql:rw
+      - ./database/createTables.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - hand-and-foot
+  revproxy:
+    build: ./proxy
+    image: "reverseproxy:1.0.0"
+    networks:
+      - hand-and-foot
+    ports:
+      - "80:80"
+networks:
+  hand-and-foot:
 volumes:
-  handf-data:
+  db_data:

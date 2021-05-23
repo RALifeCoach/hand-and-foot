@@ -8,10 +8,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import theme from "./theme";
 
 function buildConfig() {
-  debugger;
-  const serverHost = process.env.REACT_APP_SERVER_HOST
-    ? `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
-    : 'localhost:3010'
+  const serverHost = 'localhost'
   const config = {
     API_URL: `http://${serverHost}`,
     WS_URL: `ws://${serverHost}`,
