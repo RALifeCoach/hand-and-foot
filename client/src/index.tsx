@@ -11,7 +11,7 @@ function buildConfig() {
   const serverHost = 'localhost'
   const config = {
     API_URL: `http://${serverHost}`,
-    WS_URL: `ws://${serverHost}`,
+    WS_URL: `ws://${serverHost}/wsapp`,
   };
   console.log('config', config);
   return config;

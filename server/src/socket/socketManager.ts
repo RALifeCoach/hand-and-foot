@@ -14,7 +14,7 @@ const gameController: IGameController = {};
 const messageStack: any[] = [];
 
 const socketManager = (server: any) => {
-  const wss = new WebSocket.Server({ server });
+  const wss = new WebSocket.Server({ server, path: "/wsapp" });
   wss.on("connection", (socket: WebSocket, req: any) => {
     let gameId = "";
     let playerId = "";
