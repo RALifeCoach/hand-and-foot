@@ -1,4 +1,4 @@
-LABEL version: '3.8'
+version: '3.8'
 services:
   frontend:
     build: ./client
@@ -33,7 +33,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: topher123
     volumes:
-      - ./db_data:/var/lib/mysql:rw
+      - db_data:/var/lib/mysql:rw
       - ./database/createTables.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - hand-and-foot
