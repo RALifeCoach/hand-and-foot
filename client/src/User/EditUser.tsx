@@ -10,7 +10,7 @@ import {
   Divider,
   TextField,
   Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import FlexColumn from "../shared/flex-grid/FlexColumn";
 import FlexRow from "../shared/flex-grid/FlexRow";
 import UpdateHandling from "../shared/UpdateHandling";
@@ -94,7 +94,6 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
     <>
       <Dialog
         open={open}
-        disableBackdropClick
         disableEscapeKeyDown
         PaperProps={{
           style: {

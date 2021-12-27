@@ -1,6 +1,6 @@
 import React from "react";
 import Debounce from "../../utils/debounce";
-import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import { CSSProperties } from "react";
 
 interface IProps {

@@ -1,19 +1,22 @@
-import React, { useState, useContext, useCallback } from 'react';
-import { IconButton, Drawer, Typography } from '@material-ui/core';
-import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
-import NotificationsActiveOutlinedIcon from '@material-ui/icons/NotificationsActiveOutlined';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import GameContext from '../Game/GameContext';
+import React, { useState, useCallback } from 'react';
+import { IconButton, Drawer, Typography } from '@mui/material';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FlexColumn from '../shared/flex-grid/FlexColumn';
 import FlexRow from '../shared/flex-grid/FlexRow';
+import {useRecoilValue, useSetRecoilState} from 'recoil'
+import {messagesAtom, messagesSeenAtom, newMessagesAtom} from '../atoms/game'
 
 const Notifications = () => {
-  const { gameState: { newMessages, messages }, gameDispatch } = useContext(GameContext);
+  const newMessages = useRecoilValue(newMessagesAtom)
+  const messages = useRecoilValue(messagesAtom)
+  const setMessagesSeen = useSetRecoilState(messagesSeenAtom)
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleClose = useCallback(() => {
     setDrawerOpen(false);
-    gameDispatch({ type: 'messagesSeen', value: null });
-  }, [gameDispatch]);
+    setMessagesSeen(null)
+  }, [setMessagesSeen]);
   return (
     <div>
       <IconButton

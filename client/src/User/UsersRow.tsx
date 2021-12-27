@@ -3,7 +3,7 @@ import {
   TableCell,
   TableRow,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { User } from "User";
 import UsersRowButtons from "./UsersRowButtons";
 

@@ -9,6 +9,7 @@ import logger from "../../util/logger";
 
 const AuthenticationRoutes = () => {
   const router = express.Router();
+  redis.connect()
 
   router.post("/login/", (req: any, res) => {
     const sql = `SELECT * FROM user where UserEmail = '${req.body.userId}'`;
@@ -38,7 +39,7 @@ const AuthenticationRoutes = () => {
           }
 
           const privateKey = fs.readFileSync("./private.pem", "utf8");
-          const expiry = new Date().getTime() + 1 * 60 * 60;
+          const expiry = new Date().getTime() + 60 * 60;
           const role = rows[0].role;
           const userName = rows[0].UserName;
           const userId = rows[0].UserId;

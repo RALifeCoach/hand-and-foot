@@ -9,7 +9,7 @@ import {
   DialogTitle,
   Divider,
   Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import FlexColumn from "../shared/flex-grid/FlexColumn";
 import FlexRow from "../shared/flex-grid/FlexRow";
 import UpdateHandling from "../shared/UpdateHandling";
@@ -77,7 +77,6 @@ const EditGame = ({ game, open, onClose, refreshGames }: IProps) => {
     <>
       <Dialog
         open={open}
-        disableBackdropClick
         disableEscapeKeyDown
         PaperProps={{
           style: {
@@ -92,7 +91,7 @@ const EditGame = ({ game, open, onClose, refreshGames }: IProps) => {
         onClose={onClose}
       >
         <DialogTitle>
-          <Typography variant="h2">
+          <Typography>
             {Boolean(gameId) ? 'Edit Game' : 'Add Game'}
           </Typography>
         </DialogTitle>

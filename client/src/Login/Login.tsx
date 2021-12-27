@@ -1,11 +1,12 @@
-import React, { useCallback, useContext, useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import { IAction } from "General";
-import { Button, Paper, TextField, Typography } from "@material-ui/core";
+import { Button, Paper, TextField, Typography } from "@mui/material";
 import FlexRow from "../shared/flex-grid/FlexRow";
 import Spacer from "../shared/Spacer";
 import useFetchSave from "../hooks/useFetchSave";
 import UpdateHandling from "../shared/UpdateHandling";
-import MainContext from "../App/MainContext";
+import {useSetRecoilState} from 'recoil'
+import {userAtom} from '../atoms/main'
 
 interface ILoginState {
   userId: string;
@@ -15,7 +16,6 @@ interface ILoginState {
 }
 
 const Login = () => {
-  const { mainDispatch } = useContext(MainContext);
   const [state, dispatch] = useReducer((state: ILoginState, action: IAction) => {
     return { ...state, [action.type]: action.value };
   }, {
@@ -24,6 +24,7 @@ const Login = () => {
     password: '',
     passwordError: '',
   } as ILoginState);
+  const setUser = useSetRecoilState(userAtom)
 
   const { userId, idError, password, passwordError } = state;
 
@@ -46,9 +47,9 @@ const Login = () => {
   useEffect(() => {
     if (login.status === 'success') {
       localStorage.setItem('handf:user', JSON.stringify(login.response));
-      mainDispatch({ type: 'user', value: login.response });
+      setUser(login.response)
     }
-  }, [login, mainDispatch]);
+  }, [login, setUser]);
 
   return (
     <>

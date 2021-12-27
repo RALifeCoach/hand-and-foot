@@ -1,9 +1,10 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   IconButton, Menu, MenuItem,
-} from '@material-ui/core';
-import MainContext from "./MainContext";
-import MenuIcon from '@material-ui/icons/Menu';
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import {useRecoilValue, useSetRecoilState} from 'recoil'
+import {menuAtom, userAtom} from '../atoms/main'
 
 const MENU_ITEMS = [
   {
@@ -18,12 +19,9 @@ const MENU_ITEMS = [
   },
 ];
 
-interface IProps {
-  tabValue: string;
-}
-
-const ApplicationBarButtons = ({ tabValue }: IProps) => {
-  const { mainState: { user }, mainDispatch } = useContext(MainContext);
+const ApplicationBarButtons = () => {
+  const user = useRecoilValue(userAtom)
+  const setMenu = useSetRecoilState(menuAtom)
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const filteredMenuItems = MENU_ITEMS.filter(item => {
@@ -60,7 +58,7 @@ const ApplicationBarButtons = ({ tabValue }: IProps) => {
         {filteredMenuItems.map(menu => (
           <MenuItem
             onClick={() => {
-              mainDispatch({ type: 'menu', value: menu.value });
+              setMenu(menu.value)
               handleClose();
             }}
             key={menu.value}

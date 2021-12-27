@@ -6,7 +6,6 @@ const truncateDatabase = (truncate: string) => {
     if (truncate !== "yes") {
       return resolve();
     }
-    logger.debug('truncateDatabse')
     const sql = `truncate game`;
     Database.exec(sql, (err: Error | null) => {
       if (err) {

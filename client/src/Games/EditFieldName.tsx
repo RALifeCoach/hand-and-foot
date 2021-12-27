@@ -3,7 +3,7 @@ import { IDispatch } from "General";
 import {
   TextField,
   Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import Spacer from "../shared/Spacer";
 
 interface IProps {

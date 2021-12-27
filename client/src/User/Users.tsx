@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import useFetchGet from "../hooks/useFetchGet";
 import { User } from "User";
-import { Paper, Table, TableBody, Typography } from "@material-ui/core";
+import { Paper, Table, TableBody, Typography } from "@mui/material";
 import FlexRow from "../shared/flex-grid/FlexRow";
 import Spacer from "../shared/Spacer";
 import UsersHeader from "./UsersHeader";

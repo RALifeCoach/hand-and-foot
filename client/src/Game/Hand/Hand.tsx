@@ -1,11 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlayingCard from '../PlayingCard/PlayingCard';
 import FlexRow from "../../shared/flex-grid/FlexRow";
 import { ICard } from "Game";
-import GameContext from '../GameContext';
 import SortButtons from './SortButtons';
 import useSelectedCards from '../hooks/useSelectedCards';
 import useSendMessage from '../hooks/useSendMessage';
+import {useRecoilState} from 'recoil'
+import {cardMovingAtom, selectedAtom} from '../../atoms/game'
 
 const DEFAULTS = {
   offset: 20,
@@ -20,13 +21,14 @@ interface IProps {
   cardMoving: ICard | null;
 }
 
-const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
-  const { gameDispatch, gameId, playerId } = useContext(GameContext);
+const Hand = ({ options, cards }: IProps) => {
+  const [cardMoving, setCardMoving] = useRecoilState(cardMovingAtom)
+  const [selected, setSelected] = useRecoilState(selectedAtom)
   const [magicCard, setMagicCard] = useState(0);
   const config = Object.assign({}, DEFAULTS, options);
   const sendMessage = useSendMessage();
 
-  const countSelectedCards = useSelectedCards(cards, selected).length;
+  const countSelectedCards = useSelectedCards(cards).length;
   const showIcons = countSelectedCards === 1;
   const movable = showIcons && !cardMoving;
 
@@ -38,11 +40,7 @@ const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
   return (
     <FlexRow>
       <SortButtons
-        gameDispatch={gameDispatch}
-        sortOrder={sortOrder}
         config={config}
-        gameId={gameId}
-        playerId={playerId}
       />
       <FlexRow>
         <div
@@ -62,17 +60,18 @@ const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
                 left={cardIndex * config.offset + (cardMoving && cardIndex >= magicCard ? config.offset : 0)}
                 showIcons={showIcons}
                 onSelect={() => {
-                  gameDispatch({ type: 'select', value: card });
+                  setSelected({[card.cardId]: true})
                 }}
                 onPinned={movable ? () => sendMessage('setPin', { cardId: card.cardId }) : undefined}
                 onMoved={movable ? () => {
-                  gameDispatch({ type: 'cardMoving', value: card });
+                  setCardMoving(card)
                   setMagicCard(cardIndex);
                 } : undefined}
                 onMouseEnter={Boolean(cardMoving) ? () => {
                   setMagicCard(cardIndex);
                 } : undefined}
                 key={card.cardId}
+                top={0}
               />
             ))}
             {cardMoving && (
@@ -80,7 +79,7 @@ const Hand = ({ options, cards, selected, sortOrder, cardMoving }: IProps) => {
                 card={{ cardText: 'Move to front of hand.' }}
                 imageLocation={''}
                 left={cards.length * config.offset + (cardMoving ? config.offset : 0)}
-                onSelect={() => gameDispatch({ type: 'select', value: { cardId: '' } })}
+                onSelect={() => setSelected({})}
                 onMouseEnter={Boolean(cardMoving) ? () => {
                   setMagicCard(cards.length);
                 } : undefined}

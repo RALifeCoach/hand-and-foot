@@ -6,17 +6,15 @@ import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import useSelectedCards from '../hooks/useSelectedCards';
 import useCanPlay from '../hooks/useCanPlay';
 import useSendMessage from '../hooks/useSendMessage';
-import SnackMessage from '../../shared/SnackMessage';
+import SnackAlert from '../../shared/SnackAlert';
+import {useRecoilValue} from 'recoil'
+import {gameBaseAtom, gamePlayAtom} from '../../atoms/game'
 
-interface IProps {
-  gamePlay: IGamePlay;
-  gameBase: IGameBase;
-  selected: { [cardId: string]: boolean };
-}
-
-const AllTeamMelds = ({ gamePlay, gameBase, selected }: IProps) => {
+const AllTeamMelds = () => {
+  const gamePlay = useRecoilValue(gamePlayAtom) as IGamePlay
+  const gameBase = useRecoilValue(gameBaseAtom) as IGameBase
   const [error, setError] = useState('');
-  const cards = useSelectedCards(gamePlay.currentPlayer.cards, selected);
+  const cards = useSelectedCards(gamePlay.currentPlayer.cards);
   const getPlayValues = useCanPlay(gamePlay, gameBase, null);
   const sendMessage = useSendMessage();
 
@@ -40,9 +38,7 @@ const AllTeamMelds = ({ gamePlay, gameBase, selected }: IProps) => {
           onClick={handlePlay}
         >
           <TeamMelds
-            gameBase={gameBase}
             team={gamePlay.teams[gamePlay.currentPlayer.teamId]}
-            gamePlay={gamePlay}
             isCurrentPlayer={gamePlay.currentPlayer.isPlayerTurn}
             selectedCards={cards}
           />
@@ -58,18 +54,16 @@ const AllTeamMelds = ({ gamePlay, gameBase, selected }: IProps) => {
               key={team.teamId}
             >
               <TeamMelds
-                gameBase={gameBase}
                 team={team}
-                gamePlay={gamePlay}
                 selectedCards={cards}
               />
             </FlexRow>
           ))}
       </FlexColumn>
-      <SnackMessage
+      <SnackAlert
         open={Boolean(error)}
-        message={error}
-        type="error"
+        text={error}
+        severity="error"
         onClose={() => setError('')}
       />
     </>

@@ -1,70 +1,70 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from 'react'
 import {
   IconButton,
   Menu,
   MenuItem,
   TableCell,
   Tooltip,
-} from "@material-ui/core";
-import { Delete, Edit, VpnKey } from '@material-ui/icons';
-import Spacer from "../shared/Spacer";
-import { User } from "User";
-import FlexRow from "../shared/flex-grid/FlexRow";
-import WarningDialog from "../shared/WarningDialog";
-import useFetchSave from "../hooks/useFetchSave";
-import EditUser from "./EditUser";
-import Loading from "../shared/Loading";
-import SnackMessage from "../shared/SnackMessage";
-import { v4 as uuidV4 } from "uuid";
+} from '@mui/material'
+import {Delete, Edit, VpnKey} from '@mui/icons-material'
+import Spacer from '../shared/Spacer'
+import {User} from 'User'
+import FlexRow from '../shared/flex-grid/FlexRow'
+import WarningDialog from '../shared/WarningDialog'
+import useFetchSave from '../hooks/useFetchSave'
+import EditUser from './EditUser'
+import Loading from '../shared/Loading'
+import {v4 as uuidV4} from 'uuid'
+import SnackAlert from '../shared/SnackAlert'
 
 interface IProps {
   user: User;
   refreshUsers: () => void;
 }
 
-const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openReset, setOpenReset] = useState(false);
-  const [openDeleteError, setOpenDeleteError] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
+const UsersRowButtons = ({user, refreshUsers}: IProps) => {
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [openReset, setOpenReset] = useState(false)
+  const [openDeleteError, setOpenDeleteError] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
 
   const handleClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
+    setAnchorEl(null)
+  }, [])
 
-  const [deleteStatus, performDelete] = useFetchSave();
-  const [resetStatus, performReset] = useFetchSave();
+  const [deleteStatus, performDelete] = useFetchSave()
+  const [resetStatus, performReset] = useFetchSave()
   const handleDelete = useCallback(() => {
-    const body = { id: user.userId };
-    performDelete(body, 'api/users/delete');
-  }, [user, performDelete]);
+    const body = {id: user.userId}
+    performDelete(body, 'api/users/delete')
+  }, [user, performDelete])
 
   const handleReset = useCallback(() => {
     const body = {
       id: user?.userId || 0,
       password: uuidV4().toString(),
-    };
-    alert(`To reset the password use url: ${window.location.origin}/?id=${body.password}`);
-    performReset(body, 'api/users/resetPassword');
-  }, [user, performReset]);
+    }
+    alert(`To reset the password use url: ${window.location.origin}/?id=${body.password}`)
+    performReset(body, 'api/users/resetPassword')
+  }, [user, performReset])
 
   useEffect(() => {
     if (deleteStatus.status === 'success') {
-      refreshUsers();
-      setOpenDelete(false);
+      refreshUsers()
+      setOpenDelete(false)
     }
     if (deleteStatus.status === 'failure') {
-      setOpenDelete(false);
-      setOpenDeleteError(true);
+      setOpenDelete(false)
+      setOpenDeleteError(true)
     }
-  }, [deleteStatus, refreshUsers]);
+  }, [deleteStatus, refreshUsers])
 
   useEffect(() => {
     if (resetStatus.status === 'success') {
-      setOpenReset(false);
+      setOpenReset(false)
     }
-  }, [resetStatus]);
+  }, [resetStatus])
 
   return (
     <>
@@ -78,12 +78,12 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
               placement="top"
               arrow
             >
-              <Edit style={{ width: 30, height: 30 }} />
+              <Edit style={{width: 30, height: 30}}/>
             </Tooltip>
           </IconButton>
           {user.userEmail !== 'admin' && (
             <>
-              <Spacer />
+              <Spacer/>
               <IconButton
                 onClick={() => setOpenDelete(true)}
               >
@@ -92,12 +92,12 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
                   title="Delete"
                   arrow
                 >
-                  <Delete style={{ width: 30, height: 30 }} />
+                  <Delete style={{width: 30, height: 30}}/>
                 </Tooltip>
               </IconButton>
             </>
           )}
-          <Spacer />
+          <Spacer/>
           <IconButton
             onClick={() => setOpenReset(true)}
           >
@@ -106,7 +106,7 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
               title="Reset"
               arrow
             >
-              <VpnKey style={{ width: 30, height: 30 }} />
+              <VpnKey style={{width: 30, height: 30}}/>
             </Tooltip>
           </IconButton>
         </FlexRow>
@@ -118,12 +118,12 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "left"
+          vertical: 'top',
+          horizontal: 'left'
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "left"
+          vertical: 'top',
+          horizontal: 'left'
         }}
       >
         <MenuItem onClick={() => setOpenEdit(true)}>Edit</MenuItem>
@@ -158,15 +158,14 @@ const UsersRowButtons = ({ user, refreshUsers }: IProps) => {
           refreshUsers={refreshUsers}
         />
       )}
-      <Loading open={deleteStatus === 'in progress'} title="Deleting trip" />
-      <SnackMessage
+      <Loading open={deleteStatus === 'in progress'} title="Deleting trip"/>
+      <SnackAlert
         open={openDeleteError}
+        text="This user has associated games. Delete their games before deleting the user." severity="error"
         onClose={() => setOpenDeleteError(false)}
-        message="This user has associated trips. Delete their trips before deleting the user."
-        type="error"
       />
     </>
-  );
-};
+  )
+}
 
-export default UsersRowButtons;
+export default UsersRowButtons

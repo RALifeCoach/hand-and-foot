@@ -5,20 +5,18 @@ import PlayingCard from '../PlayingCard/PlayingCard';
 import useCanDrawFromPile from "../hooks/useCanDrawFromPile";
 import useSendMessage from "../hooks/useSendMessage";
 import useSelectedCards from "../hooks/useSelectedCards";
-import SnackMessage from "../../shared/SnackMessage";
-import { LockOutlined } from '@material-ui/icons';
+import SnackAlert from "../../shared/SnackAlert";
+import { LockOutlined } from '@mui/icons-material';
+import {useRecoilValue} from 'recoil'
+import {gameBaseAtom, gamePlayAtom} from '../../atoms/game'
 
-interface IProps {
-  gamePlay: IGamePlay;
-  gameBase: IGameBase;
-  selected: { [cardId: string]: boolean };
-}
-
-const DiscardPile = ({ gamePlay, gameBase, selected }: IProps) => {
-  const canDiscard = useCanDiscard(gamePlay, gameBase, selected);
+const DiscardPile = () => {
+  const gamePlay = useRecoilValue(gamePlayAtom) as IGamePlay
+  const gameBase = useRecoilValue(gameBaseAtom) as IGameBase
+  const canDiscard = useCanDiscard();
   const canDraw7 = useCanDrawFromPile();
   const sendMessage = useSendMessage();
-  const selectedCards = useSelectedCards(gamePlay.currentPlayer.cards, selected);
+  const selectedCards = useSelectedCards(gamePlay.currentPlayer.cards);
   const [error, setError] = useState('');
 
   const handleClick = useCallback(() => {
@@ -53,6 +51,7 @@ const DiscardPile = ({ gamePlay, gameBase, selected }: IProps) => {
           left={0}
           top={0}
           onSelect={handleClick}
+          onMoved={() => {}}
         />
         <div style={{ position: 'absolute', top: 22, left: 30 }} onClick={handleClick}>
           <span style={{ fontSize: 18, color: '#881111' }}>{gamePlay.discardCount.toString()}</span>
@@ -63,10 +62,10 @@ const DiscardPile = ({ gamePlay, gameBase, selected }: IProps) => {
           </div>
         )}
       </div>
-      <SnackMessage
+      <SnackAlert
         open={Boolean(error)}
-        message={error}
-        type="error"
+        text={error}
+        severity="error"
         onClose={() => setError('')}
       />
     </>

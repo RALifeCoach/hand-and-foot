@@ -1,33 +1,33 @@
-import React, {memo, useEffect, useState} from 'react';
-import Loading from "./Loading";
-import SnackMessage from "./SnackMessage";
+import React, {memo, useEffect, useState} from 'react'
+import Loading from './Loading'
+import SnackAlert from './SnackAlert'
 
 export interface IProps {
-  status: {status: string, response: any, exception: Error};
+  status: { status: string, response: any, exception: Error };
   title?: string;
 }
 
 const UpdateHandling = (props: IProps) => {
-  const { status, title } = props;
-  const [error, setError] = useState('');
+  const {status, title} = props
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (status.status === 'failure') {
-      setError(status.exception.message);
+      setError(status.exception.message)
     }
-  }, [status.status, status.exception]);
+  }, [status.status, status.exception])
 
   return (
     <>
       <Loading open={status.status === 'in progress'} title={title}/>
-      <SnackMessage
+      <SnackAlert
         open={error !== ''}
-        message={`Update Failed with message: ${error}`}
+        text={`Update Failed with message: ${error}`}
         onClose={() => setError('')}
-        type={'error'}
+        severity="error"
       />
     </>
-  );
-};
+  )
+}
 
-export default memo(UpdateHandling);
+export default memo(UpdateHandling)

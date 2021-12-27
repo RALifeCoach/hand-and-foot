@@ -1,4 +1,4 @@
-import { createMuiTheme, Color, colors } from '@material-ui/core';
+import { createTheme, Color, colors } from '@mui/material';
 
 export const themeColors: { [key: string]: Color } = {
   primary: {
@@ -83,7 +83,7 @@ export const themeColors: { [key: string]: Color } = {
   },
 };
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: themeColors.primary[900],

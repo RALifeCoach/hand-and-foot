@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   IconButton,
   TableCell, Tooltip,
-} from "@material-ui/core";
-import { Delete, Edit } from '@material-ui/icons';
+} from "@mui/material";
+import { Delete, Edit } from '@mui/icons-material';
 import Spacer from "../shared/Spacer";
 import { IGameRow } from "Game";
 import FlexRow from "../shared/flex-grid/FlexRow";

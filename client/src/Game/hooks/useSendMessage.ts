@@ -1,33 +1,29 @@
-import { useCallback, useContext } from "react";
-import GameContext from "../GameContext";
-import MainContext from "../../App/MainContext";
+import {useCallback} from 'react'
+import {useRecoilValue, useSetRecoilState} from 'recoil'
+import {addMessageSelector, gameIdAtom, playerIdAtom} from '../../atoms/game'
+import {userAtom} from '../../atoms/main'
 
 const useSendMessage = () => {
-  const {
-    mainState: { gameId, user },
-  } = useContext(MainContext);
-  const {
-    gameState: { playerId },
-    gameDispatch,
-  } = useContext(GameContext);
+  const user = useRecoilValue(userAtom)
+  const gameId = useRecoilValue(gameIdAtom)
+  const playerId = useRecoilValue(playerIdAtom)
+  const addMessage = useSetRecoilState(addMessageSelector)
 
   return useCallback(
     (type: string, value: any) => {
-      gameDispatch({
-        type: "sendMessage",
+      const body = {
+        type,
         value: {
-          type,
-          token: user?.token,
-          value: {
-            ...value,
-            gameId: gameId,
-            playerId: playerId,
-          },
+          ...value,
+          gameId,
+          playerId
         },
-      });
+        token: user?.token,
+      }
+      addMessage(body)
     },
-    [gameDispatch, gameId, playerId, user]
-  );
-};
+    [gameId, playerId, user, addMessage]
+  )
+}
 
-export default useSendMessage;
+export default useSendMessage

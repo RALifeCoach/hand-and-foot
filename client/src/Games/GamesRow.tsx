@@ -2,7 +2,7 @@ import React from "react";
 import {
   TableCell,
   TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
 import { IGameRow } from "Game";
 import GamesRowButtons from "./GamesRowButtons";
 

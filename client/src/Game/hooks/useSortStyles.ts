@@ -1,4 +1,4 @@
-const useSortStyles = (sortOrder: string, config: any) => {
+const useSortStyles = (config: any) => {
   const styleSort = {
     display: "block",
     padding: 10,

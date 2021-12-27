@@ -1,55 +1,51 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode} from 'react'
 import {
-  Theme,
-  createStyles,
-  WithStyles,
-  withStyles,
   Typography, Button, Icon, Divider,
-} from '@material-ui/core';
+} from '@mui/material'
 
-import ModalDialog from "./ModalDialog";
-import FlexRow from "./flex-grid/FlexRow";
-import {themeColors} from "../theme";
-import Spacer from "./Spacer";
+import ModalDialog from './ModalDialog'
+import FlexRow from './flex-grid/FlexRow'
+import {themeColors} from '../theme'
+import Spacer from './Spacer'
+import theme from '../theme'
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'left',
-      paddingTop: 60,
-      paddingLeft: 40,
-      paddingRight: 40,
-      textAlign: 'left'
-    },
+const styles = {
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'left',
+    paddingTop: 60,
+    paddingLeft: 40,
+    paddingRight: 40,
+    textAlign: 'left'
+  },
 
-    icon: {
-      width: 64,
-      height: 64,
-      display: 'block',
-      marginBottom: 24,
-      color: theme.palette.error.main,
-    },
+  icon: {
+    width: 64,
+    height: 64,
+    display: 'block',
+    marginBottom: 24,
+    color: theme.palette.error.main,
+  },
 
-    button: {
-      marginTop: 32,
-      marginBottom: 8,
-      color: '#fff'
-    },
+  button: {
+    marginTop: 32,
+    marginBottom: 8,
+    color: '#fff'
+  },
 
-    buttonRed: {
-      backgroundColor: '#EF6A6E',
-      marginTop: 32,
-      marginBottom: 8,
-      color: '#fff'
-    },
-    button2: {
-      color: '#3D3D3D',
-    },
-  });
+  buttonRed: {
+    backgroundColor: '#EF6A6E',
+    marginTop: 32,
+    marginBottom: 8,
+    color: '#fff'
+  },
+  button2: {
+    color: '#3D3D3D',
+  },
+}
 
-interface IProps extends WithStyles<typeof styles> {
+interface IProps {
   open: boolean;
   topText: string;
   middleText: string;
@@ -65,7 +61,6 @@ interface IProps extends WithStyles<typeof styles> {
 
 const WarningDialog = (props: IProps) => {
   const {
-    classes,
     open,
     onClose,
     onProceed,
@@ -76,8 +71,8 @@ const WarningDialog = (props: IProps) => {
     children,
     height,
     disabled,
-  } = props;
-  const dialogHeight = height || (children ? 300 : 200);
+  } = props
+  const dialogHeight = height || (children ? 300 : 200)
 
   return (
     <ModalDialog
@@ -85,7 +80,7 @@ const WarningDialog = (props: IProps) => {
       width={510}
       height={dialogHeight}
       onClose={onClose}
-      className={classes.root}
+      classes={styles.root}
     >
       <Typography variant="h2" gutterBottom>
         {topText}
@@ -100,7 +95,7 @@ const WarningDialog = (props: IProps) => {
         {Boolean(cancelText) && (
           <>
             <Button
-              className={classes.button2}
+              classes={styles.button2}
               onClick={onClose}
             >
               {cancelText}
@@ -124,7 +119,7 @@ const WarningDialog = (props: IProps) => {
         </Button>
       </FlexRow>
     </ModalDialog>
-  );
-};
+  )
+}
 
-export default withStyles(styles)(WarningDialog);
+export default WarningDialog

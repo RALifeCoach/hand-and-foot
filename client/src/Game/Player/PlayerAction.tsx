@@ -1,10 +1,10 @@
 import React, { memo, useMemo } from "react";
 import { IGamePlay } from "Game";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import useSendMessage from "../hooks/useSendMessage";
 import FlexColumn from "../../shared/flex-grid/FlexColumn";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { green, red } from '@material-ui/core/colors';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { green, red } from '@mui/material/colors';
 
 interface IProps {
   gamePlay: IGamePlay;
@@ -21,13 +21,13 @@ const PlayerAction = ({ gamePlay }: IProps) => {
 
   const canPlay = gamePlay.gameState === 'inPlay' && gamePlay.currentPlayer.isPlayerTurn;
 
-  const themeGreen = createMuiTheme({
+  const themeGreen = createTheme({
     palette: {
       primary: green,
     },
   });
 
-  const themeRed = createMuiTheme({
+  const themeRed = createTheme({
     palette: {
       primary: red,
     },

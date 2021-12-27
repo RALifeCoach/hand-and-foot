@@ -3,7 +3,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const GamesHeader = () => {
   return (

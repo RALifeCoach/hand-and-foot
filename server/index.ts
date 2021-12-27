@@ -2,12 +2,10 @@ import * as express from "express";
 import * as http from "http";
 import socketManager from "./src/socket/socketManager";
 import ApiRoutes from "./src/routes/ApiRoutes";
-import * as cors from "cors";
 import AuthenticationRoutes from "./src/routes/authentication/AuthenticationRoutes";
 import * as dotenv from "dotenv";
 import * as helmet from "helmet";
 import * as requestIp from "request-ip";
-import * as path from 'path';
 import Database from "./src/Database";
 import AuthCheckMiddleware from "./src/routes/authentication/AuthCheckMiddleware";
 import logger from './src/util/logger';
@@ -26,7 +24,6 @@ app.use(helmet());
 app.disable("x-powered-by");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
 app.use(ipMiddleware);
 
 app.use(function (req, res, next) {
@@ -48,5 +45,6 @@ server.listen(process.env.PORT || 8999, () => {
   Database.connect();
   logger.info(`Server started on port ${process.env.PORT || 8999} :)`);
 
+  console.log('start')
   socketManager(server);
 });

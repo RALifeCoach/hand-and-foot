@@ -1,36 +1,12 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from 'react'
 import {
-  Theme,
-  createStyles,
-  WithStyles,
-  withStyles,
   Dialog,
   DialogContent,
   DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material'
+import theme from '../theme'
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {},
-
-    title: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      position: 'relative',
-    },
-
-    content: {
-      paddingBottom: 0,
-    },
-
-    titleAction: {
-      position: 'absolute',
-      right: theme.spacing(2),
-      top: theme.spacing(2),
-    },
-  });
-
-export interface IProps extends WithStyles<typeof styles> {
+export interface IProps {
   open: boolean;
   width: number;
   height: number;
@@ -42,21 +18,20 @@ export interface IProps extends WithStyles<typeof styles> {
   titleAction?: JSX.Element;
 
   onClose?: React.ReactEventHandler<{}>;
-  className?: string;
+  classes?: any;
 }
 
 const ModalDialog: React.FC<IProps> = props => {
   const {
-    classes,
     open,
     width,
     height,
     onClose,
     children,
-    className,
+    classes,
     title,
     titleAction,
-  } = props;
+  } = props
   return (
     <Dialog
       open={open}
@@ -73,16 +48,23 @@ const ModalDialog: React.FC<IProps> = props => {
       }}
     >
       {title && (
-        <DialogTitle className={classes.title}>
+        <DialogTitle sx={{
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          position: 'relative',
+        }}>
           {title}
-          {titleAction && <div className={classes.titleAction}>{titleAction}</div>}
+          {titleAction && <div style={{
+            position: 'absolute',
+            right: theme.spacing(2),
+            top: theme.spacing(2),
+          }}>{titleAction}</div>}
         </DialogTitle>
       )}
-      <DialogContent className={classNames(classes.content, className)}>
+      <DialogContent classes={{root: classes}}>
         {children}
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default withStyles(styles)(ModalDialog);
+export default ModalDialog

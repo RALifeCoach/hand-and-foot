@@ -1,13 +1,11 @@
 import React, { memo } from 'react';
-import EventSeatIcon from '@material-ui/icons/EventSeat';
-import { IconButton, Tooltip } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
+import { IconButton, Tooltip } from '@mui/material';
+import styled from '@emotion/styled'
 
-const BiggerTooltip = withStyles({
-  tooltip: {
-    fontSize: 16
-  }
-})(Tooltip);
+const BiggerTooltip = styled(Tooltip)`
+  font-size: 16px
+`
 
 interface IProps {
   player: any;
@@ -34,7 +32,8 @@ const SitButton = ({ top, left, player, isPlayerPresent, isCurrentUser, handleSi
   return (
     <IconButton
       style={{ position: 'absolute', top, left, color }}
-      onClick={handleSit}
+      onClick={() => {
+        handleSit()}}
     >
       <BiggerTooltip
         placement="top"
@@ -45,7 +44,7 @@ const SitButton = ({ top, left, player, isPlayerPresent, isCurrentUser, handleSi
           <EventSeatIcon
             style={{ width: 40, height: 40 }}
           />
-          {Boolean(player) && (
+          {!!player && (
             <div style={{ position: 'relative', left: -38, color: '#00F', maxWidth: 40 }}>
               {player.name}
             </div>

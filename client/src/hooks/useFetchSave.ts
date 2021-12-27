@@ -1,6 +1,7 @@
-import { useCallback, useReducer, useContext } from "react";
+import { useCallback, useReducer } from "react";
 import { IAction } from "General";
-import MainContext from "../App/MainContext";
+import {useRecoilValue} from 'recoil'
+import {configAtom, userAtom} from '../atoms/main'
 
 interface ISaveState {
   response: any;
@@ -9,7 +10,8 @@ interface ISaveState {
 }
 
 const useFetchSave = () => {
-  const { mainState: { user }, config } = useContext(MainContext);
+  const user = useRecoilValue(userAtom)
+  const config = useRecoilValue(configAtom)
 
   const [state, dispatch] = useReducer(
     (state: ISaveState, action: IAction) => {

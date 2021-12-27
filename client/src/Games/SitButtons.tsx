@@ -1,45 +1,51 @@
-import React, { useContext, useState, useMemo } from 'react';
-import { IGameRow } from 'Game';
-import MainContext from '../App/MainContext';
-import SitButton from './SitButton';
-import SnackMessage from '../shared/SnackMessage';
+import React, {useState, useMemo} from 'react'
+import {IGameRow} from 'Game'
+import SitButton from './SitButton'
+import SnackAlert from '../shared/SnackAlert'
+import {useRecoilValue, useSetRecoilState} from 'recoil'
+import {userAtom} from '../atoms/main'
+import {User} from 'User'
+import {playerIdAtom} from '../atoms/game'
+import useSendMessage from '../Game/hooks/useSendMessage'
 
 interface IProps {
   game: IGameRow;
 }
 
-const SitButtons = ({ game }: IProps) => {
-  const { mainDispatch, mainState: { user } } = useContext(MainContext);
-  const [error, setError] = useState('');
+function getTeam(game: IGameRow, user: User, position: number) {
+  if (game.numberOfPlayers === 3) {
+    return user!.userName
+  }
+  return position % 2 === 0 ? 'North-South' : 'East-West'
+}
+
+const SitButtons = ({game}: IProps) => {
+  const user = useRecoilValue(userAtom) as User
+  const sendMessage = useSendMessage()
+
+  const [error, setError] = useState('')
 
   const userPosition = useMemo(() => {
     return Object.keys(game.players || []).find(key =>
-      game.players?.[key].playerId === user?.userId);
-  }, [game.players, user]);
+      game.players?.[key].playerId === user?.userId)
+  }, [game.players, user])
 
-  const handleSit = (position: number) => () => {
-    if (userPosition !== undefined && Number(userPosition) !== position) {
-      return setError(`You are already sitting in position ${userPosition}`);
-    }
-    if (Number(userPosition) !== position && game?.players?.[position]) {
-      return setError('someone else is already sitting there');
-    }
-    mainDispatch(
-      {
-        type: 'play',
-        value: {
-          gameId: game.gameId,
-          position,
-          teamId: game.numberOfPlayers === 4 ? 'North-South' : user!.userName
-        }
+  const handleSit = (position: number) => {
+    return () => {
+      if (userPosition !== undefined && Number(userPosition) !== position) {
+        return setError(`You are already sitting in position ${userPosition}`)
       }
-    );
-  };
+      if (Number(userPosition) !== position && game?.players?.[position]) {
+        return setError('someone else is already sitting there')
+      }
+      sendMessage('addPlayer', {position, teamId: getTeam(game, user, position)})
+    }
+  }
 
   return (
     <>
-      <div style={{ border: '1px solid #000', width: 160, height: 148, display: 'block', position: 'relative' }}>
-        <div style={{ backgroundColor: '#000', height: 50, width: 50, position: 'absolute', top: 50, left: 56 }} />
+      <div style={{border: '1px solid #000', width: 160, height: 148, display: 'block', position: 'relative'}}>
+        <div style={{backgroundColor: '#000', height: 50, width: 50, position: 'absolute', top: 50, left: 56}}/>
         <SitButton
           player={game?.players?.[0]}
           top={-6}
@@ -75,14 +81,14 @@ const SitButtons = ({ game }: IProps) => {
           isCurrentUser={userPosition === '2'}
         />
       </div>
-      <SnackMessage
-        open={Boolean(error)}
-        message={error}
-        type="error"
+      <SnackAlert
+        open={!!error}
         onClose={() => setError('')}
+        severity="error"
+        text={error}
       />
     </>
   )
-};
+}
 
-export default SitButtons;
+export default SitButtons

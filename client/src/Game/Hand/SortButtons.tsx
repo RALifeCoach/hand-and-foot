@@ -1,19 +1,14 @@
 import React from 'react';
 import useSortStyles from "../hooks/useSortStyles";
 import FlexColumn from "../../shared/flex-grid/FlexColumn";
-import { IDispatch } from 'General';
 import useSendMessage from '../hooks/useSendMessage';
 
 interface IProps {
-  gameDispatch: IDispatch;
-  sortOrder: string;
   config: any;
-  gameId: number;
-  playerId: number;
 }
 
-const SortButtons = ({ gameDispatch, sortOrder, config, gameId, playerId }: IProps) => {
-  const { styleSortRank, styleSortSuit } = useSortStyles(sortOrder, config);
+const SortButtons = ({ config }: IProps) => {
+  const { styleSortRank, styleSortSuit } = useSortStyles(config);
   const sendMessage = useSendMessage();
   return (
     <FlexColumn style={{ width: 60, margin: '8px 8px 8px 8px' }}>

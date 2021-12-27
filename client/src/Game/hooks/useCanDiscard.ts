@@ -2,9 +2,13 @@ import { IGamePlay, IGameBase } from "Game";
 import useSelectedCards from "./useSelectedCards";
 import canDiscard from "../functions/canDiscard";
 import { useCallback } from "react";
+import {useRecoilValue} from 'recoil'
+import {gameBaseAtom, gamePlayAtom} from '../../atoms/game'
 
-const useCanDiscard = (gamePlay: IGamePlay, gameBase: IGameBase, selected: { [cardId: string]: boolean }) => {
-  const cards = useSelectedCards(gamePlay.currentPlayer.cards, selected);
+const useCanDiscard = () => {
+  const gamePlay = useRecoilValue(gamePlayAtom) as IGamePlay
+  const gameBase = useRecoilValue(gameBaseAtom) as IGameBase
+  const cards = useSelectedCards(gamePlay.currentPlayer.cards);
   return useCallback(() => {
     if (
       gamePlay.gameState !== "inPlay" ||

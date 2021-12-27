@@ -1,12 +1,14 @@
 import React from "react";
-import MainContext from "./MainContext";
 import Users from "../User/Users";
 import Games from "../Games/Games";
 import Game from "../Game/Game";
-import GameProvider from "../Game/GameProvider";
+import {MutableSnapshot, RecoilRoot, useRecoilValue} from 'recoil'
+import {playerIdAtom} from '../atoms/game'
+import {menuAtom, userAtom} from '../atoms/main'
 
 function AppDisplayComponent() {
-  const { mainState: { menu, user } } = React.useContext(MainContext);
+  const user = useRecoilValue(userAtom)
+  const menu = useRecoilValue(menuAtom)
 
   if (!user) {
     return null;
@@ -15,20 +17,22 @@ function AppDisplayComponent() {
     localStorage.setItem('main.menu', menu);
   }
 
+  const initializeState = ({set}: MutableSnapshot) => {
+    set(playerIdAtom, user.userId)
+  }
+
   const menus: string[] = menu.split(':');
   switch (menus[0]) {
     case 'games':
       return <Games />;
     case 'game':
       return (
-        <GameProvider
-          playerId={user.userId}
-        >
+        <RecoilRoot initializeState={initializeState}>
           <Game
             position={Number(menus[1])}
             teamId={menus[2]}
           />
-        </GameProvider>
+        </RecoilRoot>
       );
     case 'users':
       return <Users />;

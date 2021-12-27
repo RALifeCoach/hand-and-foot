@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { CSSProperties } from "react";
-import { FormControl, FormHelperText, makeStyles, MenuItem, Select } from "@material-ui/core";
+import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { IOption } from "General";
 
 interface IFieldProps {
@@ -13,11 +13,11 @@ interface IFieldProps {
   options: IOption[];
 }
 
-const useStyles = makeStyles({
+const styles = {
   outlined: {
     padding: '4px 30px 4px 8px'
   }
-});
+}
 
 const SelectField = (props: IFieldProps) => {
   const {
@@ -29,7 +29,6 @@ const SelectField = (props: IFieldProps) => {
     onChange,
     options,
   } = props;
-  const classes = useStyles();
   const myStyle = style || {};
   if (Boolean(error)) {
     myStyle.borderColor = 'red';
@@ -50,9 +49,7 @@ const SelectField = (props: IFieldProps) => {
         }}
         disabled={disabled}
         style={{ marginTop: 0 }}
-        classes={{
-          outlined: classes.outlined
-        }}
+        sx={styles.outlined}
       >
         {options.map((option, index) => (
           <MenuItem value={option.value as string | number} key={(option.value as string | number) || index}>{option.label}</MenuItem>

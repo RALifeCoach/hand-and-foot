@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, {CSSProperties, useCallback, useMemo} from 'react'
 import Debounce from '../../utils/debounce';
 import CardIcons from './CardIcons';
 import { ICard, IDummyCard } from "Game";
-import { CSSProperties } from '@material-ui/styles';
 import { SUIT_IMAGES } from '../../constants';
 
 const DEFAULTS = {

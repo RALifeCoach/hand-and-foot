@@ -9,13 +9,13 @@ import {
   Divider,
   TextField,
   Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import FlexColumn from "../shared/flex-grid/FlexColumn";
 import FlexRow from "../shared/flex-grid/FlexRow";
 import Spacer from "../shared/Spacer";
 import useFetchSave from "../hooks/useFetchSave";
 import Loading from "../shared/Loading";
-import SnackMessage from "../shared/SnackMessage";
+import SnackAlert from "../shared/SnackAlert";
 
 interface IProps {
   open: boolean;
@@ -96,7 +96,6 @@ const ChangePassword = ({open, onClose}: IProps) => {
     <>
       <Dialog
         open={open}
-        disableBackdropClick
         disableEscapeKeyDown
         PaperProps={{
           style: {
@@ -169,11 +168,11 @@ const ChangePassword = ({open, onClose}: IProps) => {
         </DialogActions>
       </Dialog>
       <Loading open={status.status === 'in progress'} title="Updating Password..."/>
-      <SnackMessage
+      <SnackAlert
         open={openPasswordError}
         onClose={() => setOpenPasswordError(false)}
-        message="The old password doesn't match."
-        type="error"
+        text="The old password doesn't match."
+        severity="error"
       />
     </>
   );

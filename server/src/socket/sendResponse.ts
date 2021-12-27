@@ -111,6 +111,7 @@ const sendResponse = (
             false
           ),
         });
+      console.log(playerInfo)
       gameController[gameId].players[playerId].send(playerInfo);
     }
   });

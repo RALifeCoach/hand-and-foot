@@ -1,9 +1,9 @@
-import React from 'react';
-import IconRank from './IconRank';
-import IconSuit from './IconSuit';
-import IconPin from './IconPin';
-import IconMove from './IconMove';
-import { ICard } from 'Game';
+import React from 'react'
+import IconRank from './IconRank'
+import IconSuit from './IconSuit'
+import IconPin from './IconPin'
+import IconMove from './IconMove'
+import {ICard} from 'Game'
 
 interface IProps {
   card: ICard;
@@ -15,7 +15,7 @@ interface IProps {
   config: any;
 }
 
-export default function CardIcons({ card, imageLocation, showIcons, onPinned, onMoved, config, selected }: IProps) {
+export default function CardIcons({card, imageLocation, showIcons, onPinned, onMoved, config, selected}: IProps) {
   return (
     <div>
       <IconRank
@@ -58,7 +58,7 @@ export default function CardIcons({ card, imageLocation, showIcons, onPinned, on
         config={config}
       />
     </div>
-  );
+  )
 }
 
 CardIcons.defaultProps = {
@@ -67,4 +67,4 @@ CardIcons.defaultProps = {
   showIcons: false,
   onPinned: null,
   onMoved: null
-};
+}

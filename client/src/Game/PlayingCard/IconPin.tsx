@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 import Debounce from '../../utils/debounce';
-import PinDropIcon from '@material-ui/icons/PinDrop';
+import PinDropIcon from '@mui/icons-material/PinDrop';
 
 interface IProps {
   selected: boolean;

@@ -1,6 +1,7 @@
 import React from 'react';
-import {Tab, Typography} from "@material-ui/core";
-import MainContext from "./MainContext";
+import {Tab, Typography} from "@mui/material";
+import {useSetRecoilState} from 'recoil'
+import {menuAtom} from '../atoms/main'
 
 interface IProps {
   title: string;
@@ -8,14 +9,14 @@ interface IProps {
 }
 
 const AppMenuItem = ({title, value}: IProps) => {
-  const {mainDispatch} = React.useContext(MainContext);
+  const setMenu = useSetRecoilState(menuAtom)
 
   return (
     <Tab
       label={(<Typography>{title}</Typography>)}
       value={value}
       onClick={() => {
-        mainDispatch({type: 'menu', value: value});
+        setMenu(value)
       }}
     />
   );

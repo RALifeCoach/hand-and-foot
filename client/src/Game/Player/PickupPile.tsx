@@ -2,15 +2,17 @@ import React, { memo, useState, useCallback } from "react";
 import { IGamePlay } from "Game";
 import useSendMessage from "../hooks/useSendMessage";
 import PlayingCard from "../PlayingCard/PlayingCard";
-import SnackMessage from "../../shared/SnackMessage";
+import SnackAlert from "../../shared/SnackAlert";
+import {useRecoilValue} from 'recoil'
+import {gamePlayAtom} from '../../atoms/game'
 
 interface IProps {
-  gamePlay: IGamePlay;
-  pickupPile: number;
   pileIndex: number;
 }
 
-const PickupPile = ({ gamePlay, pickupPile, pileIndex }: IProps) => {
+const PickupPile = ({ pileIndex }: IProps) => {
+  const gamePlay = useRecoilValue(gamePlayAtom) as IGamePlay
+  const pickupPile = gamePlay.pickupPiles[pileIndex]
   const sendMessage = useSendMessage();
   const [error, setError] = useState('');
   const handleClick = useCallback(() => {
@@ -42,10 +44,10 @@ const PickupPile = ({ gamePlay, pickupPile, pileIndex }: IProps) => {
           onSelect={handleClick}
         />
       </div>
-      <SnackMessage
+      <SnackAlert
         open={Boolean(error)}
-        message={error}
-        type="error"
+        text={error}
+        severity="error"
         onClose={() => setError('')}
       />
     </>

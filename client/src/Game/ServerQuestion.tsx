@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Button,
   Dialog,
@@ -7,31 +7,30 @@ import {
   DialogTitle,
   Divider,
   Typography
-} from "@material-ui/core";
-import FlexColumn from "../shared/flex-grid/FlexColumn";
-import FlexRow from "../shared/flex-grid/FlexRow";
-import { IServerQuestion, IServerQuestionButton } from "Game";
-import Spacer from "../shared/Spacer";
-import useSendMessage from "./hooks/useSendMessage";
+} from '@mui/material'
+import FlexColumn from '../shared/flex-grid/FlexColumn'
+import FlexRow from '../shared/flex-grid/FlexRow'
+import {IServerQuestion, IServerQuestionButton} from 'Game'
+import Spacer from '../shared/Spacer'
+import useSendMessage from './hooks/useSendMessage'
 
 interface IProps {
   serverQuestion: IServerQuestion;
 }
 
-const ServerQuestion = ({ serverQuestion }: IProps) => {
-  const sendMessage = useSendMessage();
+const ServerQuestion = ({serverQuestion}: IProps) => {
+  const sendMessage = useSendMessage()
 
   const handleClick = (button: IServerQuestionButton) => () => {
-    sendMessage(button.sendType, button.sendValue);
-  };
+    sendMessage(button.sendType, button.sendValue)
+  }
 
-  const width = 350;
-  const height = 600;
+  const width = 350
+  const height = 600
   return (
     <>
       <Dialog
         open={true}
-        disableBackdropClick
         disableEscapeKeyDown
         PaperProps={{
           style: {
@@ -51,7 +50,7 @@ const ServerQuestion = ({ serverQuestion }: IProps) => {
         </DialogTitle>
         <DialogContent>
           <FlexColumn>
-            <Divider style={{ width: '100%' }} />
+            <Divider style={{width: '100%'}}/>
             <div>{serverQuestion.message}</div>
           </FlexColumn>
         </DialogContent>
@@ -64,14 +63,14 @@ const ServerQuestion = ({ serverQuestion }: IProps) => {
                 >
                   {button.text}
                 </Button>
-                <Spacer />
+                <Spacer/>
               </div>
             ))}
           </FlexRow>
         </DialogActions>
       </Dialog>
     </>
-  );
-};
+  )
+}
 
-export default ServerQuestion;
+export default ServerQuestion

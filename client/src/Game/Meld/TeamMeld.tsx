@@ -2,21 +2,23 @@ import React, { memo } from 'react';
 import { IMeld, IGamePlay, ICard, IGameBase } from 'Game';
 import FlexRow from '../../shared/flex-grid/FlexRow';
 import Meld from './Meld';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip } from '@mui/material';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import buildMeldDisplay from '../functions/buildMeldDisplay';
 import getCardValue from '../functions/getCardValue';
+import {useRecoilValue} from 'recoil'
+import {gameBaseAtom, gamePlayAtom} from '../../atoms/game'
 
 interface IProps {
   melds: IMeld[];
   title: string;
-  gamePlay: IGamePlay;
-  gameBase: IGameBase;
   isCurrentPlayer?: boolean;
   selectedCards: ICard[];
 }
 
-const TeamMeld = ({ melds, gamePlay, gameBase, title, isCurrentPlayer, selectedCards }: IProps) => {
+const TeamMeld = ({ melds, title, isCurrentPlayer, selectedCards }: IProps) => {
+  const gamePlay = useRecoilValue(gamePlayAtom) as IGamePlay
+  const gameBase = useRecoilValue(gameBaseAtom) as IGameBase
   const complete = melds.filter(meld => meld.isComplete);
   const incomplete = melds.filter(meld => !meld.isComplete).sort((meldA, meldB) =>
     (getCardValue(meldA.rank) || 0) < (getCardValue(meldB.rank) || 0) ? 1 : -1);

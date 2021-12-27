@@ -4,7 +4,7 @@ import {
   Table,
   TableBody,
   Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import Spacer from "../shared/Spacer";
 import useFetchGet from "../hooks/useFetchGet";
 import {IGameRow} from "Game";

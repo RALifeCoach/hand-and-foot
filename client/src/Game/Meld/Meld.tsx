@@ -1,18 +1,11 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { IGamePlay, IMeld, ICard, IGameBase } from 'Game';
-import mapMeldCards from '../functions/mapMeldCards';
-import { Paper, Tooltip, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { Paper, Tooltip } from '@mui/material';
 import useCanPlay from '../hooks/useCanPlay';
 import useSendMessage from '../hooks/useSendMessage';
-import SnackMessage from "../../shared/SnackMessage";
+import SnackAlert from "../../shared/SnackAlert";
 import buildMeldDisplay from '../functions/buildMeldDisplay';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  tooltip: {
-    fontSize: 14,
-  },
-}));
+import { SUIT_IMAGES } from '../../constants';
 
 interface IProps {
   options: any;
@@ -24,23 +17,24 @@ interface IProps {
 }
 
 const Meld = ({ meld, gamePlay, gameBase, isCurrentPlayer, selectedCards }: IProps) => {
-  const { cards, rank, type } = meld;
-  const mappedMeld = mapMeldCards(cards);
+  const { cards } = meld;
   const [isOver, setIsOver] = useState(false);
-  const classes = useStyles();
   const [error, setError] = useState('');
   const display = useMemo(() => {
-    switch (type) {
-      case 'clean':
-        return `${rank}-${cards.length}`;
-      case 'dirty':
-        return `${rank}-${cards.length} (${mappedMeld.naturals}/${mappedMeld.wild})`;
-      case 'run':
-        return `${cards[0].suit} (${cards[0].rank}-${cards[cards.length - 1].rank})`;
-      case 'wild':
-        return `${cards.length}`;
-    }
-  }, [type, cards, rank, mappedMeld]);
+    return (
+      <>
+        {cards.map((card, cardIndex) => (
+          <span>
+            {card.suit === 'J' ? '' : card.rank}
+            <span style={{ color: SUIT_IMAGES[card.suit].color }}>
+              {SUIT_IMAGES[card.suit].image}
+            </span>
+            {cardIndex < cards.length - 1 && ', '}
+          </span>
+        ))}
+      </>
+    )
+  }, [cards]);
 
   const getPlayValues = useCanPlay(gamePlay, gameBase, meld);
   const sendMessage = useSendMessage();
@@ -80,15 +74,14 @@ const Meld = ({ meld, gamePlay, gameBase, isCurrentPlayer, selectedCards }: IPro
           title={displayValues}
           placement="top"
           arrow
-          classes={classes}
         >
           <div>{display}</div>
         </Tooltip>
       </Paper>
-      <SnackMessage
-        open={Boolean(error)}
-        message={error}
-        type="error"
+      <SnackAlert
+        open={!!error}
+        text={error}
+        severity="error"
         onClose={() => setError('')}
       />
     </>

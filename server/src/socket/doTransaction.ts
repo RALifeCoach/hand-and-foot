@@ -20,9 +20,13 @@ const doTransaction = (
       gameController,
       gameId
     );
+    console.log('handle', ACTION_RESPONSE[data.type].sendToAll,
+      gamePlay.gameState === "waitingToStart",
+      gameRules.numberOfPlayers,
+      Object.keys(gameController[gameId].players).length)
     if (
       ACTION_RESPONSE[data.type].sendToAll &&
-      gamePlay.gameState === "waitingToReStart" &&
+      gamePlay.gameState === "waitingToStart" &&
       gameRules.numberOfPlayers ===
         Object.keys(gameController[gameId].players).length
     ) {

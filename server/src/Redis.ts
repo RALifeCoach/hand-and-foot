@@ -3,11 +3,11 @@ import { promisify } from "util";
 import logger from "./util/logger";
 
 class Redis {
-  public getAsync: (key: string) => any;
-  public setAsync: (key: string, value: string) => any;
-  public expireAsync: (key: string, expiry: number) => any;
-  constructor() {
-    console.log(process.env.REDIS)
+  public getAsync: ((key: string) => any) | null = null;
+  public setAsync: ((key: string, value: string) => any) | null = null;
+  public expireAsync: ((key: string, expiry: number) => any) | null = null;
+  connect() {
+    console.log('redis', process.env.REDIS)
     const client = redis.createClient({
       host: process.env.REDIS as string,
       port: 6379
@@ -23,6 +23,9 @@ class Redis {
   }
 
   redisGet(key: string, callback: any) {
+    if (!this.getAsync) {
+      return
+    }
     this.getAsync(key)
       .then((value: string) => callback(value))
       .catch(logger.error);
@@ -39,9 +42,15 @@ class Redis {
     expiry: number;
     callback?: any;
   }) {
+    if (!this.setAsync) {
+      return
+    }
     this.setAsync(key, value)
       .then(() => {
         if (expiry) {
+          if (!this.expireAsync) {
+            return
+          }
           this.expireAsync(key, expiry).then(() => {
             if (callback) {
               callback(null);

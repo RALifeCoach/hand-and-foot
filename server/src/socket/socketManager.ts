@@ -14,19 +14,20 @@ const gameController: IGameController = {};
 const messageStack: any[] = [];
 
 const socketManager = (server: any) => {
-  const wss = new WebSocket.Server({ server, path: "/wsapp" });
-  wss.on("connection", (socket: WebSocket, req: any) => {
+  const wss = new WebSocket.Server({ server });
+  wss.on("connection", (socket: WebSocket) => {
     let gameId = "";
     let playerId = "";
     socket.on("message", (message: string) => {
       const data: { type: string; value: any; token: string } = JSON.parse(
         message
       );
+      console.log('arrived', data.type, data.value)
 
       new Promise<any>((resolve: (user: any) => void, reject: () => void) => {
         isAuthorized(data.token, "", resolve, reject);
       })
-        .then((user: any) => {
+        .then(() => {
           gameId = data.value.gameId;
           playerId = data.value.playerId;
 
@@ -37,7 +38,8 @@ const socketManager = (server: any) => {
 
           processMessages(messageStack, gameController);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('err', err)
           const message = JSON.stringify({ type: "authFailure" });
           socket.send(message);
         });
@@ -52,6 +54,9 @@ const socketManager = (server: any) => {
       messageStack.push({ type: "disconnect", value: { gameId, playerId } });
     });
   });
+  wss.on('listening', (...args) => {
+    console.log('listen', args)
+  })
 };
 
 export default socketManager;
