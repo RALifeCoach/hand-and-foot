@@ -33,8 +33,6 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
 
-  console.log('game', gameId, playerId)
-
   useEffect(() => {
     if (gameId < 0) {
       return
@@ -45,6 +43,7 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
   useEffect(() => {
     if (gameStatus.status === 'success') {
       setGameBase(gameStatus.data)
+
       sendMessage('addPlayer', { position, teamId })
     }
   }, [gameStatus, playerId, sendMessage, gameId, position, teamId, setGameBase]);

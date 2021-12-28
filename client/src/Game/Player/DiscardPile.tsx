@@ -9,6 +9,7 @@ import SnackAlert from "../../shared/SnackAlert";
 import { LockOutlined } from '@mui/icons-material';
 import {useRecoilValue} from 'recoil'
 import {gameBaseAtom, gamePlayAtom} from '../../atoms/game'
+import useDebounce from '../hooks/useDebounce'
 
 const DiscardPile = () => {
   const gamePlay = useRecoilValue(gamePlayAtom) as IGamePlay
@@ -37,30 +38,39 @@ const DiscardPile = () => {
     setError(message);
   }, [canDiscard, canDraw7, sendMessage, selectedCards, gamePlay, gameBase]);
 
+  const onClick = useDebounce(handleClick, 1000)
+
+  const displayCard = () => {
+    if (gamePlay.currentPlayer.playerState === 'draw7') {
+      return { cardText: 'Draw 7'}
+    }
+    return gamePlay.discardCard === null ? { cardText: 'Empty'} : gamePlay.discardCard
+  }
   return (
     <>
       <div style={{ position: 'relative', zIndex: 500 }} >
         <PlayingCard
-          card={gamePlay.currentPlayer.playerState === 'draw7'
-            ? { cardText: 'Draw 7' }
-            : gamePlay.discardCard === null
-              ? { cardText: 'Empty' }
-              : gamePlay.discardCard
-          }
-          imageLocation="below"
+          card={displayCard()}
           left={0}
           top={0}
           onSelect={handleClick}
           onMoved={() => {}}
-        />
-        <div style={{ position: 'absolute', top: 22, left: 30 }} onClick={handleClick}>
-          <span style={{ fontSize: 18, color: '#881111' }}>{gamePlay.discardCount.toString()}</span>
+        >
+        <div
+          className="absolute top-7 left-0 w-full text-center text-teal-600"
+          onClick={event => onClick(event)}
+        >
+          <span className="text-md">{gamePlay.discardCount.toString()}</span>
         </div>
         {gamePlay.pileIsLocked && (
-          <div style={{ position: 'absolute', top: 60, left: 22 }} onClick={handleClick}>
+          <div
+            style={{ position: 'absolute', top: 60, left: 22 }}
+            onClick={event => onClick(event)}
+          >
             <LockOutlined style={{ width: 25, height: 25 }} />
           </div>
         )}
+        </PlayingCard>
       </div>
       <SnackAlert
         open={Boolean(error)}

@@ -1,4 +1,4 @@
-import { selector } from "recoil";
+import {GetRecoilValue, selector, SetRecoilState} from 'recoil'
 import {
   errorAtom,
   lastMessageAtom,
@@ -10,26 +10,26 @@ import pinCard from "./pinCard";
 import sortOrder from "./sortOrder";
 import updateGame from "./updateGame";
 
+const COMMANDS = {
+  updateGame: updateGame,
+  sortOrder: sortOrder,
+  moveCard: moveCard,
+  pinCard: pinCard,
+} as {[key: string]: (get: GetRecoilValue, set: SetRecoilState, message: any) => void}
+
 export const lastMessageSelector = selector<any>({
   key: "lastMessageSelector",
   get: ({ get }) => get(lastMessageAtom),
   set: ({ get, set }, message) => {
     const selected = get(selectedAtom);
+    const command = COMMANDS[message.type as string]
+    if (command) {
+      command(get, set, message)
+      return
+    }
     switch (message.type) {
-      case "updateGame":
-        updateGame(get, set, message);
-        return;
-      case "sortOrder":
-        sortOrder(set, message);
-        return;
       case "serverQuestion":
         set(serverQuestionAtom, message.value);
-        return;
-      case "moveCard":
-        moveCard(set, message);
-        return;
-      case "pinCard":
-        pinCard(set, message);
         return;
       case "unmetMin":
         set(errorAtom, "You do not have enough points on the board to go down");

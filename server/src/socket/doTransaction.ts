@@ -10,9 +10,10 @@ const doTransaction = (
   data: any,
   gameController: IGameController,
   gameId: number,
+  playerId: number,
   resolve: any
 ) => {
-  socketHandler(gamePlay, gameRules, gameId, data).then((message) => {
+  socketHandler(gamePlay, gameRules, gameId, playerId, data).then((message) => {
     startPlaying(
       ACTION_RESPONSE[data.type].sendToAll,
       gamePlay,
@@ -20,18 +21,6 @@ const doTransaction = (
       gameController,
       gameId
     );
-    console.log('handle', ACTION_RESPONSE[data.type].sendToAll,
-      gamePlay.gameState === "waitingToStart",
-      gameRules.numberOfPlayers,
-      Object.keys(gameController[gameId].players).length)
-    if (
-      ACTION_RESPONSE[data.type].sendToAll &&
-      gamePlay.gameState === "waitingToStart" &&
-      gameRules.numberOfPlayers ===
-        Object.keys(gameController[gameId].players).length
-    ) {
-      gamePlay.gameState = "inPlay";
-    }
     resolve({
       newGamePlay: gamePlay,
       message: message === null ? "" : JSON.stringify(message),

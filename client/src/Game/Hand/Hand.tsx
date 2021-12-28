@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PlayingCard from '../PlayingCard/PlayingCard';
-import FlexRow from "../../shared/flex-grid/FlexRow";
 import { ICard } from "Game";
 import SortButtons from './SortButtons';
 import useSelectedCards from '../hooks/useSelectedCards';
@@ -32,63 +31,74 @@ const Hand = ({ options, cards }: IProps) => {
   const showIcons = countSelectedCards === 1;
   const movable = showIcons && !cardMoving;
 
-
   useEffect(() => {
     console.log('magic', magicCard);
   }, [magicCard]);
 
   return (
-    <FlexRow>
-      <SortButtons
-        config={config}
-      />
-      <FlexRow>
+    <div className="flex">
+      <SortButtons />
+      <div className="flex">
         <div
           style={{ overflowX: 'auto', overflowY: 'hidden', maxWidth: '100%' }}
         >
           <div
+            className="relative"
             style={{
               width: config.offset * (cardMoving ? cards.length + 1 : cards.length - 1) + 70,
-              position: 'relative'
             }}
           >
-            {cards.map((card: ICard, cardIndex: number) => (
-              <PlayingCard
-                card={card}
-                selected={Boolean(selected[card.cardId])}
-                imageLocation={'below'}
-                left={cardIndex * config.offset + (cardMoving && cardIndex >= magicCard ? config.offset : 0)}
-                showIcons={showIcons}
-                onSelect={() => {
-                  setSelected({[card.cardId]: true})
-                }}
-                onPinned={movable ? () => sendMessage('setPin', { cardId: card.cardId }) : undefined}
-                onMoved={movable ? () => {
-                  setCardMoving(card)
-                  setMagicCard(cardIndex);
-                } : undefined}
-                onMouseEnter={Boolean(cardMoving) ? () => {
-                  setMagicCard(cardIndex);
-                } : undefined}
-                key={card.cardId}
-                top={0}
-              />
-            ))}
+            {cards.map((card: ICard, cardIndex: number) => {
+              const isSelected = !!selected[card.cardId]
+              return (
+                <PlayingCard
+                  card={card}
+                  selected={isSelected}
+                  left={cardIndex * config.offset + (cardMoving && cardIndex >= magicCard ? config.offset : 0)}
+                  onSelect={() => {
+                    if (!cardMoving) {
+                      const newSelected = {...selected}
+                      if (isSelected) {
+                        delete newSelected[card.cardId]
+                      } else {
+                        newSelected[card.cardId] = true
+                      }
+                      setSelected(newSelected)
+                      return
+                    }
+                    if (!!cardMoving) {
+                      const destCardId = cards[magicCard]
+                      sendMessage('moveCard', {movingCardId: cardMoving.cardId, destCardId: destCardId.cardId})
+                    }
+                  }}
+                  onPinned={movable ? () => sendMessage('setPin', { cardId: card.cardId }) : undefined}
+                  onMoved={movable ? () => {
+                    setCardMoving(card)
+                    setMagicCard(cardIndex);
+                  } : undefined}
+                  onMouseEnter={!!cardMoving ? () => {
+                    setMagicCard(cardIndex);
+                  } : undefined}
+                  key={card.cardId}
+                  top={10}
+                />
+              )
+            })}
             {cardMoving && (
               <PlayingCard
                 card={{ cardText: 'Move to front of hand.' }}
-                imageLocation={''}
                 left={cards.length * config.offset + (cardMoving ? config.offset : 0)}
                 onSelect={() => setSelected({})}
                 onMouseEnter={Boolean(cardMoving) ? () => {
                   setMagicCard(cards.length);
                 } : undefined}
+                top={18}
               />
             )}
           </div>
         </div>
-      </FlexRow>
-    </FlexRow>
+      </div>
+    </div>
   );
 };
 

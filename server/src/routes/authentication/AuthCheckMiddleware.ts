@@ -10,7 +10,6 @@ const AuthCheckMiddleware = (req: any, res: any, next: () => void) => {
         req.role = user.role;
         req.userId = user.id;
         return next();
-        next();
       })
       .catch(() => {
         res.status(500).json({ error: "Not Authorized" });

@@ -18,6 +18,7 @@ const processMessages = (
   gameController[data.value.gameId].players[data.value.playerId] = data.socket;
 
   const gameId = data.value.gameId;
+  const playerId = data.value.playerId;
   logger.debug(`About to process ${data.type} for gameId ${data.value.gameId} and player ${data.value.playerId}`);
 
   const sqlGame = `select * from game where gameId = '${data.value.gameId}'`;
@@ -39,6 +40,7 @@ const processMessages = (
           data,
           gameController,
           gameId,
+          playerId,
           resolve
         );
       }

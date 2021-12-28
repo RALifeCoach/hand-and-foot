@@ -1,5 +1,4 @@
 import React from 'react'
-import FlexColumn from '../../shared/flex-grid/FlexColumn'
 import Hand from '../Hand/Hand'
 import {IPlayerCurrent} from 'Game'
 import {Paper} from '@mui/material'
@@ -30,8 +29,8 @@ const Player = ({player}: IProps) => {
   return (
     <>
       <Paper elevation={1} style={{margin: 8}}>
-        <FlexColumn style={{marginLeft: 8}}>
-          <FlexRow>
+        <div className="flex flex-col gap-3 ml-2">
+          <div className="flex gap-3">
             <PlayersStats
               gamePlay={gamePlay}
               player={player}
@@ -39,7 +38,7 @@ const Player = ({player}: IProps) => {
             <PlayerAction
               gamePlay={gamePlay}
             />
-          </FlexRow>
+          </div>
           <Hand
             options={{}}
             cards={gamePlay.currentPlayer.cards}
@@ -47,7 +46,7 @@ const Player = ({player}: IProps) => {
             sortOrder={sortOrder}
             cardMoving={cardMoving}
           />
-        </FlexColumn>
+        </div>
         <FlexRow style={{height: 120, width: '100%', position: 'relative', paddingLeft: 8}}>
           <FlexRow>
             <div style={{width: 80}}>

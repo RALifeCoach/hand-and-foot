@@ -4,7 +4,7 @@ const drawCardPlayer = (
   gamePlay: IGamePlay,
   pileIndex: number
 ) => {
-  console.debug('draw card player', pileIndex);
+  console.log('draw card player', pileIndex);
   const player = gamePlay.players[gamePlay.currentPlayerId];
   const cards = player.isInHand ? player.hand : player.foot;
 

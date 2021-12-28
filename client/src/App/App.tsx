@@ -1,8 +1,6 @@
 import React, {memo, useCallback, useEffect, useState} from 'react'
 import Game from '../Game/Game'
-import useFetchSave from '../hooks/useFetchSave'
 import FetchHandling from '../shared/FetchHandling'
-import QueryString from 'query-string'
 import Login from '../Login/Login'
 import SetPassword from '../Login/SetPassword'
 import {
@@ -18,6 +16,7 @@ import {Routes, Route} from 'react-router-dom'
 import Games from '../Games/Games'
 import {User} from 'User'
 import MessageProvider from './MessageProvider'
+import useTestSetup from './useTestSetup'
 
 const PLAYERS4 = [
   {
@@ -61,16 +60,9 @@ const PLAYERS3 = [
 
 const App = () => {
   const [userSet, setUserSet] = useState(false)
-  const queryParams = QueryString.parse(window.location.search)
-  const isTest = queryParams.test === 'true'
-  const players = parseInt((queryParams.players as string) ?? '4')
-  const truncate = queryParams.truncate || 'no'
-  const [gameId, setGameId] = useRecoilState(gameIdAtom)
-  const [gameStatus, getGame] = useFetchSave()
   const [windowSize, setWindowSize] = useRecoilState(windowSizeAtom)
   const [user, setUser] = useRecoilState(userAtom)
   const config = useRecoilValue(configAtom)
-  const [truncateComplete, setTruncateComplete] = useState((queryParams.truncate || 'no') === 'no')
 
   const onWindowResize = useCallback(
     (event) => {
@@ -98,44 +90,21 @@ const App = () => {
     setTimeout(() => setUserSet(true), 200)
   }, [setUser])
 
-  useEffect(() => {
-    if (gameId < 0 && isTest) {
-      getGame({}, `api/game/restart/TestGame/${players}/${truncate}`)
-    }
-  }, [getGame, gameId, players, isTest, truncate])
+  const {passwordId, isTest, players, gameStatus, gameId} = useTestSetup()
 
-  useEffect(() => {
-    console.log('status', gameStatus)
-    if (gameStatus.status === 'success') {
-      setGameId(gameStatus.response.gameId)
-    }
-  }, [gameStatus, setGameId])
-
-  useEffect(() => {
-    console.log('status', gameStatus.status)
-    if (!truncateComplete && gameStatus.status === 'success') {
-      setTimeout(() => setTruncateComplete(true), 200)
-    }
-  }, [truncateComplete, setTruncateComplete, gameStatus.status])
-
-  if (!truncateComplete) {
-    return null
-  }
-
-  if (queryParams.id) {
+  if (passwordId) {
     return (
       <>
-        <SetPassword id={queryParams.id as string}/>
+        <SetPassword id={passwordId as string}/>
       </>
     )
   }
 
-  if (!gameId && isTest) {
+  if (!!gameStatus) {
     return <FetchHandling status={gameStatus} title="Fetching game"/>
   }
 
   const initializeState = (playerId: number) => ({set}: MutableSnapshot) => {
-    console.log('init', playerId, gameId)
     set(playerIdAtom, playerId)
     set(gameIdAtom, gameId)
     set(configAtom, config)

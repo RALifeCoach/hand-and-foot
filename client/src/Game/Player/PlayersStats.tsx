@@ -1,5 +1,4 @@
 import React from 'react';
-import FlexRow from "../../shared/flex-grid/FlexRow";
 import { IGamePlay, IPlayerCurrent } from 'Game';
 import PlayerStats from './PlayerStats';
 
@@ -10,7 +9,7 @@ interface IProps {
 
 const PlayersStats = ({ gamePlay, player }: IProps) => {
   return (
-    <FlexRow>
+    <div className="flex gap-4">
       <PlayerStats
         playerName={player.playerName || `Player: ${player.playerId}`}
         isPlayerTurn={player.isPlayerTurn}
@@ -18,9 +17,9 @@ const PlayersStats = ({ gamePlay, player }: IProps) => {
         isInHand={player.isInHand}
         team={gamePlay.teams[player.teamId]}
       />
-      <FlexRow>
+      <div className="flex gap-4">
         {gamePlay.otherPlayers.map(player => (
-          <FlexRow key={player.playerId}>
+          <div className="flex" key={player.playerId}>
             <PlayerStats
               playerName={player.playerName || `Player: ${player.playerId}`}
               isPlayerTurn={player.isPlayerTurn}
@@ -28,10 +27,10 @@ const PlayersStats = ({ gamePlay, player }: IProps) => {
               isInHand={player.isInHand}
               team={gamePlay.teams[player.teamId]}
             />
-          </FlexRow>
+          </div>
         ))}
-      </FlexRow>
-    </FlexRow>
+      </div>
+    </div>
   );
 };
 

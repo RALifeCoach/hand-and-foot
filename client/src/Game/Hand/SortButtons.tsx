@@ -1,31 +1,40 @@
-import React from 'react';
-import useSortStyles from "../hooks/useSortStyles";
-import FlexColumn from "../../shared/flex-grid/FlexColumn";
-import useSendMessage from '../hooks/useSendMessage';
+import React from 'react'
+import useSendMessage from '../hooks/useSendMessage'
+import {useRecoilValue} from 'recoil'
+import {sortOrderAtom} from '../../atoms/game'
+import cx from 'clsx'
 
-interface IProps {
-  config: any;
-}
-
-const SortButtons = ({ config }: IProps) => {
-  const { styleSortRank, styleSortSuit } = useSortStyles(config);
-  const sendMessage = useSendMessage();
+const SortButtons = () => {
+  const sortOrder = useRecoilValue(sortOrderAtom)
+  const sendMessage = useSendMessage()
   return (
-    <FlexColumn style={{ width: 60, margin: '8px 8px 8px 8px' }}>
+    <div className="flex flex-col w-15 mr-2 mb-2 mt-3 text-center cursor-pointer">
       <div
-        style={styleSortRank}
-        onClick={() => sendMessage('setSortOrder', { sortOrder: 'rank' })}
+        className={cx(
+          'p-2 border text-xl border-gray-600 mb-1',
+          {
+            'bg-blue-300': sortOrder === 'rank',
+            'bg-gray-300': sortOrder !== 'rank'
+          }
+        )}
+        onClick={() => sendMessage('setSortOrder', {sortOrder: 'rank'})}
       >
         A-4
-        </div>
+      </div>
       <div
-        style={styleSortSuit}
-        onClick={() => sendMessage('setSortOrder', { sortOrder: 'suit' })}
+        className={cx(
+          'p-2 border text-xl border-gray-600 mb-1',
+          {
+            'bg-blue-300': sortOrder === 'suit',
+            'bg-gray-300': sortOrder !== 'suit'
+          }
+        )}
+        onClick={() => sendMessage('setSortOrder', {sortOrder: 'suit'})}
       >
         {String.fromCharCode(9824)}-{String.fromCharCode(9827)}
       </div>
-    </FlexColumn>
-  );
-};
+    </div>
+  )
+}
 
-export default SortButtons;
+export default SortButtons

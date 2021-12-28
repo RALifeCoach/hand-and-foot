@@ -1,8 +1,8 @@
-import React, {CSSProperties, useCallback, useMemo} from 'react'
-import Debounce from '../../utils/debounce';
+import React, {CSSProperties} from 'react'
 import CardIcons from './CardIcons';
 import { ICard, IDummyCard } from "Game";
 import { SUIT_IMAGES } from '../../constants';
+import useDebounce from '../hooks/useDebounce'
 
 const DEFAULTS = {
   buttonHighlight: '#f00',
@@ -28,57 +28,43 @@ interface IProps {
   onSelect?: () => void;
   styling?: CSSProperties;
   onPinned?: () => void;
-  onMoved: () => void;
+  onMoved?: () => void;
   onMouseEnter?: () => void;
 }
 
-export default function PlayingCard(
-  { card, selected = false, left, top, onSelect, styling, onMouseEnter, ...props }: IProps
-) {
+const PlayingCard: React.FC<IProps> = (
+  { card, selected = false, left, top, onSelect, styling, onMouseEnter, children, ...props }
+) => {
   const config = Object.assign({}, DEFAULTS, styling);
-  const selectDebounce = useMemo(() => {
-    return new Debounce(() => {
-      if (onSelect) {
-        onSelect();
-      }
-    }, 300, true);
-  }, [onSelect]);
+  const handleClick = useDebounce(onSelect, 500)
 
+  const classes = [
+    'absolute',
+    'w-16',
+    'h-24',
+    'overflow-hidden',
+    'rounded-md',
+    'shadow'
+  ]
   const styleCard: CSSProperties = {
-    position: 'absolute',
     left: left || 0,
-    width: 70,
-    height: 98,
-    overflow: 'hidden',
-    marginTop: top !== undefined
-      ? top
-      : selected
-        ? 0
-        : 10,
+    marginTop: selected
+        ? top - 10
+        : top,
     background: config.cardBackground,
-    borderRadius: 12,
-    boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.25)',
     color: card.cardText ? config.textColor : config.SUIT_IMAGES[card.suit || 'C'].color
   };
-  const styleText = {
-    fontSize: 10,
-    padding: 5,
-    height: 'auto',
-  };
-
-  const handleClick = useCallback((event: any) => {
-    selectDebounce.debounce(event);
-  }, [selectDebounce]);
 
   return (
     <div
       style={styleCard}
-      onClick={handleClick}
+      className={classes.join(' ')}
+      onClick={ev => handleClick(ev)}
       onMouseEnter={onMouseEnter}
     >
       {Boolean(card.cardText)
         ? (
-          <div style={styleText}>
+          <div className="text-md p-1 text-center">
             {card.cardText}
           </div>
         )
@@ -91,17 +77,9 @@ export default function PlayingCard(
           />
         )
       }
+      {children}
     </div>
   );
 }
 
-PlayingCard.defaultProps = {
-  card: null,
-  imageLocation: 'below',
-  left: 0,
-  top: undefined,
-  showIcons: false,
-  onSelect: null,
-  onPinned: null,
-  onMoved: null
-};
+export default PlayingCard

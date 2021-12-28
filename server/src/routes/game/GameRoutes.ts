@@ -7,7 +7,7 @@ import logger from "../../util/logger";
 
 const GameRoutes = () => {
   const router = express.Router();
-  router.post(
+  router.get(
     "/restart/:gameName/:numberOfPlayers/:truncate",
     (req: any, res: any) => {
       const game = startGame(req.params.numberOfPlayers);

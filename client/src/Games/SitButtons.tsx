@@ -2,10 +2,9 @@ import React, {useState, useMemo} from 'react'
 import {IGameRow} from 'Game'
 import SitButton from './SitButton'
 import SnackAlert from '../shared/SnackAlert'
-import {useRecoilValue, useSetRecoilState} from 'recoil'
+import {useRecoilValue} from 'recoil'
 import {userAtom} from '../atoms/main'
 import {User} from 'User'
-import {playerIdAtom} from '../atoms/game'
 import useSendMessage from '../Game/hooks/useSendMessage'
 
 interface IProps {

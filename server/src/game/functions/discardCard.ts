@@ -11,12 +11,16 @@ import logger from "../../util/logger";
 
 const discardCard = (
   gameId: number,
+  playerId: number,
   gamePlay: IGamePlay,
   gameRules: IGameRules,
   toDiscardId: number,
   resolve: any
 ) => {
   console.debug('discard card', toDiscardId);
+  if (playerId !== gamePlay.currentPlayerId) {
+    resolve(null)
+  }
   const player = gamePlay.players[gamePlay.currentPlayerId];
   const team = gamePlay.teams[player.teamId];
   const points = computeTeamCardPoints(gameRules, team);

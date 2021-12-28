@@ -1,7 +1,7 @@
-import React from "react";
-import Debounce from "../../utils/debounce";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import { CSSProperties } from "react";
+import React from 'react'
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
+import {CSSProperties} from 'react'
+import useDebounce from '../hooks/useDebounce'
 
 interface IProps {
   showIcons: boolean;
@@ -10,30 +10,30 @@ interface IProps {
   config: any;
 }
 
-export default function IconMove({ showIcons, selected, onMoved, config }: IProps) {
+export default function IconMove({showIcons, selected, onMoved, config}: IProps) {
   const styleMove: CSSProperties = {
-    position: "absolute",
+    position: 'absolute',
     top: config.moveOffsetTop,
     left: config.baseLeftMark,
-  };
+  }
 
-  const moveDebounce = new Debounce(onMoved, 300, true);
-  const showMove = onMoved && selected && showIcons;
+  const handleMove = useDebounce(onMoved, 500)
+  const showMove = onMoved && selected && showIcons
 
   if (!showMove) {
-    return null;
+    return null
   }
   return (
     <div style={styleMove}>
       <SwapHorizIcon
-        onClick={onMoved ? (event) => moveDebounce.debounce(event) : undefined}
+        onClick={onMoved ? (event) => handleMove(event) : undefined}
       />
     </div>
-  );
+  )
 }
 
 IconMove.defaultProps = {
   showIcons: false,
   selected: false,
   onMoved: null,
-};
+}

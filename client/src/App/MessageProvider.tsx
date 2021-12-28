@@ -9,6 +9,7 @@ import {userAtom} from '../atoms/main'
 import SnackAlert from '../shared/SnackAlert'
 import {User} from 'User'
 import ReconnectingWebsocket from 'reconnecting-websocket'
+import {lastMessageSelector} from '../atoms/lastMessageSelector/lastMessageSelector'
 
 const MessageProvider: React.FC<any> = ({children}) => {
   const user = useRecoilValue(userAtom) as User
@@ -18,9 +19,10 @@ const MessageProvider: React.FC<any> = ({children}) => {
   const savedMessages = useRecoilValue(savedMessagesAtom)
   const [wss, setWss] = useState<any>(null)
   const [ready, setReady] = useState(false)
-  const [lastMessage, setLastMessage] = useState<any>()
+  const setLastMessage = useSetRecoilState(lastMessageSelector)
 
   useEffect(() => {
+    console.log('ws')
     const client = new ReconnectingWebsocket('ws://localhost:3100', )
     setWss(client)
   }, [])
@@ -33,11 +35,7 @@ const MessageProvider: React.FC<any> = ({children}) => {
       wss.onmessage = (message: any) => {
         const data = JSON.parse(message.data)
         console.log('message', data)
-        if (data.type === 'updateGame') {
-          setGamePlay(data.game)
-          return
-        }
-        debugger
+        setLastMessage(data)
       }
       wss.onclose = () => {
         console.log('close')
@@ -46,7 +44,7 @@ const MessageProvider: React.FC<any> = ({children}) => {
         console.log(error)
       }
     }
-  }, [wss])
+  }, [wss, setGamePlay, setLastMessage])
 
   useEffect(() => {
     if (
@@ -64,13 +62,6 @@ const MessageProvider: React.FC<any> = ({children}) => {
       setSavedMessages('clear')
     }
   }, [savedMessages, wss, setSavedMessages, user])
-
-  useEffect(() => {
-    if (lastMessage) {
-      setGamePlay(lastMessage.game)
-      setLastMessage(null)
-    }
-  }, [lastMessage, setLastMessage, setGamePlay])
 
   return (
     <>

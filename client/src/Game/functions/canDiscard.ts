@@ -6,7 +6,6 @@ import canPlayFindExistingMelds from "./canPlayFindExistingMelds";
 import mapCards from "./mapCards";
 
 const canDiscard = (gamePlay: IGamePlay, gameBase: IGameBase, card: ICard) => {
-  debugger;
   if (
     gamePlay.gameState !== "inPlay" ||
     !gamePlay.currentPlayer.isPlayerTurn ||
@@ -22,7 +21,7 @@ const canDiscard = (gamePlay: IGamePlay, gameBase: IGameBase, card: ICard) => {
     }
     return "";
   }
-  // can always disacrd black thress
+  // can always discard black threes
   if (isBlackThree(card)) {
     return "";
   }
