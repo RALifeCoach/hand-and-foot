@@ -1,32 +1,49 @@
-import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
-import EditGame from "./EditGame";
+import React, {Dispatch, useState} from 'react'
+import {Button, FormControl, InputLabel, MenuItem, Select, Typography} from '@mui/material'
+import EditGame from './EditGame'
+import {Add} from '@mui/icons-material'
 
 interface IProps {
   refreshGames: () => void;
+  status: number
+  setStatus: Dispatch<number>
 }
 
-const GamesHeaderButtons = ({ refreshGames }: IProps) => {
-  const [newOpen, setNewOpen] = useState(false);
+const GamesHeaderButtons = ({refreshGames, status, setStatus}: IProps) => {
+  const [newOpen, setNewOpen] = useState(false)
 
   return (
-    <>
+    <div className="flex gap-8">
+      <FormControl>
+        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+        <Select
+          label="Status"
+          value={status}
+          onChange={ev => setStatus(parseInt(ev.target.value as string || '0'))}
+        >
+          <MenuItem value={0}>All</MenuItem>
+          <MenuItem value={1}>Unfinished</MenuItem>
+          <MenuItem value={2}>Finished</MenuItem>
+        </Select>
+      </FormControl>
       <Button
         onClick={() => setNewOpen(true)}
-        variant="outlined"
+        variant="contained"
+        color="success"
+        startIcon={<Add />}
       >
-        <Typography variant="subtitle1">New Game</Typography>
+        New Game
       </Button>
       {newOpen && (
         <EditGame
-          game={{ gameName: "", numberOfPlayers: 4 }}
+          game={{gameName: '', numberOfPlayers: 4}}
           open={newOpen}
           onClose={() => setNewOpen(false)}
           refreshGames={refreshGames}
         />
       )}
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default GamesHeaderButtons;
+export default GamesHeaderButtons

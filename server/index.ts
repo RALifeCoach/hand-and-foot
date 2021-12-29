@@ -32,7 +32,8 @@ app.use(function (req, res, next) {
 });
 
 app.use("/login", AuthenticationRoutes());
-app.use("/api", AuthCheckMiddleware, ApiRoutes());
+// app.use("/api", AuthCheckMiddleware, ApiRoutes());
+app.use("/api", ApiRoutes());
 
 app.use(function (req, res) {
   console.log('404')

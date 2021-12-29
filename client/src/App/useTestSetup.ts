@@ -24,15 +24,18 @@ const useTestSetup = () => {
   }, [getGame, doTruncate, players])
 
   useEffect(() => {
-    if (doGetTestGame) {
+    if (doFetchGame) {
       getGame(`api/game/query/${pGameId}`)
     }
   }, [getGame, doGetTestGame, pGameId])
 
   useEffect(() => {
     if (!getTestGame && gameStatus.status === 'success') {
-      setGameId(gameStatus.data.gameId)
-      setTimeout(() => setGetTestGame(true), 200)
+      console.log(gameStatus)
+      if (!!gameStatus.data.gameId) {
+        setGameId(gameStatus.data.gameId)
+        setTimeout(() => setGetTestGame(true), 200)
+      }
     }
   }, [getTestGame, setGetTestGame, gameStatus.status])
 

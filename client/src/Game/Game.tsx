@@ -14,7 +14,7 @@ import {
   playerIdAtom,
   serverQuestionAtom,
 } from '../atoms/game'
-import {useParams} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 
 interface IProps {
   position?: number;
@@ -32,6 +32,7 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
   const [gameBase, setGameBase] = useRecoilState(gameBaseAtom)
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (gameId < 0) {
@@ -42,8 +43,10 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
 
   useEffect(() => {
     if (gameStatus.status === 'success') {
+      if (gameStatus.data.gameStatus === 'finished') {
+        return navigate('/games')
+      }
       setGameBase(gameStatus.data)
-
       sendMessage('addPlayer', { position, teamId })
     }
   }, [gameStatus, playerId, sendMessage, gameId, position, teamId, setGameBase]);

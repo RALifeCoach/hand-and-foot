@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback, useEffect, useState} from 'react'
 import {
   Paper,
   Table,
@@ -17,14 +17,15 @@ import ApplicationBar from "../App/ApplicationBar";
 
 const Games = () => {
   const [games, fetchGames] = useFetchGet();
+  const [status, setStatus] = useState(1)
 
   useEffect(() => {
-    fetchGames('api/game/query');
-  }, [fetchGames]);
+    fetchGames(`api/game/query?status=${status}`);
+  }, [fetchGames, status]);
 
   const refreshGames = useCallback(() => {
-    fetchGames('api/game/query');
-  }, [fetchGames]);
+    fetchGames(`api/game/query?status=${status}`);
+  }, [fetchGames, status]);
 
   return (
     <>
@@ -35,6 +36,8 @@ const Games = () => {
         <FlexRow justify="space-between">
           <Typography variant="h2">Games</Typography>
           <GamesHeaderButtons
+            status={status}
+            setStatus={setStatus}
             refreshGames={refreshGames}
           />
         </FlexRow>
