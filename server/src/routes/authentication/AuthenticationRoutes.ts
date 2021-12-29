@@ -12,7 +12,7 @@ const AuthenticationRoutes = () => {
   redis.connect()
 
   router.post("/login/", (req: any, res) => {
-    const sql = `SELECT * FROM user where UserEmail = '${req.body.userId}'`;
+    const sql = `SELECT * FROM handf.player where Email = '${req.body.userId}'`;
 
     Database.query(sql, (rows) => {
       if (rows.length !== 1) {
@@ -23,7 +23,7 @@ const AuthenticationRoutes = () => {
 
       bcrypt.compare(
         req.body.password,
-        rows[0].Password,
+        rows[0].password,
         (err: Error, success: boolean) => {
           if (err) {
             logger.error(
@@ -41,16 +41,16 @@ const AuthenticationRoutes = () => {
           const privateKey = fs.readFileSync("./private.pem", "utf8");
           const expiry = new Date().getTime() + 60 * 60;
           const role = rows[0].role;
-          const userName = rows[0].UserName;
-          const userId = rows[0].UserId;
-          const userEmail = rows[0].UserEmail;
+          const name = rows[0].name;
+          const id = rows[0].id;
+          const email = rows[0].email;
           const redisKey = uuid.v4();
           const redisBody = {
-            userEmail: userEmail,
-            userName: userName,
+            userEmail: email,
+            userName: name,
             expiry: expiry,
             role: role,
-            userId: userId,
+            userId: id,
             ip: req.clientIp,
           };
           const token = jwt.sign(
@@ -65,7 +65,7 @@ const AuthenticationRoutes = () => {
             value: JSON.stringify(redisBody),
             expiry,
           });
-          res.send({ token, role, userName, userId, userEmail });
+          res.send({ token, role, name, id, email });
         }
       );
     });
@@ -73,7 +73,7 @@ const AuthenticationRoutes = () => {
 
   router.post("/setPassword/", (req, res) => {
     const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-    const sql = `SELECT * FROM user where Password = '${req.body.password}'`;
+    const sql = `SELECT * FROM handf.player where password = '${req.body.password}'`;
     Database.query(sql, (rows) => {
       if (rows.length !== 1) {
         logger.error(
@@ -83,7 +83,7 @@ const AuthenticationRoutes = () => {
         return;
       }
 
-      const updateSql = `Update user set password = '${newPassword}' where UserId = ${rows[0].UserId}`;
+      const updateSql = `Update handf.player set password = '${newPassword}' where id = ${rows[0].id}`;
       Database.exec(updateSql, (err: Error) => {
         if (err) {
           logger.error(

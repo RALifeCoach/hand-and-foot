@@ -3,7 +3,7 @@ import {atom, selector} from 'recoil'
 
 export const gameIdAtom = atom<number>({
   key: 'gameId',
-  default: -1,
+  default: 0,
 })
 
 export const gameBaseAtom = atom<IGameBase | null>({

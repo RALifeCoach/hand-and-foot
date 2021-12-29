@@ -6,16 +6,10 @@ const truncateDatabase = (truncate: string) => {
     if (truncate !== "yes") {
       return resolve();
     }
-    const sql = `truncate game`;
-    Database.exec(sql, (err: Error | null) => {
-      if (err) {
-        throw err;
-      }
-      const sql = `truncate game_log`;
-      Database.exec(sql, (err: Error | null) => {
-        if (err) {
-          throw err;
-        }
+    const sql = `truncate handf.game_log`;
+    Database.exec(sql, () => {
+      const sql = `truncate handf.game`;
+      Database.exec(sql, () => {
         resolve();
       });
     });

@@ -1,6 +1,5 @@
 import React, {memo, useCallback, useEffect, useState} from 'react'
 import Game from '../Game/Game'
-import FetchHandling from '../shared/FetchHandling'
 import Login from '../Login/Login'
 import SetPassword from '../Login/SetPassword'
 import {
@@ -90,7 +89,7 @@ const App = () => {
     setTimeout(() => setUserSet(true), 200)
   }, [setUser])
 
-  const {passwordId, isTest, players, gameStatus, gameId} = useTestSetup()
+  const {passwordId, isTest, players, loading, gameId} = useTestSetup()
 
   if (passwordId) {
     return (
@@ -100,8 +99,10 @@ const App = () => {
     )
   }
 
-  if (!!gameStatus) {
-    return <FetchHandling status={gameStatus} title="Fetching game"/>
+  if (loading) {
+    console.log('loading')
+    return null
+    // return <FetchHandling status={game} title="Fetching game"/>
   }
 
   const initializeState = (playerId: number) => ({set}: MutableSnapshot) => {
@@ -112,6 +113,9 @@ const App = () => {
   }
 
   if (isTest) {
+    if (!gameId) {
+      return null
+    }
     return (
       <>
         {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (
@@ -125,6 +129,7 @@ const App = () => {
     )
   }
 
+  console.log('app2', userSet)
   if (!userSet) {
     return null
   }

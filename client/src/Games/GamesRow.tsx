@@ -12,6 +12,7 @@ interface IProps {
 }
 
 const GamesRow = ({ game, refreshGames }: IProps) => {
+  console.log('game', game)
   return (
     <>
       <TableRow>

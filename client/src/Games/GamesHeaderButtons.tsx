@@ -1,5 +1,5 @@
 import React, {Dispatch, useState} from 'react'
-import {Button, FormControl, InputLabel, MenuItem, Select, Typography} from '@mui/material'
+import {Button, FormControl, InputLabel, MenuItem, Select} from '@mui/material'
 import EditGame from './EditGame'
 import {Add} from '@mui/icons-material'
 

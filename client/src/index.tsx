@@ -8,6 +8,11 @@ import theme from './theme'
 import {MutableSnapshot, RecoilRoot} from 'recoil'
 import {configAtom} from './atoms/main'
 import {BrowserRouter} from 'react-router-dom'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider
+} from '@apollo/client'
 
 function buildConfig() {
   const serverHost = window.location.host
@@ -17,6 +22,11 @@ function buildConfig() {
   }
 }
 
+const client = new ApolloClient({
+  uri: 'http://localhost:8080/v1/graphql',
+  cache: new InMemoryCache()
+})
+
 const initializeState = ({set}: MutableSnapshot) => {
   set(configAtom, buildConfig())
 }
@@ -25,9 +35,11 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <RecoilRoot initializeState={initializeState}>
-          <App/>
-        </RecoilRoot>
+        <ApolloProvider client={client}>
+          <RecoilRoot initializeState={initializeState}>
+            <App/>
+          </RecoilRoot>
+        </ApolloProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,

@@ -7,7 +7,7 @@ const UserRoutes = () => {
   const router = express.Router();
   router.get("/query", (req, res) => {
     const sql =
-      "Select UserId as userId, UserEmail as userEmail, UserName as userName, role from user";
+      "Select Id as userId, Email as email, Name as name, Role as role from handf.player";
     Database.query(sql, (rows: any[]) => {
       res.json(rows);
     });
@@ -18,7 +18,7 @@ const UserRoutes = () => {
       res.json({ status: "failure", message: "Invalid message body" });
       return;
     }
-    const sql = `Delete from user where UserId = ${req.body.userId}`;
+    const sql = `Delete from handf.player where Id = ${req.body.userId}`;
     Database.exec(sql, (err: Error | null) => {
       if (err) {
         res.json({ status: "failure", message: err });
@@ -38,13 +38,13 @@ const UserRoutes = () => {
       return;
     }
     const sql = req.body.id
-      ? `Update user
-      set userEmail = '${req.body.userEmail}',
-          userName = '${req.body.userName}',
-          role = '${req.body.role}'
+      ? `Update handf.player
+      set Email = '${req.body.userEmail}',
+          Name = '${req.body.userName}',
+          Role = '${req.body.role}'
       where id = ${req.body.userId}`
-      : `insert into user
-      (UserEmail, UserName, role, Password) values
+      : `insert into handf.player
+      (Email, Name, Role, Password) values
       (
         '${req.body.userEmail}',
         '${req.body.userName}',
@@ -63,7 +63,7 @@ const UserRoutes = () => {
 
   router.post("/changePassword", (req: any, res) => {
     const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-    const sql = `SELECT * FROM user where id = '${req.userId}'`;
+    const sql = `SELECT * FROM handf.player where id = '${req.userId}'`;
     Database.query(sql, (rows: any[]) => {
       if (rows.length !== 1) {
         res.status(500).json({ error: "Not Authorized" });
@@ -95,12 +95,9 @@ const UserRoutes = () => {
       res.json({ status: "failure", message: "Invalid message body" });
       return;
     }
-    const sql = `Update user set password = '${req.body.password}' where id = ${req.body.id}`;
-    Database.exec(sql, (err: Error | null) => {
-      if (err) {
-        res.json({ status: "failure", message: err });
-        return;
-      }
+    const sql = `Update handf.player set password = '${req.body.newPassword}' where password = ${req.body.id}`;
+    console.log(req.body, sql)
+    Database.exec(sql, () => {
       res.json({ status: "success" });
     });
   });

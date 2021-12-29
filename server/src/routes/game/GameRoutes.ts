@@ -20,32 +20,17 @@ const GameRoutes = () => {
       const game = startGame(req.params.numberOfPlayers)
       truncateDatabase(req.params.truncate)
         .then(() => {
-          const sql = `insert into game (GameName, GameState, GamePlay, GameRules) values ('${
+          const sql = `insert into handf.game (gamename, gamestate, gameplay, gamerules) values ('${
             req.params.gameName
           }', '${game.GamePlay.gameState}', '${JSON.stringify(game.GamePlay)}', '${JSON.stringify(
             game.GameRules
-          )}')`
-          console.log('insert', sql)
+          )}') RETURNING gameid;`
           return new Promise<void>((resolve) => {
-            Database.exec(sql, (err: Error | null) => {
-              if (err) {
-                console.log(err)
-                throw err
-              }
+            Database.exec(sql, (data: any) => {
+              console.log({gameId: data[0].gameid})
+              res.json({gameId: data[0].gameid})
               resolve()
             })
-          })
-        })
-        .then(() => {
-          const sql = `SELECT LAST_INSERT_ID()`
-          Database.query(sql, (data) => {
-            if (data.length !== 1) {
-              logger.error(
-                `GameRoutes:restart: wrong number of rows returned ${data.length} for query(${sql})`
-              )
-              throw new Error('invalid data')
-            }
-            res.json({gameId: data[0]['LAST_INSERT_ID()']})
           })
         })
         .catch((err) => {
@@ -57,19 +42,20 @@ const GameRoutes = () => {
   router.get('/query', (req: any, res: any) => {
     const search = url.parse(req.url).search
     const params = queryString.parse((search ?? ' ').substr(1) ?? '')
-    const baseSql = `select * from game`
+    const baseSql = `select * from handf.game`
     const sql = baseSql +
-      (params.status ? ` where gameState in ("${STATES[params.status as string].join('", "')}");` : ';')
+      (params.status ? ` where gamestate in ("${STATES[params.status as string].join('", "')}");` : ';')
     console.log(sql)
     Database.query(sql, (data: any[]) => {
+      console.log('query', data)
       const games = data
         .map(
           (row) =>
             ({
-              GameId: row.GameId,
-              GameName: row.GameName,
-              GamePlay: JSON.parse(row.GamePlay) as IGamePlay,
-              GameRules: JSON.parse(row.GameRules) as IGameRules,
+              GameId: row.gameid,
+              GameName: row.gamename,
+              GamePlay: JSON.parse(row.gameplay) as IGamePlay,
+              GameRules: JSON.parse(row.gamerules) as IGameRules,
             } as IGame)
         )
         .filter((game) => {
@@ -97,7 +83,7 @@ const GameRoutes = () => {
 
   router.get('/query/:gameId', (req: any, res: any) => {
     const gameId = parseInt(req.params.gameId)
-    const sql = `select * from game where GameId = ${gameId}`
+    const sql = `select * from handf.game where gameid = ${gameId}`
     Database.query(sql, (data: any[]) => {
       if (data.length !== 1) {
         logger.error(
@@ -106,10 +92,10 @@ const GameRoutes = () => {
         throw new Error('Game not found')
       }
       const game = data[0]
-      const rules = JSON.parse(game.GameRules)
+      const rules = JSON.parse(game.gamerules)
       res.json({
-        gameId: game.GameId,
-        gameName: game.GameName,
+        gameId: game.gameid,
+        gameName: game.gamename,
         ...rules,
       })
     })
@@ -117,28 +103,15 @@ const GameRoutes = () => {
 
   router.post('/create', (req: any, res: any) => {
     const game: IGame = startGame(req.body.numberOfPlayers)
-    const sql = `insert into game (GameName, GameRules, GamePlay) values ('${
+    const sql = `insert into game (gamename, gamerules, gameplay, gamestate) values ('${
       req.body.gameName
     }', '${JSON.stringify(game.GameRules)}', '${JSON.stringify(
       game.GamePlay
-    )}')`
+    )}, 'waitingToStart') returning gameid`
     new Promise<void>((resolve) => {
-      Database.exec(sql, (err: Error | null) => {
-        if (err) {
-          throw err
-        }
+      Database.exec(sql, (data: any[]) => {
+        res.json({gameId: data[0].gameid})
         resolve()
-      })
-    }).then(() => {
-      const sql = `SELECT LAST_INSERT_ID()`
-      Database.query(sql, (data) => {
-        if (data.length !== 1) {
-          logger.error(
-            `GameRoutes:create: wrong number of rows returned ${data.length} for query(${sql})`
-          )
-          throw new Error('yikes!')
-        }
-        res.json({gameId: data[0]['LAST_INSERT_ID()']})
       })
     })
   })

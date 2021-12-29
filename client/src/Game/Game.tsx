@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import Player from "./Player/Player";
 import { IPlayerCurrent } from "Game";
 import ApplicationBar from "../App/ApplicationBar";
-import useFetchGet from "../hooks/useFetchGet";
-import FetchHandling from "../shared/FetchHandling";
 import useSendMessage from "./hooks/useSendMessage";
 import ServerQuestion from "./ServerQuestion";
 import {useRecoilState, useRecoilValue} from 'recoil'
@@ -11,46 +9,56 @@ import {
   gameBaseAtom,
   gameIdAtom,
   gamePlayAtom,
-  playerIdAtom,
   serverQuestionAtom,
 } from '../atoms/game'
 import {useParams, useNavigate} from 'react-router-dom'
+import {gql, useQuery} from '@apollo/client'
 
 interface IProps {
   position?: number;
   teamId?: string;
 }
 
+const FETCH_GAME = gql`
+query MyQuery($id: Int) {
+  handf_game(where: {gameid: {_eq: $id}}) {
+    gameid
+    gamename
+    gameplay
+    gamerules
+  }
+}
+`
+
 const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
   const params = useParams<{ position: string, team: string }>();
   const position = positionP ?? parseInt(params.position ?? '0');
   const teamId = teamIdP ?? parseInt(params.team ?? '0');
   const gameId = useRecoilValue(gameIdAtom);
-  const [gameStatus, getGame] = useFetchGet();
   const sendMessage = useSendMessage();
-  const playerId = useRecoilValue(playerIdAtom);
   const [gameBase, setGameBase] = useRecoilState(gameBaseAtom)
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
   const navigate = useNavigate()
+  const {loading: gameLoading, error, data: gameData} = useQuery(FETCH_GAME, {
+    variables: {id: gameId}
+  })
 
+  if (!!error) {
+    console.log(error)
+  }
   useEffect(() => {
-    if (gameId < 0) {
-      return
-    }
-    getGame(`api/game/query/${gameId}`);
-  }, [getGame, gameId]);
-
-  useEffect(() => {
-    if (gameStatus.status === 'success') {
-      if (gameStatus.data.gameStatus === 'finished') {
+    if (!gameLoading && !error && gameData.handf_game.length) {
+      console.log('game', gameData.handf_game[0].gamerules)
+      if (gameData.gamestate === 'finished') {
         return navigate('/games')
       }
-      setGameBase(gameStatus.data)
+      setGameBase(gameData.handf_game[0].gamerules)
       sendMessage('addPlayer', { position, teamId })
     }
-  }, [gameStatus, playerId, sendMessage, gameId, position, teamId, setGameBase]);
+  }, [gameLoading,  sendMessage, position, teamId, setGameBase, navigate, gameData, error]);
 
+  console.log(gameId, gamePlay, gameBase)
   if (!gamePlay || !gameBase) {
     return null;
   }
@@ -74,7 +82,6 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
           key={gamePlay?.currentPlayer.playerId}
         />
       )}
-      <FetchHandling status={gameStatus} title="Fetching the game..." />
     </>
   )
 };
