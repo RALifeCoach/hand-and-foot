@@ -25,7 +25,7 @@ const addPlayer = (
   }
 
   // now get the player
-  const sql = `select * from user where UserId = ${playerId}`;
+  const sql = `select * from handf.player where id = ${playerId}`;
   Database.query(sql, (rows) => {
     if (rows.length !== 1) {
       logger.error(`user not found for query ${sql}`);
@@ -36,7 +36,7 @@ const addPlayer = (
       playerId,
       teamId,
       position,
-      playerName: rows[0].UserName,
+      playerName: rows[0].name,
       playerState: "waiting",
       numberOfCardsToDraw: 0,
       hand: [] as ICard[],

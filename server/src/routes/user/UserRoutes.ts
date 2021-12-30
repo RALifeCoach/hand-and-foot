@@ -19,7 +19,7 @@ const UserRoutes = () => {
       return;
     }
     const sql = `Delete from handf.player where Id = ${req.body.userId}`;
-    Database.exec(sql, (err: Error | null) => {
+    Database.query(sql, (err: Error | null) => {
       if (err) {
         res.json({ status: "failure", message: err });
         return;
@@ -52,7 +52,7 @@ const UserRoutes = () => {
         '${req.body.password}'
       )
     `;
-    Database.exec(sql, (err: Error | null) => {
+    Database.query(sql, (err: Error | null) => {
       if (err) {
         res.json({ status: "failure", message: err });
         return;
@@ -79,7 +79,7 @@ const UserRoutes = () => {
           return;
         }
         const sql = `Update user set password = '${newPassword}' where id = ${req.userId}`;
-        Database.exec(sql, (err: Error | null) => {
+        Database.query(sql, (err: Error | null) => {
           if (err) {
             res.json({ status: "failure", message: err });
             return;
@@ -97,7 +97,7 @@ const UserRoutes = () => {
     }
     const sql = `Update handf.player set password = '${req.body.newPassword}' where password = ${req.body.id}`;
     console.log(req.body, sql)
-    Database.exec(sql, () => {
+    Database.query(sql, () => {
       res.json({ status: "success" });
     });
   });

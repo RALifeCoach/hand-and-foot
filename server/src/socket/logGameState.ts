@@ -9,7 +9,7 @@ const logGameState = (gameId: number, gamePlay: IGamePlay, canUndo: boolean) => 
     const sql = `insert into game_log values ('${logId}', ${gameId}, '${JSON.stringify(
       gamePlay
     )}')`;
-    Database.exec(sql, (err: Error) => {
+    Database.query(sql, (err: Error) => {
       if (err) {
         logger.error(`logGameState: error inserting game log ${JSON.stringify(err)} for sql ${sql}`);
         throw err;

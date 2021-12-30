@@ -84,7 +84,7 @@ const AuthenticationRoutes = () => {
       }
 
       const updateSql = `Update handf.player set password = '${newPassword}' where id = ${rows[0].id}`;
-      Database.exec(updateSql, (err: Error) => {
+      Database.query(updateSql, (err: Error) => {
         if (err) {
           logger.error(
             `setPassword: update failed ${JSON.stringify(

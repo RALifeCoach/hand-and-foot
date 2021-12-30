@@ -24,16 +24,7 @@ const sendResponse = (
     newMessages.forEach((message) => (message.isSent = true))
   }
 
-  const newGamePlayStr = JSON.stringify(gamePlay)
-  const sql = `update game set GamePlay = '${newGamePlayStr}', gameState = '${gamePlay.gameState}' where GameId = '${gameId}'`
-  Database.exec(sql, (err: Error | null) => {
-    if (err) {
-      logger.error(
-        `sendResponse: error in update ${JSON.stringify(err)} for sql ${sql}`
-      )
-      throw err
-    }
-
+  Database.updateGame(gameId, gamePlay, () => {
     const messageId = uuid.v4()
     if (gamePlay.gameState === 'askRoundEnd') {
       try {
