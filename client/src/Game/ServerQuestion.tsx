@@ -10,9 +10,9 @@ import {
 } from '@mui/material'
 import FlexColumn from '../shared/flex-grid/FlexColumn'
 import FlexRow from '../shared/flex-grid/FlexRow'
-import {IServerQuestion, IServerQuestionButton} from '../queries/game'
 import Spacer from '../shared/Spacer'
 import useSendMessage from './hooks/useSendMessage'
+import {IServerQuestion, IServerQuestionButton} from '../../../models/game'
 
 interface IProps {
   serverQuestion: IServerQuestion;

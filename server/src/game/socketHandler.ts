@@ -1,4 +1,6 @@
-import {IAction, IGamePlay, IGameRules} from 'Game'
+import {IGamePlay, IPlayer} from '../models/game'
+import { IGameBase } from "../../../models/game";
+import {IAction} from 'Game'
 import addPlayer from './functions/addPlayer'
 import setSortOrder from './functions/setSortOrder'
 import moveCard from './functions/moveCard'
@@ -12,7 +14,8 @@ import logger from '../util/logger'
 
 const socketHandler = (
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
+  players: IPlayer[],
   gameId: number,
   playerId: number,
   action: IAction
@@ -22,6 +25,7 @@ const socketHandler = (
       case 'addPlayer':
         addPlayer(
           gamePlay,
+          players,
           action.value.playerId,
           action.value.teamId,
           action.value.position,
@@ -30,13 +34,14 @@ const socketHandler = (
         break
       case 'setSortOrder':
         resolve(
-          setSortOrder(gamePlay, action.value.playerId, action.value.sortOrder)
+          setSortOrder(gamePlay, players, action.value.playerId, action.value.sortOrder)
         )
         break
       case 'moveCard':
         resolve(
           moveCard(
             gamePlay,
+            players,
             action.value.playerId,
             action.value.movingCardId,
             action.value.destCardId
@@ -44,13 +49,13 @@ const socketHandler = (
         )
         break
       case 'setPin':
-        resolve(pinCard(gamePlay, action.value.playerId, action.value.cardId))
+        resolve(pinCard(gamePlay, players, action.value.playerId, action.value.cardId))
         break
       case 'drawCard':
-        resolve(drawCardPlayer(gamePlay, action.value.pileIndex))
+        resolve(drawCardPlayer(gamePlay, players, action.value.pileIndex))
         break
       case 'draw7':
-        draw7(gamePlay, gameId, resolve)
+        draw7(gamePlay, players, gameId, resolve)
         break
       case 'discardCard':
         discardCard(
@@ -58,18 +63,20 @@ const socketHandler = (
           playerId,
           gamePlay,
           gameRules,
+          players,
           action.value.toDiscard,
           resolve
         )
         break
       case 'endRound':
-        resolve(endRoundResponse(gamePlay, gameRules, action.value))
+        resolve(endRoundResponse(gamePlay, gameRules, players, action.value))
         break
       case 'playCards':
         playCards(
           gameId,
           gamePlay,
           gameRules,
+          players,
           action.value.cardIds,
           action.value.meldId,
           action.value.meldType,

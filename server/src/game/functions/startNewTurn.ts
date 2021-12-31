@@ -1,23 +1,21 @@
-import { IGamePlay, IPlayer, IGameRules } from "Game";
+import { IGamePlay, IPlayer } from "../../models/game";
+import { IGameBase } from "../../../../models/game";
 
-const startNewTurn = (gamePlay: IGamePlay, gameRules: IGameRules) => {
-  console.debug("start new turn");
-  const currentPlayer = gamePlay.players[gamePlay.currentPlayerId];
+const startNewTurn = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {
+  const currentPlayer = players[gamePlay.currentPlayerIndex];
   currentPlayer.playerState = "waiting";
 
-  const playerIds = Object.values(gamePlay.players)
-    .sort((a: IPlayer, b: IPlayer) => a.position - b.position)
-    .map((player) => player.playerId);
+  const position = Math.min(currentPlayer.position + 1, players.length - 1)
+  const nextPlayerIndex = players.findIndex(player => player.position === position)
+  if (nextPlayerIndex === -1) {
+    throw new Error('player not found')
+  }
 
-  const currentPlayerIndex = playerIds.indexOf(gamePlay.currentPlayerId);
-  const nextPlayerIndex =
-    currentPlayerIndex === gameRules.numberOfPlayers - 1
-      ? 0
-      : currentPlayerIndex + 1;
-  gamePlay.currentPlayerId = playerIds[nextPlayerIndex];
-  const nextPlayer = gamePlay.players[gamePlay.currentPlayerId];
+  gamePlay.currentPlayerIndex = nextPlayerIndex;
+  const nextPlayer = players[nextPlayerIndex]
   nextPlayer.playerState = "draw";
   nextPlayer.numberOfCardsToDraw = 2;
+  nextPlayer.numberOfCardsToReplace = 0;
 };
 
 export default startNewTurn;

@@ -1,4 +1,4 @@
-import { ICard } from "Game";
+import { ICard } from "../../../../models/game";
 
 const drawCards = (deck: ICard[], numberOfCards: number): ICard[] => {
   const cards: ICard[] = [];

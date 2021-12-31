@@ -1,4 +1,5 @@
-import { ITeam, IPlayer, IGameRules } from "Game";
+import { IPlayer } from "../../models/game";
+import { ITeam } from "../../../../models/game";
 
 const endTurn = (team: ITeam, player: IPlayer) => {
   console.debug("end turn");

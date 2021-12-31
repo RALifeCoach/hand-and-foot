@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { IGamePlay } from 'Game';
-import { IMeld, ICard, IGameBase } from '../../queries/game';
+import { IMeld, ICard, IGameBase } from '../../../../models/game';
 import FlexRow from '../../shared/flex-grid/FlexRow';
 import Meld from './Meld';
 import { Tooltip } from '@mui/material';

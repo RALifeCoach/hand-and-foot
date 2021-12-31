@@ -1,4 +1,4 @@
-import { IRank } from "Game";
+import { IRank } from "../../../../models/game";
 
 const VALUE_FROM_RANK = {
     "2": 2,

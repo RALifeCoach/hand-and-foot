@@ -1,7 +1,7 @@
-import { ITeam, IGameRules } from "Game";
+import { ITeam, IGameBase } from "../../../../models/game";
 import scoreCards from "./scoreCards";
 
-const computeTeamCardPoints = (gameRules: IGameRules, team: ITeam) => {
+const computeTeamCardPoints = (gameRules: IGameBase, team: ITeam) => {
   return Object.values(team.melds).reduce((points, meld) => {
     if (meld.type === "3s") {
       return points;

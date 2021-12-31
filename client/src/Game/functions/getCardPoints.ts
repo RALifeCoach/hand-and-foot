@@ -1,4 +1,4 @@
-import { ICard, IRank, IGameBase } from "../../queries/game";
+import { ICard, IRank, IGameBase } from "../../../../models/game";
 import isRedThree from "./isRedThree";
 
 const CARD_POINTS = {

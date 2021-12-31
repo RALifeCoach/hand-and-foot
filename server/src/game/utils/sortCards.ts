@@ -1,4 +1,4 @@
-import { ICard } from "Game";
+import { ICard } from "../../../../models/game";
 import getCardValue from './getCardValue';
 
 const sortCards = (cards: ICard[], sortOrder: string) => {

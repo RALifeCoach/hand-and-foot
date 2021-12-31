@@ -1,15 +1,17 @@
-import { IGamePlay, IPlayer, ITeam, ICard } from "Game";
+import { IGamePlay, IPlayer } from "../../models/game";
+import { ITeam, ICard } from "../../../../models/game";
 import Database from "../../Database";
 import logger from "../../util/logger";
 
 const addPlayer = (
   gamePlay: IGamePlay,
+  players: IPlayer[],
   playerId: number,
   teamId: string,
   position: number,
   resolve: any
 ) => {
-  const player = gamePlay.players[playerId];
+  const player = players.find(player => player.playerId === playerId);
   if (player) {
     if (player.position !== position) {
       logger.error(`Player is aleady present at a different position (${player.position}, ${position})`);
@@ -17,9 +19,7 @@ const addPlayer = (
     }
     resolve(null);
   }
-  const positionExists = Object.values(gamePlay.players).some(
-    (player) => player.position === position
-  );
+  const positionExists = players.some((player) => player.position === position);
   if (positionExists) {
     throw new Error("that position is already filled");
   }
@@ -32,7 +32,7 @@ const addPlayer = (
       throw new Error("user not found");
     }
 
-    gamePlay.players[playerId] = {
+    players.push({
       playerId,
       teamId,
       position,
@@ -42,7 +42,7 @@ const addPlayer = (
       hand: [] as ICard[],
       foot: [] as ICard[],
       isInHand: true,
-    } as IPlayer;
+    } as IPlayer)
 
     if (!gamePlay.teams[teamId]) {
       gamePlay.teams[teamId] = {

@@ -1,4 +1,5 @@
-import { IGamePlay, IGameRules, ITeam } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
+import { IGameBase } from "../../../../models/game";
 import startNewTurn from "./startNewTurn";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
 import logGameState from "../../socket/logGameState";
@@ -13,15 +14,15 @@ const discardCard = (
   gameId: number,
   playerId: number,
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
+  players: IPlayer[],
   toDiscardId: number,
   resolve: any
 ) => {
-  console.debug('discard card', toDiscardId);
-  if (playerId !== gamePlay.currentPlayerId) {
+  const player = players[gamePlay.currentPlayerIndex]
+  if (playerId !== player.playerId) {
     resolve(null)
   }
-  const player = gamePlay.players[gamePlay.currentPlayerId];
   const team = gamePlay.teams[player.teamId];
   const points = computeTeamCardPoints(gameRules, team);
   if (!team.isDown) {
@@ -35,7 +36,7 @@ const discardCard = (
       });
     }
   }
-  logGameState(gameId, gamePlay, false).then(() => {
+  logGameState(gameId, gamePlay, players,false).then(() => {
     if (!team.isDown && points > 0) {
       team.isDown = true;
     }
@@ -71,7 +72,7 @@ const discardCard = (
     gamePlay.discard.unshift(...cards.splice(discardCardIndex, 1));
     if (cards.length === 0 && player.isInHand) {
       player.isInHand = false;
-      addMessageFoot(gamePlay, false);
+      addMessageFoot(gamePlay, players, false);
     }
     rePinCards(cards);
 
@@ -79,11 +80,11 @@ const discardCard = (
 
     // check to see if this discard ends the round
     if (canEndRound) {
-      endRound(gamePlay, gameRules);
+      endRound(gamePlay, gameRules, players);
       return resolve(null);
     }
 
-    startNewTurn(gamePlay, gameRules);
+    startNewTurn(gamePlay, gameRules, players);
 
     resolve(null);
   });

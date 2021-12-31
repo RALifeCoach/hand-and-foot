@@ -1,4 +1,4 @@
-import { ICard } from "Game";
+import { ICard } from "../../../../models/game";
 
 const rePinCards = (cards: ICard[]) => {
   const maxPinIndex = cards.reduce(

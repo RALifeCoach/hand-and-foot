@@ -1,4 +1,4 @@
-import { ICard } from "Game";
+import { ICard } from "../../../../models/game";
 import { RANKS, SUITS } from "../../../constants";
 
 const dealCards = (): ICard[] => {

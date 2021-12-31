@@ -1,23 +1,27 @@
+import {IGamePlay, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from '../../models/game'
 import {
-  IGamePlay,
-  IPlayer,
-  IPlayerCurrent,
-  IPlayerInfo,
-  IPlayerOther,
   IMessage,
-  IGameRules,
-} from "Game";
-import isWildCard from "./isWildCard";
+  IGameBase
+} from '../../../../models/game'
+import isWildCard from './isWildCard'
 
 const buildPlayerInfo = (
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
+  players: IPlayer[],
   gameId: number,
   playerId: number,
   messages: IMessage[],
   isCurrentPlayer: boolean,
 ): IPlayerInfo => {
-  const currentPlayer = gamePlay.players[playerId];
+  const activePlayer = players[gamePlay.currentPlayerIndex]
+  if (!activePlayer) {
+    throw new Error('active player not found')
+  }
+  const currentPlayer = players.find(player => player.playerId === playerId)
+  if (!currentPlayer) {
+    throw new Error('player not found')
+  }
   return {
     gameId,
     gameState: gamePlay.gameState,
@@ -26,22 +30,22 @@ const buildPlayerInfo = (
       playerName: currentPlayer.playerName,
       playerState: currentPlayer.playerState,
       cards: currentPlayer.isInHand ? currentPlayer.hand : currentPlayer.foot,
-      isPlayerTurn: gamePlay.currentPlayerId === currentPlayer.playerId,
+      isPlayerTurn: currentPlayer.playerId === activePlayer.playerId,
       numberOfCardsToDraw: currentPlayer.numberOfCardsToDraw,
       isInHand: currentPlayer.isInHand,
       sortOrder: currentPlayer.sortOrder,
       teamId: currentPlayer.teamId,
     } as IPlayerCurrent,
-    otherPlayers: (Object.values(gamePlay.players) as IPlayer[])
+    otherPlayers: (players as IPlayer[])
       .filter((player) => player.playerId !== playerId)
       .sort((playerA, playerB) => {
         const positionA =
           (playerA.position + gameRules.numberOfPlayers - currentPlayer.position) %
-          gameRules.numberOfPlayers;
+          gameRules.numberOfPlayers
         const positionB =
           (playerB.position + gameRules.numberOfPlayers - currentPlayer.position) %
-          gameRules.numberOfPlayers;
-        return positionA - positionB;
+          gameRules.numberOfPlayers
+        return positionA - positionB
       })
       .map(
         (player: IPlayer) =>
@@ -50,7 +54,7 @@ const buildPlayerInfo = (
             playerName: player.playerName,
             playerState: player.playerState,
             cards: player.isInHand ? player.hand.length : player.foot.length,
-            isPlayerTurn: gamePlay.currentPlayerId === player.playerId,
+            isPlayerTurn: currentPlayer.playerId === activePlayer.playerId,
             isInHand: player.isInHand,
             teamId: player.teamId,
           } as IPlayerOther)
@@ -62,7 +66,7 @@ const buildPlayerInfo = (
     pileIsLocked: gamePlay.discard.some((card) => isWildCard(card)),
     minimumPoints: gamePlay.minimumPoints,
     messages: isCurrentPlayer ? messages : [],
-  } as IPlayerInfo;
-};
+  } as IPlayerInfo
+}
 
-export default buildPlayerInfo;
+export default buildPlayerInfo

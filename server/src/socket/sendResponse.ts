@@ -1,4 +1,5 @@
-import {IGamePlay, IPlayer, IMessage, IGameRules, ITeam} from 'Game'
+import {IGamePlay, IPlayer, IMessage, ITeam} from '../models/game'
+import { IGameBase } from "../../../models/game";
 import Database from '../Database'
 import {ACTION_RESPONSE} from '../../constants'
 import buildPlayerInfo from '../game/utils/buildPlayerInfo'
@@ -8,7 +9,8 @@ import logger from '../util/logger'
 
 const sendResponse = (
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
+  players: IPlayer[],
   message: string,
   gameController: IGameController,
   gameId: number,
@@ -24,12 +26,16 @@ const sendResponse = (
     newMessages.forEach((message) => (message.isSent = true))
   }
 
-  Database.updateGame(gameId, gamePlay, () => {
+  Database.updateGame(gameId, gamePlay, players, () => {
     const messageId = uuid.v4()
+    const player = players.find(player => player.playerId === playerId)
+    if (!player) {
+      throw new Error('player not found')
+    }
     if (gamePlay.gameState === 'askRoundEnd') {
       try {
-        const team = gamePlay.teams[gamePlay.players[playerId].teamId];
-        (Object.values(gamePlay.players) as IPlayer[]).forEach((player) => {
+        const team = gamePlay.teams[player.teamId];
+        players.forEach((player) => {
           const playerTeam = gamePlay.teams[player.teamId]
           const otherTeam = Object.values(gamePlay.teams).find(
             (team: ITeam) => team.teamId !== player.teamId
@@ -70,7 +76,7 @@ const sendResponse = (
           map(team => team.scoreBase + team.scoreCards))
         const winners = Object.values(gamePlay.teams)
           .filter(team => (team.scoreCards + team.scoreBase) === maxScore);
-        (Object.values(gamePlay.players) as IPlayer[]).forEach((player) => {
+        players.forEach((player) => {
           const playerTeam = gamePlay.teams[player.teamId]
           const message = (playerTeam.scoreCards + playerTeam.scoreBase) === maxScore
             ? `Congratulations your team ${winners.length > 1 ? 'tied' : 'won'} with a score of ${maxScore}`
@@ -88,7 +94,7 @@ const sendResponse = (
     }
     if (ACTION_RESPONSE[transactionType].sendToAll) {
       try {
-        (Object.values(gamePlay.players) as IPlayer[]).forEach((player) => {
+        players.forEach((player) => {
           const playerInfo =
             message ||
             JSON.stringify({
@@ -97,6 +103,7 @@ const sendResponse = (
               game: buildPlayerInfo(
                 gamePlay,
                 gameRules,
+                players,
                 gameId,
                 player.playerId,
                 messages,
@@ -122,6 +129,7 @@ const sendResponse = (
         game: buildPlayerInfo(
           gamePlay,
           gameRules,
+          players,
           gameId,
           playerId,
           [],

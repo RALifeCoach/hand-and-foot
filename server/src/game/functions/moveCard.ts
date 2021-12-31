@@ -1,4 +1,5 @@
-import { IGamePlay, ICard } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
+import { ICard } from "../../../../models/game";
 import rePinCards from "./rePinCards";
 
 const buildNewCards = (
@@ -51,11 +52,15 @@ const buildNewCards = (
 
 const moveCard = (
   gamePlay: IGamePlay,
+  players: IPlayer[],
   playerId: number,
   sourceCardId: number,
   destCardId: number
 ) => {
-  const player = gamePlay.players[playerId];
+  const player = players.find(player => player.playerId == playerId)
+  if (!player) {
+    throw new Error("player not found");
+  }
 
   if (player.isInHand) {
     player.hand = rePinCards(

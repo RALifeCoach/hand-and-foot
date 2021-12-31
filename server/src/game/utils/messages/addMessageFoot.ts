@@ -1,10 +1,10 @@
-import { IGamePlay } from "Game";
+import {IGamePlay, IPlayer} from '../../../models/game'
 
-const addMessageFoot = (gamePlay: IGamePlay, stillPlaying: boolean) => {
+const addMessageFoot = (gamePlay: IGamePlay, players: IPlayer[], stillPlaying: boolean) => {
   gamePlay.messages.push({
     isSent: false,
     type: "foot",
-    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
+    playerName: players[gamePlay.currentPlayerIndex].playerName,
     text: `went into their foot${stillPlaying ? ' and still playing' : ''}`,
   });
 };

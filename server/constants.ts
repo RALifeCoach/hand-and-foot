@@ -1,4 +1,5 @@
-import { ISuit, IRank, IRound } from "Game";
+import {IRank, ISuit} from '../models/game'
+import {IRound} from './src/models/game'
 
 export const SUITS: ISuit[] = ["C", "D", "H", "S", "J"];
 export const RANKS: IRank[] = [

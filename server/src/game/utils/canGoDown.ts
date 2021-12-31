@@ -1,8 +1,9 @@
-import { IGamePlay, ITeam, IGameRules } from "Game";
+import { IGamePlay } from "../../models/game";
+import { ITeam, IGameBase } from "../../../../models/game";
 
 const canGoDown = (
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
   team: ITeam,
   points: number
 ): boolean => {

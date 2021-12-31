@@ -1,8 +1,10 @@
-import { IGamePlay, IMeldType, ICard } from "Game";
+import {IGamePlay, IPlayer} from '../../../models/game'
+import { IMeldType, ICard } from "../../../../../models/game";
 import getMessageTypeText from "./getMessageTypeText";
 
 const addMessageAdded = (
   gamePlay: IGamePlay,
+  players: IPlayer[],
   type: IMeldType,
   cards: ICard[]
 ) => {
@@ -10,7 +12,7 @@ const addMessageAdded = (
     gamePlay.messages.push({
       isSent: false,
       type: "added",
-      playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
+      playerName: players[gamePlay.currentPlayerIndex].playerName,
       text: `added ${cards.length} ${getMessageTypeText(type)}${
         cards.length > 1 ? "s" : ""
       }`,
@@ -25,7 +27,7 @@ const addMessageAdded = (
   gamePlay.messages.push({
     isSent: false,
     type: "added",
-    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
+    playerName: players[gamePlay.currentPlayerIndex].playerName,
     text: `added ${cardDisplays} to a ${getMessageTypeText(type)}`,
   });
 };

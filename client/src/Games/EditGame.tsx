@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer} from 'react'
+import React, {useCallback, useReducer} from 'react'
 import {IAction} from 'General'
 import {IGamesRow} from 'Game'
 import {

@@ -1,10 +1,11 @@
-import { IGamePlay, ICard } from "Game";
+import {IGamePlay, IPlayer} from '../../../models/game'
+import { ICard } from "../../../../../models/game";
 
-const addMessageDraw7 = (gamePlay: IGamePlay, card: ICard) => {
+const addMessageDraw7 = (gamePlay: IGamePlay, players: IPlayer[], card: ICard) => {
   gamePlay.messages.push({
     isSent: false,
     type: "draw7",
-    playerName: gamePlay.players[gamePlay.currentPlayerId].playerName,
+    playerName: players[gamePlay.currentPlayerIndex].playerName,
     text: `drew the ${card.suit}-${card.rank}`,
   });
 };

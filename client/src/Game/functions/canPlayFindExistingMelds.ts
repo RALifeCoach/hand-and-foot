@@ -1,4 +1,4 @@
-import { ICard, IMeld } from "../../queries/game";
+import { ICard, IMeld } from "../../../../models/game";
 import { IGamePlay } from "Game";
 import isWildCard from "./isWildCard";
 import checkRunCards from "./checkRunCards";

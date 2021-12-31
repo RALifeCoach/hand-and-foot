@@ -1,4 +1,5 @@
-import { IGamePlay, IMeldType, IRank, ICard, IGameRules } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
+import { IMeldType, IRank, ICard, IGameBase } from "../../../../models/game";
 import * as uuid from "uuid";
 import logGameState from "../../socket/logGameState";
 import isRedThree from "../utils/isRedThree";
@@ -18,7 +19,8 @@ import logger from "../../util/logger";
 const playCards = (
   gameId: number,
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
+  players: IPlayer[],
   cardIds: number[],
   meldId: string,
   meldType: IMeldType,
@@ -26,14 +28,14 @@ const playCards = (
   resolve: any
 ) => {
   logger.debug('play cards')
-  const player = gamePlay.players[gamePlay.currentPlayerId];
-  const team =
-    gamePlay.teams[gamePlay.players[gamePlay.currentPlayerId].teamId];
+  const player = players[gamePlay.currentPlayerIndex]
+
+  const team = gamePlay.teams[player.teamId];
   if (!team) {
     throw new Error("team not found");
   }
 
-  logGameState(gameId, gamePlay, true)
+  logGameState(gameId, gamePlay, players,true)
     .then(() => {
       const cards = player.isInHand ? player.hand : player.foot;
       let thisMeldId = meldId;
@@ -49,7 +51,7 @@ const playCards = (
         selectedCards.push(card);
         if (!thisMeldId || isRedThree(card)) {
           if (!isRedThree(card)) {
-            addMessageStarted(gamePlay, meldType);
+            addMessageStarted(gamePlay, players, meldType);
           }
           thisMeldId = uuid.v4();
           team.melds[thisMeldId] = {
@@ -61,7 +63,7 @@ const playCards = (
           };
         }
         if (isRedThree(card)) {
-          player.numberOfCardsToDraw += 1;
+          player.numberOfCardsToReplace += 1;
         }
         const meld = team.melds[thisMeldId];
         if (meld.type === "clean" && isWildCard(card)) {
@@ -87,26 +89,26 @@ const playCards = (
         return cardA.suit < cardB.suit ? -1 : 1;
       });
 
-      addMessageAdded(gamePlay, meld.type, selectedCards);
+      addMessageAdded(gamePlay, players, meld.type, selectedCards);
 
       if (
         !gameRules.canOverFillMeld &&
         team.melds[thisMeldId].cards.length > 6
       ) {
         team.melds[thisMeldId].isComplete = true;
-        addMessageCompleted(gamePlay, team.melds[thisMeldId].type);
+        addMessageCompleted(gamePlay, players, team.melds[thisMeldId].type);
       }
 
       if (cards.length === 0 && player.playerState !== "draw7") {
         if (player.isInHand) {
           player.isInHand = false;
-          addMessageFoot(gamePlay, true);
+          addMessageFoot(gamePlay, players, true);
         } else {
           endTurn(team, player);
-          startNewTurn(gamePlay, gameRules);
+          startNewTurn(gamePlay, gameRules, players);
         }
       }
-      completeDraw7(gamePlay, gameRules, gameId)
+      completeDraw7(gamePlay, gameRules, players, gameId)
         .then(() => {
           rePinCards(cards);
 

@@ -1,10 +1,12 @@
-import { IGamePlay, IGameRules } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
+import { IGameBase } from "../../../../models/game";
 import endRound from "./endRound";
 import logger from "../../util/logger";
 
 const endRoundResponse = (
   gamePlay: IGamePlay,
-  gameRules: IGameRules,
+  gameRules: IGameBase,
+  players: IPlayer[],
   partnerAgreed: boolean
 ) => {
   gamePlay.gameState = "inPlay";
@@ -15,7 +17,7 @@ const endRoundResponse = (
       value: null,
     };
   }
-  const player = gamePlay.players[gamePlay.currentPlayerId];
+  const player = players[gamePlay.currentPlayerIndex];
   const cards = player.foot;
   const discardCardIndex = cards.findIndex(
     (card) => card.cardId === gamePlay.toDiscardId
@@ -38,7 +40,7 @@ const endRoundResponse = (
     }
   });
 
-  endRound(gamePlay, gameRules);
+  endRound(gamePlay, gameRules, players);
   return null;
 };
 

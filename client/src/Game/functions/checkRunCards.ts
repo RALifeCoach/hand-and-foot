@@ -1,4 +1,4 @@
-import { ICard, IMeldType, IRank } from "../../queries/game";
+import { ICard, IMeldType, IRank } from "../../../../models/game";
 import mapCards from "./mapCards";
 import getCardValue from "./getCardValue";
 

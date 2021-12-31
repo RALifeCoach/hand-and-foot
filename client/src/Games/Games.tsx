@@ -54,8 +54,7 @@ const Games = () => {
     }
   )
 
-  const {loading: loadingAll} = useQuery(FETCH_GAMES_FILTERED, {
-      variables: {states: STATES[status]},
+  const {loading: loadingAll} = useQuery(FETCH_GAMES_ALL, {
       pollInterval: 10000,
       skip: status !== 0,
       onCompleted: data => onGamesCompleted(data, setGames)

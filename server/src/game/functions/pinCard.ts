@@ -1,9 +1,14 @@
-import { IGamePlay, ICard } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
+import { ICard } from "../../../../models/game";
 import sortCards from "../utils/sortCards";
 import logger from "../../util/logger";
 
-const pinCard = (gamePlay: IGamePlay, playerId: number, cardId: number) => {
-  const player = gamePlay.players[playerId];
+const pinCard = (gamePlay: IGamePlay, players: IPlayer[], playerId: number, cardId: number) => {
+  const player = players.find(player => player.playerId == playerId)
+  if (!player) {
+    throw new Error("player not found");
+  }
+
   const cards = player.isInHand ? player.hand : player.foot;
   const newCards: ICard[] = JSON.parse(JSON.stringify(cards));
 

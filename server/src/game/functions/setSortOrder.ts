@@ -1,8 +1,11 @@
-import { IGamePlay } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
 import sortCards from "../utils/sortCards";
 
-const setSortOrder = (gamePlay: IGamePlay, playerId: string, sortOrder: string) => {
-  const player = gamePlay.players[playerId];
+const setSortOrder = (gamePlay: IGamePlay, players: IPlayer[], playerId: number, sortOrder: string) => {
+  const player = players.find(player => player.playerId === playerId)
+  if (!player) {
+    throw new Error("player not found");
+  }
 
   player.sortOrder = sortOrder;
   if (player.isInHand) {

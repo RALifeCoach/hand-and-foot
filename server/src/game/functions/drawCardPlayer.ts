@@ -1,11 +1,12 @@
-import { IGamePlay } from "Game";
+import {IGamePlay, IPlayer} from '../../models/game'
 import drawCards from "../utils/drawCards";
 const drawCardPlayer = (
   gamePlay: IGamePlay,
+  players: IPlayer[],
   pileIndex: number
 ) => {
   console.log('draw card player', pileIndex);
-  const player = gamePlay.players[gamePlay.currentPlayerId];
+  const player = players[gamePlay.currentPlayerIndex];
   const cards = player.isInHand ? player.hand : player.foot;
 
   if (player.numberOfCardsToDraw) {

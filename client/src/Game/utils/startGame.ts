@@ -96,7 +96,6 @@ const startGame = (numberOfPlayers: number) => {
       currentRound: -1,
       transactionLog: [],
       minimumPoints: 0,
-      players: {},
       teams: {},
       messages: [],
       discard: [],
@@ -104,6 +103,7 @@ const startGame = (numberOfPlayers: number) => {
       deck: [],
       toDiscardId: 0,
     },
+    players: [],
   };
 };
 

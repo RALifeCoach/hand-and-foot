@@ -1,4 +1,4 @@
-import { ICard } from "../../queries/game";
+import { ICard } from "../../../../models/game";
 import isWildCard from "./isWildCard";
 
 export interface ICardMapping {

@@ -1,4 +1,4 @@
-import { ICard, IRank, IGameRules } from "Game";
+import { ICard, IRank, IGameBase } from "../../../../models/game";
 import isRedThree from "./isRedThree";
 
 const CARD_POINTS = {
@@ -17,7 +17,7 @@ const CARD_POINTS = {
   A: 20,
 };
 
-const getCardPoints = (gameRules: IGameRules, card: ICard) => {
+const getCardPoints = (gameRules: IGameBase, card: ICard) => {
   if (isRedThree(card)) {
     return Math.abs(gameRules.redThreeScore);
   }

@@ -1,4 +1,4 @@
-import { IMeldType } from "Game";
+import { IMeldType } from "../../../../../models/game";
 
 const getMessageTypeText = (type: IMeldType): string => {
   switch (type) {

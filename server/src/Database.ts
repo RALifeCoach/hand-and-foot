@@ -1,10 +1,11 @@
 import {Client, QueryResult} from 'pg'
-import {IGamePlay, IGameRules} from 'Game'
 import logger from './util/logger'
+import {IGamePlay, IPlayer} from './models/game'
+import {IGameBase} from '../../models/game'
 
 
 class Database {
-  private readonly cache: {[gameId: string]: {gamePlay: IGamePlay, gameRules: IGameRules}}
+  private readonly cache: {[gameId: string]: {gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]}}
 
   constructor() {
     this.cache = {}
@@ -46,15 +47,18 @@ class Database {
       this.cache[gameId] = {
         gamePlay: data[0].gameplay,
         gameRules: data[0].gamerules,
+        players: data[0].players
       }
       callback(this.cache[gameId])
     })
   }
 
-  updateGame(gameId: number, gamePlay: IGamePlay, callback:  (rows: any) => void) {
+  updateGame(gameId: number, gamePlay: IGamePlay, players: IPlayer[], callback:  (rows: any) => void) {
     this.cache[gameId].gamePlay = gamePlay
+    this.cache[gameId].players = players
     const sql = `update handf.game
-        set gameplay = '${JSON.stringify(gamePlay)}', gamestate = '${gamePlay.gameState}'
+        set gameplay = '${JSON.stringify(gamePlay)}', gamestate = '${gamePlay.gameState}',
+            players = '${JSON.stringify(players)}'
         where GameId = '${gameId}'`
     this.query(sql, callback)
   }

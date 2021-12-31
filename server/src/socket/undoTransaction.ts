@@ -1,4 +1,4 @@
-import { IGamePlay } from "Game";
+import { IGamePlay } from "../models/game";
 import Database from "../Database";
 import logger from "../util/logger";
 
