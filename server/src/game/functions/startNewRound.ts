@@ -21,6 +21,10 @@ const startNewRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlay
   players.forEach((player) => {
     player.hand = drawCards(gamePlay.deck, 11);
     player.foot = drawCards(gamePlay.deck, 11);
+    player.playerState = 'waiting'
+    player.isInHand = true
+    player.numberOfCardsToReplace = 0
+    player.numberOfCardsToDraw = 0
   });
   gamePlay.minimumPoints = ROUND_MINIMUM[gamePlay.currentRound];
   Object.keys(gamePlay.teams).forEach((teamId) => {

@@ -100,9 +100,7 @@ const App = () => {
   }
 
   if (loading) {
-    console.log('loading')
     return null
-    // return <FetchHandling status={game} title="Fetching game"/>
   }
 
   const initializeState = (playerId: number) => ({set}: MutableSnapshot) => {

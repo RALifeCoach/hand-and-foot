@@ -1,20 +1,18 @@
 import {
   ICard,
   IGameState,
-  IMeldType,
-  IMessageType,
+  IMessage,
   IPlayerState,
   IPosition,
-  IRank,
-  IRoundSequence
+  ITeam
 } from '../../../models/game'
 
 export interface IPlayer {
   playerId: number;
-  playerName: string;
   teamId: string;
   position: IPosition;
   playerState: IPlayerState;
+  playerName: string;
   numberOfCardsToDraw: number;
   numberOfCardsToReplace: number;
   hand: ICard[];
@@ -23,21 +21,19 @@ export interface IPlayer {
   sortOrder: string;
 }
 
-export interface IMeld {
-  meldId: string;
-  cards: ICard[];
-  isComplete: boolean;
-  type: IMeldType;
-  rank?: IRank;
-}
-
-export interface ITeam {
-  teamId: string;
-  isDown: boolean;
-  melds: { [meldId: string]: IMeld };
-  scoreBase: number;
-  scoreCards: number;
-  scoreOnTable: number;
+export interface IPlayerDb {
+  game_id: number;
+  player_id: number;
+  team: string;
+  position: IPosition;
+  player_state: IPlayerState;
+  cards_to_draw: number;
+  cards_to_replace: number;
+  hand: ICard[];
+  foot: ICard[];
+  in_hand: boolean;
+  sort_order: string;
+  player_name: string;
 }
 
 export interface IRound {
@@ -57,13 +53,6 @@ export interface ILogEntry {
   logId: string;
 }
 
-export interface IMessage {
-  isSent: boolean;
-  type: IMessageType;
-  playerName: string;
-  text: string;
-}
-
 export interface IGamePlay {
   deck: ICard[];
   pickupPiles: ICard[][];
@@ -80,23 +69,6 @@ export interface IGamePlay {
   messages: IMessage[];
   minimumPoints: number;
   toDiscardId: number;
-}
-
-export interface IGameRules {
-  numberOfPlayers: number;
-  numberOfRounds: number;
-  roundSequence: IRoundSequence;
-  wildCardMeldScore: number;
-  runScore: number;
-  cleanScore: number;
-  dirtyScore: number;
-  canPickupWithWild: boolean;
-  canLockDiscards: boolean;
-  askRoundEnd: boolean;
-  canOverFillMeld: boolean;
-  redThreeScore: number;
-  canDraw7: boolean;
-  minimumRoundNatural7: number;
 }
 
 export interface IPlayerCurrent {

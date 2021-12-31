@@ -11,7 +11,7 @@ const useSendMessage = () => {
 
   return useCallback(
     (type: string, value: any) => {
-      console.log('send', type, value)
+      console.log('send', type)
       const body = {
         type,
         value: {

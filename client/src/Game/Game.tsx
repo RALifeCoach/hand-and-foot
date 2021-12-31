@@ -40,7 +40,6 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
   }
   useEffect(() => {
     if (!gameLoading && !error && gameData.handf_game.length) {
-      console.log('game', gameData.handf_game[0].gamerules)
       if (gameData.gamestate === 'finished') {
         return navigate('/games')
       }
@@ -49,7 +48,6 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
     }
   }, [gameLoading,  sendMessage, position, teamId, setGameBase, navigate, gameData, error]);
 
-  console.log(gameId, gamePlay, gameBase)
   if (!gamePlay || !gameBase) {
     return null;
   }

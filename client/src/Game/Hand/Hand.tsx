@@ -31,10 +31,6 @@ const Hand = ({ options, cards }: IProps) => {
   const showIcons = countSelectedCards === 1;
   const movable = showIcons && !cardMoving;
 
-  useEffect(() => {
-    console.log('magic', magicCard);
-  }, [magicCard]);
-
   return (
     <div className="flex">
       <SortButtons />

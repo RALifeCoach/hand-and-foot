@@ -22,6 +22,7 @@ const buildPlayerInfo = (
   if (!currentPlayer) {
     throw new Error('player not found')
   }
+
   return {
     gameId,
     gameState: gamePlay.gameState,
@@ -32,6 +33,7 @@ const buildPlayerInfo = (
       cards: currentPlayer.isInHand ? currentPlayer.hand : currentPlayer.foot,
       isPlayerTurn: currentPlayer.playerId === activePlayer.playerId,
       numberOfCardsToDraw: currentPlayer.numberOfCardsToDraw,
+      numberOfCardsToReplace: currentPlayer.numberOfCardsToReplace,
       isInHand: currentPlayer.isInHand,
       sortOrder: currentPlayer.sortOrder,
       teamId: currentPlayer.teamId,
@@ -54,7 +56,7 @@ const buildPlayerInfo = (
             playerName: player.playerName,
             playerState: player.playerState,
             cards: player.isInHand ? player.hand.length : player.foot.length,
-            isPlayerTurn: currentPlayer.playerId === activePlayer.playerId,
+            isPlayerTurn: player.playerId === activePlayer.playerId,
             isInHand: player.isInHand,
             teamId: player.teamId,
           } as IPlayerOther)

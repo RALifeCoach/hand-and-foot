@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../models/game'
-import { IGameBase } from "../../../../models/game";
+import {IGameBase, ITeam} from '../../../../models/game'
 import startNewTurn from "./startNewTurn";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
 import logGameState from "../../socket/logGameState";
@@ -23,7 +23,7 @@ const discardCard = (
   if (playerId !== player.playerId) {
     resolve(null)
   }
-  const team = gamePlay.teams[player.teamId];
+  const team: ITeam = gamePlay.teams[player.teamId];
   const points = computeTeamCardPoints(gameRules, team);
   if (!team.isDown) {
     const melds = Object.keys(team.melds).filter(

@@ -2,6 +2,7 @@ import { IGamePlay, IPlayer } from "../../models/game";
 import { IGameBase } from "../../../../models/game";
 
 const startNewTurn = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {
+  console.log('start new turn')
   const currentPlayer = players[gamePlay.currentPlayerIndex];
   currentPlayer.playerState = "waiting";
 

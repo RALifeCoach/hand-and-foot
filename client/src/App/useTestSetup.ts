@@ -21,9 +21,8 @@ const useTestSetup = () => {
   useEffect(() => {
     if (doTruncate && !gameId) {
       const rulesPlay = startGame(players)
-      truncateData({variables: {play: rulesPlay.play, rules: rulesPlay.rules}})
+      truncateData({variables: {play: rulesPlay.play, rules: rulesPlay.rules, players: rulesPlay.players}})
         .then(data => {
-          console.log('after', data?.data?.insert_handf_game?.returning[0]?.gameid)
           setGameId(data?.data?.insert_handf_game?.returning[0]?.gameid)
         })
         .catch(err => console.log(err))

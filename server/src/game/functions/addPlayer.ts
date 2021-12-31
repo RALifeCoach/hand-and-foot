@@ -39,6 +39,7 @@ const addPlayer = (
       playerName: rows[0].name,
       playerState: "waiting",
       numberOfCardsToDraw: 0,
+      numberOfCardsToReplace: 0,
       hand: [] as ICard[],
       foot: [] as ICard[],
       isInHand: true,

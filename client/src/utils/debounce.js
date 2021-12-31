@@ -9,7 +9,6 @@ export default class Debounce {
   debounce(event) {
     event.stopPropagation();
     if (this.timer) {
-      console.log('debounce')
       return;
     }
     this.timer = setInterval(() => {

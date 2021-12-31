@@ -34,7 +34,6 @@ const MessageProvider: React.FC<any> = ({children}) => {
       }
       wss.onmessage = (message: any) => {
         const data = JSON.parse(message.data)
-        console.log('message', data)
         setLastMessage(data)
       }
       wss.onclose = () => {

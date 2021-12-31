@@ -10,7 +10,6 @@ const processMessages = (
   messageStack: any[],
   gameController: IGameController
 ) => {
-  console.log('process')
   const data = messageStack[0]
 
   if (!gameController[data.value.gameId]) {

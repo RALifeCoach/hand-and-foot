@@ -46,7 +46,7 @@ export interface IFetchGames {
 }
 
 export const TRUNCATE = gql`
-mutation delete_all_games($play: json, $rules: json) {
+mutation delete_all_games($play: json, $rules: json, $players: json) {
   delete_handf_game(where: {}) {
     affected_rows
   }
@@ -57,7 +57,8 @@ mutation delete_all_games($play: json, $rules: json) {
     gamename: "Test Game",
     gameplay: $play,
     gamerules: $rules,
-    gamestate: "waitingToStart"
+    gamestate: "waitingToStart",
+    players: $players
   },  
   ) {
     affected_rows
