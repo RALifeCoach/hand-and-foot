@@ -1,6 +1,6 @@
 import React, {CSSProperties} from 'react'
 import CardIcons from './CardIcons';
-import { ICard, IDummyCard } from "Game";
+import { ICard, IDummyCard } from "../../queries/game";
 import { SUIT_IMAGES } from '../../constants';
 import useDebounce from '../hooks/useDebounce'
 

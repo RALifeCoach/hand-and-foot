@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import useSelectCard from "./useSelectCard";
 import { IAction } from "General";
-import { ICard } from "Game";
+import { ICard } from "../../queries/game";
 
 const useSendMessage = (gameId: number, user: any, playerId: number) => {
   const selectCard = useSelectCard();

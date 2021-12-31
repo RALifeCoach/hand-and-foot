@@ -1,24 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   IconButton,
   TableCell, Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from '@mui/icons-material';
 import Spacer from "../shared/Spacer";
-import { IGameRow } from "Game";
 import FlexRow from "../shared/flex-grid/FlexRow";
 import WarningDialog from "../shared/WarningDialog";
 import useFetchSave from "../hooks/useFetchSave";
 import UpdateHandling from "../shared/UpdateHandling";
 import EditGame from "./EditGame";
 import SitButtons from "./SitButtons";
+import {IGamesRow} from 'Game'
 
 interface IProps {
-  game: IGameRow;
-  refreshGames: () => void;
+  game: IGamesRow;
 }
 
-const GamesRowButtons = ({ game, refreshGames }: IProps) => {
+const GamesRowButtons = ({ game }: IProps) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
 
@@ -27,13 +26,6 @@ const GamesRowButtons = ({ game, refreshGames }: IProps) => {
     const body = { gameId: game.gameId };
     performDelete(body, 'api/game/delete');
   }, [game, performDelete]);
-
-  useEffect(() => {
-    if (deleteStatus.status === 'success') {
-      refreshGames();
-      setOpenDelete(false);
-    }
-  }, [deleteStatus, refreshGames]);
 
   return (
     <>
@@ -87,7 +79,6 @@ const GamesRowButtons = ({ game, refreshGames }: IProps) => {
           game={game}
           open={openEdit}
           onClose={() => setOpenEdit(false)}
-          refreshGames={refreshGames}
         />
       )}
       <UpdateHandling status={deleteStatus} title="Deleting game" />

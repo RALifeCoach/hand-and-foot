@@ -1,4 +1,4 @@
-import { ICard } from "Game";
+import { ICard } from "../../queries/game";
 import isWildCard from "./isWildCard";
 
 const mapMeldCards = (cards: ICard[]) => {

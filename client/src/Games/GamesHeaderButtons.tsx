@@ -4,12 +4,11 @@ import EditGame from './EditGame'
 import {Add} from '@mui/icons-material'
 
 interface IProps {
-  refreshGames: () => void;
   status: number
   setStatus: Dispatch<number>
 }
 
-const GamesHeaderButtons = ({refreshGames, status, setStatus}: IProps) => {
+const GamesHeaderButtons = ({status, setStatus}: IProps) => {
   const [newOpen, setNewOpen] = useState(false)
 
   return (
@@ -36,10 +35,9 @@ const GamesHeaderButtons = ({refreshGames, status, setStatus}: IProps) => {
       </Button>
       {newOpen && (
         <EditGame
-          game={{gameName: '', numberOfPlayers: 4}}
+          game={{gameName: '', numberOfPlayers: 4, players: []}}
           open={newOpen}
           onClose={() => setNewOpen(false)}
-          refreshGames={refreshGames}
         />
       )}
     </div>

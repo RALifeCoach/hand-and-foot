@@ -1,5 +1,5 @@
 import React, {useState, useMemo} from 'react'
-import {IGameRow} from 'Game'
+import {IGamesRow} from 'Game'
 import SitButton from './SitButton'
 import SnackAlert from '../shared/SnackAlert'
 import {useRecoilValue} from 'recoil'
@@ -8,12 +8,12 @@ import {User} from 'User'
 import useSendMessage from '../Game/hooks/useSendMessage'
 
 interface IProps {
-  game: IGameRow;
+  game: IGamesRow;
 }
 
-function getTeam(game: IGameRow, user: User, position: number) {
+function getTeam(game: IGamesRow, user: User, position: number) {
   if (game.numberOfPlayers === 3) {
-    return user!.userName
+    return user.userName
   }
   return position % 2 === 0 ? 'North-South' : 'East-West'
 }
@@ -25,16 +25,19 @@ const SitButtons = ({game}: IProps) => {
   const [error, setError] = useState('')
 
   const userPosition = useMemo(() => {
-    return Object.keys(game.players || []).find(key =>
-      game.players?.[key].playerId === user?.userId)
+    if (!user) {
+      return
+    }
+    return game.players.find(player => player.playerId === user.userId)
   }, [game.players, user])
 
   const handleSit = (position: number) => {
     return () => {
-      if (userPosition !== undefined && Number(userPosition) !== position) {
-        return setError(`You are already sitting in position ${userPosition}`)
+      if (userPosition && userPosition.position !== position) {
+        return setError(`You are already sitting in position ${userPosition.position}`)
       }
-      if (Number(userPosition) !== position && game?.players?.[position]) {
+      const currentPlayer = game.players.find(player => player.position === position)
+      if (userPosition?.position !== position && !!currentPlayer) {
         return setError('someone else is already sitting there')
       }
       sendMessage('addPlayer', {position, teamId: getTeam(game, user, position)})
@@ -51,7 +54,7 @@ const SitButtons = ({game}: IProps) => {
           left={50}
           handleSit={handleSit(0)}
           isPlayerPresent={userPosition !== undefined}
-          isCurrentUser={userPosition === '0'}
+          isCurrentUser={userPosition?.position === 0}
         />
         {game.numberOfPlayers === 4 && (
           <SitButton
@@ -60,7 +63,7 @@ const SitButtons = ({game}: IProps) => {
             left={-3}
             handleSit={handleSit(3)}
             isPlayerPresent={userPosition !== undefined}
-            isCurrentUser={userPosition === '3'}
+            isCurrentUser={userPosition?.position === 3}
           />
         )}
         <SitButton
@@ -69,7 +72,7 @@ const SitButtons = ({game}: IProps) => {
           left={100}
           handleSit={handleSit(1)}
           isPlayerPresent={userPosition !== undefined}
-          isCurrentUser={userPosition === '1'}
+          isCurrentUser={userPosition?.position === 1}
         />
         <SitButton
           player={game?.players?.[2]}
@@ -77,7 +80,7 @@ const SitButtons = ({game}: IProps) => {
           left={50}
           handleSit={handleSit(2)}
           isPlayerPresent={userPosition !== undefined}
-          isCurrentUser={userPosition === '2'}
+          isCurrentUser={userPosition?.position === 2}
         />
       </div>
       <SnackAlert

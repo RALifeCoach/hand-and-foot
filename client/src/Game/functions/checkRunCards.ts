@@ -1,4 +1,4 @@
-import { ICard, IMeldType, IRank } from "Game";
+import { ICard, IMeldType, IRank } from "../../queries/game";
 import mapCards from "./mapCards";
 import getCardValue from "./getCardValue";
 
@@ -6,7 +6,7 @@ const checkRunCards = (cards: ICard[]): { meldType: IMeldType; meldRank?: IRank 
   const mapping = mapCards(cards);
 
   // make sure there are no duplicates
-  if (Object.values(mapping.ranks).some(rank => rank > 1)) {
+  if ((Object.values(mapping.ranks) as number[]).some(rank => rank > 1)) {
     return null;
   }
   // make sure no gaps

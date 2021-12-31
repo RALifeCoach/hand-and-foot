@@ -1,4 +1,4 @@
-import { IMeld } from "Game";
+import { IMeld } from "../../queries/game";
 import { RANK_NAMES, SUIT_NAMES, SUIT_IMAGES } from "../../constants";
 import isWildCard from "./isWildCard";
 

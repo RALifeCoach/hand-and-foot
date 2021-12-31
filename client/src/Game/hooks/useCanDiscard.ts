@@ -1,4 +1,5 @@
-import { IGamePlay, IGameBase } from "Game";
+import { IGameBase } from "../../queries/game";
+import { IGamePlay } from "Game";
 import useSelectedCards from "./useSelectedCards";
 import canDiscard from "../functions/canDiscard";
 import { useCallback } from "react";

@@ -1,4 +1,5 @@
-import { IGamePlay, IGameBase } from "Game";
+import { IGamePlay } from "Game";
+import { IGameBase } from "../../queries/game";
 import { useCallback } from "react";
 import mapCards from "../functions/mapCards";
 import isWildCard from "../functions/isWildCard";

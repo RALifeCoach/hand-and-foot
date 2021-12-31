@@ -12,23 +12,14 @@ import {
   serverQuestionAtom,
 } from '../atoms/game'
 import {useParams, useNavigate} from 'react-router-dom'
-import {gql, useQuery} from '@apollo/client'
+import {useQuery} from '@apollo/client'
+import {FETCH_GAME} from '../queries/game'
 
 interface IProps {
   position?: number;
   teamId?: string;
 }
 
-const FETCH_GAME = gql`
-query MyQuery($id: Int) {
-  handf_game(where: {gameid: {_eq: $id}}) {
-    gameid
-    gamename
-    gameplay
-    gamerules
-  }
-}
-`
 
 const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
   const params = useParams<{ position: string, team: string }>();

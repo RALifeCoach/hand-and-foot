@@ -1,18 +1,16 @@
-import React from "react";
+import React from 'react'
 import {
   TableCell,
   TableRow,
-} from "@mui/material";
-import { IGameRow } from "Game";
-import GamesRowButtons from "./GamesRowButtons";
+} from '@mui/material'
+import {IGamesRow} from 'Game'
+import GamesRowButtons from './GamesRowButtons'
 
 interface IProps {
-  game: IGameRow;
-  refreshGames: () => void;
+  game: IGamesRow;
 }
 
-const GamesRow = ({ game, refreshGames }: IProps) => {
-  console.log('game', game)
+const GamesRow = ({game}: IProps) => {
   return (
     <>
       <TableRow>
@@ -28,11 +26,10 @@ const GamesRow = ({ game, refreshGames }: IProps) => {
         <TableCell>{game.gameState}</TableCell>
         <GamesRowButtons
           game={game}
-          refreshGames={refreshGames}
         />
       </TableRow>
     </>
-  );
-};
+  )
+}
 
-export default GamesRow;
+export default GamesRow

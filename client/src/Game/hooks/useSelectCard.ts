@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { ICard } from "Game";
+import { ICard } from "../../queries/game";
 
 const useSelectCard = () =>
   useCallback((selected: { [cardId: string]: boolean }, card: ICard) => {

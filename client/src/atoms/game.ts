@@ -1,5 +1,6 @@
-import {ICard, IGameBase, IGamePlay, IMessage, IServerQuestion} from 'Game'
+import {ICard, IGameBase, IMessage, IServerQuestion} from '../queries/game'
 import {atom, selector} from 'recoil'
+import {IGamePlay} from 'Game'
 
 export const gameIdAtom = atom<number>({
   key: 'gameId',

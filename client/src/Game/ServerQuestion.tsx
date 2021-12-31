@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import FlexColumn from '../shared/flex-grid/FlexColumn'
 import FlexRow from '../shared/flex-grid/FlexRow'
-import {IServerQuestion, IServerQuestionButton} from 'Game'
+import {IServerQuestion, IServerQuestionButton} from '../queries/game'
 import Spacer from '../shared/Spacer'
 import useSendMessage from './hooks/useSendMessage'
 
@@ -56,7 +56,7 @@ const ServerQuestion = ({serverQuestion}: IProps) => {
         </DialogContent>
         <DialogActions>
           <FlexRow justify="flex-end">
-            {serverQuestion.buttons.map((button, index) => (
+            {serverQuestion.buttons.map((button: any, index: number) => (
               <div key={index}>
                 <Button
                   onClick={handleClick(button)}

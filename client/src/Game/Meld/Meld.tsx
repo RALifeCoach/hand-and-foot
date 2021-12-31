@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { IGamePlay, IMeld, ICard, IGameBase } from 'Game';
+import { IGamePlay } from 'Game';
+import { IMeld, ICard, IGameBase } from '../../queries/game';
 import { Paper, Tooltip } from '@mui/material';
 import useCanPlay from '../hooks/useCanPlay';
 import useSendMessage from '../hooks/useSendMessage';

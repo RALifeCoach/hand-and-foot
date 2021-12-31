@@ -1,4 +1,4 @@
-import { ICard } from "Game";
+import { ICard } from "../../queries/game";
 import {useRecoilValue} from 'recoil'
 import {selectedAtom} from '../../atoms/game'
 

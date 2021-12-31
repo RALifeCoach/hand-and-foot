@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
-import { IGamePlay, IGameBase } from "Game";
+import { IGamePlay } from "Game";
+import { IGameBase } from "../../queries/game";
 import useCanDiscard from "../hooks/useCanDiscard";
 import PlayingCard from '../PlayingCard/PlayingCard';
 import useCanDrawFromPile from "../hooks/useCanDrawFromPile";

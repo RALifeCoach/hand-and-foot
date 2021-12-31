@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { IGamePlay, IGameBase } from 'Game';
+import { IGameBase } from '../../queries/game';
+import { IGamePlay } from 'Game';
 import FlexRow from '../../shared/flex-grid/FlexRow';
 import TeamMelds from './TeamMelds';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';

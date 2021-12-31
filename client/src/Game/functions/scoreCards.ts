@@ -1,4 +1,4 @@
-import { ICard, IGameBase } from "Game";
+import { ICard, IGameBase } from "../../queries/game";
 import getCardPoints from "./getCardPoints";
 
 const scoreCards = (gameBase: IGameBase, cards: ICard[]): number => {

@@ -1,4 +1,4 @@
-import { ICard, IMeld } from "Game";
+import { ICard, IMeld } from "../../queries/game";
 import mapMeldCards from "./mapMeldCards";
 import { ICanPlay } from "../hooks/useCanPlay";
 

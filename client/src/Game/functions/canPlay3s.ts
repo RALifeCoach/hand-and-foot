@@ -1,6 +1,7 @@
 import { ICardMapping } from "./mapCards";
 import { ICanPlay } from "../hooks/useCanPlay";
-import { IGamePlay, IGameBase } from "Game";
+import { IGameBase } from "../../queries/game";
+import { IGamePlay } from "Game";
 import canDiscard from "./canDiscard";
 import isBlackThree from "./isBlackThree";
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PlayingCard from '../PlayingCard/PlayingCard';
-import { ICard } from "Game";
+import { ICard } from "../../queries/game";
 import SortButtons from './SortButtons';
 import useSelectedCards from '../hooks/useSelectedCards';
 import useSendMessage from '../hooks/useSendMessage';

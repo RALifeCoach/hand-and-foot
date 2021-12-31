@@ -1,31 +1,71 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {Dispatch, useState} from 'react'
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
   Typography
-} from "@mui/material";
-import Spacer from "../shared/Spacer";
-import useFetchGet from "../hooks/useFetchGet";
-import {IGameRow} from "Game";
-import GamesHeader from "./GamesHeader";
-import GamesRow from "./GamesRow";
-import FlexRow from "../shared/flex-grid/FlexRow";
-import GamesHeaderButtons from "./GamesHeaderButtons";
-import FetchHandling from "../shared/FetchHandling";
-import ApplicationBar from "../App/ApplicationBar";
+} from '@mui/material'
+import Spacer from '../shared/Spacer'
+import {IGameDb, IGamesRow, IPlayerDb} from 'Game'
+import GamesHeader from './GamesHeader'
+import GamesRow from './GamesRow'
+import FlexRow from '../shared/flex-grid/FlexRow'
+import GamesHeaderButtons from './GamesHeaderButtons'
+import ApplicationBar from '../App/ApplicationBar'
+import {FETCH_GAMES_FILTERED, FETCH_GAMES_ALL} from '../queries/game'
+import {useQuery} from '@apollo/client'
+
+function onGamesCompleted(data: any, setGames: Dispatch<IGamesRow[]>) {
+  console.log(data)
+  const newData = data.handf_game.map((game: IGameDb) => {
+    return {
+      gameId: game.gameid,
+      gameName: game.gamename,
+      gameState: game.gamestate,
+      numberOfPlayers: game.gamerules.numberOfPlayers,
+      players: Object.values(game.gameplay.players).map((player: IPlayerDb) => (
+        {
+          playerId: player.playerId,
+          playerName: player.playerName,
+          position: player.position
+        }
+      ))
+    } as IGamesRow
+  })
+  setGames(newData)
+}
+
+const STATES = {
+  0: [],
+  1: ['waitingToPlay', 'inPlay', 'waitingToRestart'],
+  2: ['finished']
+} as { [key: number]: string[] }
 
 const Games = () => {
-  const [games, fetchGames] = useFetchGet();
   const [status, setStatus] = useState(1)
+  const [games, setGames] = useState<IGamesRow[]>()
 
-  useEffect(() => {
-    fetchGames(`api/game/query?status=${status}`);
-  }, [fetchGames, status]);
+  const {loading: loadingFiltered} = useQuery(FETCH_GAMES_FILTERED, {
+      variables: {states: STATES[status]},
+      pollInterval: 10000,
+      skip: status === 0,
+      onCompleted: data => onGamesCompleted(data, setGames)
+    }
+  )
 
-  const refreshGames = useCallback(() => {
-    fetchGames(`api/game/query?status=${status}`);
-  }, [fetchGames, status]);
+  const {loading: loadingAll} = useQuery(FETCH_GAMES_FILTERED, {
+      variables: {states: STATES[status]},
+      pollInterval: 10000,
+      skip: status !== 0,
+      onCompleted: data => onGamesCompleted(data, setGames)
+    }
+  )
+
+  console.log('games', games)
+  if (loadingFiltered || loadingAll) {
+    return <CircularProgress/>
+  }
 
   return (
     <>
@@ -38,16 +78,14 @@ const Games = () => {
           <GamesHeaderButtons
             status={status}
             setStatus={setStatus}
-            refreshGames={refreshGames}
           />
         </FlexRow>
         <Spacer height={16}/>
         <Table size="small">
           <GamesHeader/>
           <TableBody>
-            {(games?.data || []).map((game: IGameRow) => (
+            {(games ?? []).map((game: IGamesRow) => (
               <GamesRow
-                refreshGames={refreshGames}
                 game={game}
                 key={game.gameId}
               />
@@ -55,9 +93,9 @@ const Games = () => {
           </TableBody>
         </Table>
       </Paper>
-      <FetchHandling status={games} title="Loading games..."/>
     </>
-  );
-};
+  )
+}
 
-export default Games;
+
+export default Games

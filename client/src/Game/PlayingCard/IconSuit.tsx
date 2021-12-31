@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { ICard } from "Game";
+import { ICard } from "../../queries/game";
 
 interface IProps {
   card: ICard;

@@ -1,4 +1,5 @@
-import { IGamePlay, IGameBase, ICard, IMeld, IMeldType, IRank } from "Game";
+import { IGameBase, ICard, IMeld, IMeldType, IRank } from "../../queries/game";
+import { IGamePlay } from "Game";
 import mapCards from "../functions/mapCards";
 import { useCallback } from "react";
 import canPlayFindExistingMelds from "../functions/canPlayFindExistingMelds";
