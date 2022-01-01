@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../models/game'
-import { IGameBase } from "../../../models/game";
+import {IGameBase} from '../../../models/game'
 import {IGameController} from './socketManager'
 import Database from '../Database'
 import undoTransaction from './undoTransaction'
@@ -26,9 +26,9 @@ const processMessages = (
     const gameRules: IGameBase = game.gameRules
     const players: IPlayer[] = game.players
 
-    new Promise<{ newGamePlay: IGamePlay; message: string }>((resolve) => {
+    new Promise<{ newGamePlay: IGamePlay; newPlayers: IPlayer[]; message: string }>((resolve) => {
       if (data.type === 'undo') {
-        undoTransaction(gamePlay, resolve)
+        undoTransaction(gamePlay, players, resolve)
       } else {
         doTransaction(
           gamePlay,
@@ -44,15 +44,17 @@ const processMessages = (
     }).then(
       ({
          newGamePlay,
+         newPlayers,
          message,
        }: {
         newGamePlay: IGamePlay;
+        newPlayers: IPlayer[];
         message: string;
       }) => {
         sendResponse(
           newGamePlay,
           gameRules,
-          players,
+          newPlayers,
           message,
           gameController,
           data.value.gameId,

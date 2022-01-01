@@ -1,22 +1,22 @@
-import { IGamePlay, IPlayer } from "../../models/game";
-import { IGameBase } from "../../../../models/game";
+import { IGamePlay, IPlayer } from '../../models/game'
+import { IGameBase } from '../../../../models/game'
 
 const startNewTurn = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {
   console.log('start new turn')
-  const currentPlayer = players[gamePlay.currentPlayerIndex];
-  currentPlayer.playerState = "waiting";
+  const currentPlayer = players[gamePlay.currentPlayerIndex]
+  currentPlayer.playerState = 'waiting'
 
-  const position = Math.min(currentPlayer.position + 1, players.length - 1)
+  const position = (currentPlayer.position + 1) % players.length
   const nextPlayerIndex = players.findIndex(player => player.position === position)
   if (nextPlayerIndex === -1) {
     throw new Error('player not found')
   }
 
-  gamePlay.currentPlayerIndex = nextPlayerIndex;
+  gamePlay.currentPlayerIndex = nextPlayerIndex
   const nextPlayer = players[nextPlayerIndex]
-  nextPlayer.playerState = "draw";
-  nextPlayer.numberOfCardsToDraw = 2;
-  nextPlayer.numberOfCardsToReplace = 0;
-};
+  nextPlayer.playerState = 'draw'
+  nextPlayer.numberOfCardsToDraw = 2
+  nextPlayer.numberOfCardsToReplace = 0
+}
 
-export default startNewTurn;
+export default startNewTurn

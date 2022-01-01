@@ -26,6 +26,7 @@ const sendResponse = (
     newMessages.forEach((message) => (message.isSent = true))
   }
 
+  console.log(gamePlay.transactionLog)
   Database.updateGame(gameId, gamePlay, players, () => {
     const messageId = uuid.v4()
     const player = players.find(player => player.playerId === playerId)

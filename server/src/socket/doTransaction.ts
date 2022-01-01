@@ -26,6 +26,7 @@ const doTransaction = (
     );
     resolve({
       newGamePlay: gamePlay,
+      newPlayers: players,
       message: message === null ? "" : JSON.stringify(message),
     });
   });

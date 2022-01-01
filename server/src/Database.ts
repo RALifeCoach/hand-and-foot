@@ -86,7 +86,8 @@ class Database {
       })
       .catch(async (err: Error) => {
         await client.end()
-        console.log(err)
+        console.log('error', err)
+        console.log('error sql', sqls[0])
       })
 
   }
@@ -98,7 +99,6 @@ class Database {
     sqls.push(`update handf.game
         set gameplay = '${JSON.stringify(gamePlay)}', gamestate = '${gamePlay.gameState}'
         where gameid = ${gameId}`)
-    sqls.push(`delete from handf.game_player where game_id = ${gameId}`)
     sqls.push(...players.map(player => (`insert into handf.game_player (
         game_id, player_id, position, team, hand, foot, player_state,
         cards_to_draw, cards_to_replace, in_hand, sort_order, player_name) values (
@@ -106,7 +106,11 @@ class Database {
         '${JSON.stringify(player.foot)}', '${player.playerState}', ${player.numberOfCardsToDraw},
         ${player.numberOfCardsToReplace}, ${player.isInHand},
         ${!!player.sortOrder ? '\'' + player.sortOrder + '\'' : 'null'}, '${player.playerName}' 
-        )`
+        ) on conflict on constraint game_player_pkey do update set hand = '${JSON.stringify(player.hand)}',
+        foot = '${JSON.stringify(player.foot)}', player_state = '${player.playerState}', 
+        cards_to_draw = ${player.numberOfCardsToDraw},
+        cards_to_replace = ${player.numberOfCardsToReplace}, in_hand = ${player.isInHand},
+        sort_order = ${!!player.sortOrder ? '\'' + player.sortOrder + '\'' : 'null'}`
     )))
     const client = new Client({
       host: 'localhost',
