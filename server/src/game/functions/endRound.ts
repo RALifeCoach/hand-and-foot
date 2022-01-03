@@ -3,6 +3,7 @@ import { IGameBase } from "../../../../models/game";
 import scoreTeam from "../utils/scoreTeam";
 import scoreCards from "../utils/scoreCards";
 import endGame from "./endGame";
+import startNewTurn from './startNewTurn'
 
 const endRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {
   console.debug('end round');
@@ -24,7 +25,10 @@ const endRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[])
   const incompleteRounds = gamePlay.rounds.filter(round => !round.played);
   if (incompleteRounds.length === 0) {
     endGame(gamePlay);
+    return
   }
+
+  startNewTurn(gamePlay, gameRules, players);
 };
 
 export default endRound;

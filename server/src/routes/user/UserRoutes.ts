@@ -96,7 +96,6 @@ const UserRoutes = () => {
       return;
     }
     const sql = `Update handf.player set password = '${req.body.newPassword}' where password = ${req.body.id}`;
-    console.log(req.body, sql)
     Database.query(sql, () => {
       res.json({ status: "success" });
     });

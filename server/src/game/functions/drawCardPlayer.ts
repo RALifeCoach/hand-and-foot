@@ -17,6 +17,14 @@ const drawCardPlayer = (
     }
   }
 
+  if (player.numberOfCardsToReplace) {
+    cards.push(...drawCards(gamePlay.pickupPiles[pileIndex], 1));
+    player.numberOfCardsToReplace--;
+    if (player.playerState === "draw" && player.numberOfCardsToReplace === 0) {
+      player.playerState = "playing";
+    }
+  }
+
   return null;
 };
 

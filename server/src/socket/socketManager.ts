@@ -54,9 +54,6 @@ const socketManager = (server: any) => {
       messageStack.push({ type: "disconnect", value: { gameId, playerId } });
     });
   });
-  wss.on('listening', (...args) => {
-    console.log('listen', args)
-  })
 };
 
 export default socketManager;

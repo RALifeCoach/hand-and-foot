@@ -69,56 +69,50 @@ export const ROUNDS: IRound[] = [
 ];
 
 export const ACTION_RESPONSE: {
-  [key: string]: { logIt: boolean; canUndo: boolean; sendToAll: boolean };
+  [key: string]: { canUndo: boolean; sendToAll: boolean };
 } = {
   addPlayer: {
-    logIt: false,
     canUndo: false,
     sendToAll: true,
   },
   setSortOrder: {
-    logIt: false,
     canUndo: false,
     sendToAll: false,
   },
   moveCard: {
-    logIt: false,
     canUndo: false,
     sendToAll: false,
   },
   setPin: {
-    logIt: false,
     canUndo: false,
     sendToAll: false,
   },
   drawCard: {
-    logIt: false,
     canUndo: false,
     sendToAll: true,
   },
   draw7: {
-    logIt: true,
     canUndo: true,
     sendToAll: false,
   },
   discardCard: {
-    logIt: true,
     canUndo: false,
     sendToAll: true,
   },
   playCards: {
-    logIt: true,
     canUndo: true,
     sendToAll: false,
   },
   disconnect: {
-    logIt: false,
     canUndo: false,
     sendToAll: true,
   },
   undo: {
-    logIt: false,
     canUndo: false,
     sendToAll: false,
+  },
+  endRound: {
+    canUndo: false,
+    sendToAll: true,
   },
 };

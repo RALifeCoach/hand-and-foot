@@ -6,7 +6,7 @@ import setSortOrder from './functions/setSortOrder'
 import moveCard from './functions/moveCard'
 import pinCard from './functions/pinCard'
 import drawCardPlayer from './functions/drawCardPlayer'
-import discardCard from './functions/discardCard'
+import discardCardCheck from './functions/discardCardCheck'
 import playCards from './functions/playCards'
 import draw7 from './functions/draw7'
 import endRoundResponse from './functions/endRoundResponse'
@@ -58,7 +58,7 @@ const socketHandler = (
         draw7(gamePlay, players, gameId, resolve)
         break
       case 'discardCard':
-        discardCard(
+        discardCardCheck(
           gameId,
           playerId,
           gamePlay,
@@ -69,7 +69,7 @@ const socketHandler = (
         )
         break
       case 'endRound':
-        resolve(endRoundResponse(gamePlay, gameRules, players, action.value))
+        endRoundResponse(gameId, gamePlay, gameRules, players, action.value.partnerAgreed, resolve)
         break
       case 'playCards':
         playCards(

@@ -23,7 +23,8 @@ const useCanPlay = (gamePlay: IGamePlay, gameBase: IGameBase, meld: IMeld | null
       if (
         gamePlay.gameState !== "inPlay" ||
         ['playing', 'draw7'].indexOf(gamePlay.currentPlayer.playerState) === -1 ||
-        gamePlay.currentPlayer.numberOfCardsToDraw > 0
+        gamePlay.currentPlayer.numberOfCardsToDraw > 0 ||
+        gamePlay.currentPlayer.numberOfCardsToReplace > 0
       ) {
         return { error: "Not at this time", meldId: null };
       }

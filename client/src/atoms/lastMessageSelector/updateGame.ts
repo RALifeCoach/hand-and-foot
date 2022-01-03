@@ -6,10 +6,11 @@ import {
   gamePlayAtom,
   sortOrderAtom,
   messagesAtom,
-  newMessagesAtom,
-} from "../game";
+  newMessagesAtom, serverQuestionAtom,
+} from '../game'
 
 const updateGame = (get: any, set: any, message: any) => {
+  set(serverQuestionAtom, null)
   const messageId = get(messageIdAtom);
   if (message.messageId === messageId) {
     return;

@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import { useEffect, useState } from 'react'
 import {gameIdAtom} from '../atoms/game'
 import {useRecoilState} from 'recoil'
 import QueryString from 'query-string'
@@ -12,7 +12,7 @@ const useTestSetup = () => {
   const [fetchGame, {loading: gameLoading}] = useLazyQuery(FETCH_GAME)
   const queryParams = QueryString.parse(window.location.search)
   const isTest = queryParams.test === 'true'
-  const players = parseInt((queryParams.players as string) ?? '4')
+  const [players, setPlayers] = useState(parseInt((queryParams.players as string) ?? '4'))
   const truncate = queryParams.truncate || 'no'
   const pGameId = queryParams.gameId
   const doTruncate = isTest && truncate === 'yes'
@@ -32,7 +32,9 @@ const useTestSetup = () => {
   useEffect(() => {
     if (doFetchGame) {
       fetchGame({variables: {id: pGameId}})
-        .then(() => {
+        .then((data) => {
+          console.log(data.data.handf_game[0])
+          setPlayers(data.data.handf_game[0].gamerules.numberOfPlayers)
           setGameId(parseInt(pGameId as string))
         })
         .catch(err => console.log(err))

@@ -1,12 +1,10 @@
 declare module 'Game' {
-  export type IPlayerState = 'playing' | 'waiting' | 'draw' | 'draw7';
-  export type IPosition = 0 | 1 | 2 | 3;
-
   export interface IPlayerCurrent {
     playerId: number;
     playerName: string;
     playerState: IPlayerState;
     numberOfCardsToDraw: number;
+    numberOfCardsToReplace: number;
     cards: ICard[];
     isPlayerTurn: boolean;
     isInHand: boolean;
@@ -38,7 +36,6 @@ declare module 'Game' {
     teamId: string;
   }
 
-
   export interface IPlayerDb {
     playerId: number;
     playerName: string;
@@ -51,20 +48,6 @@ declare module 'Game' {
     gamestate: IGameState;
     gameplay: { [playerId: string]: IPlayerDb }
     gamerules: IGameBase
-  }
-
-  export interface IGameRow {
-    gameid?: number;
-    gamename: string;
-    gamestate: IGameState;
-    gameplay: IGamePlay;
-    canPickupWithWild?: boolean;
-    canLockDiscards?: boolean;
-    canOverFillMeld?: boolean;
-    redThreeScore?: number;
-    wildCardMeldScore?: number;
-    canDraw7?: boolean;
-    players?: { [position: string]: { name: string; playerId: number } };
   }
 
   export interface IGamesPlayer {

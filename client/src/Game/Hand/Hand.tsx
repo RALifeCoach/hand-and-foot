@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PlayingCard from '../PlayingCard/PlayingCard';
 import { ICard } from "../../../../models/game";
 import SortButtons from './SortButtons';

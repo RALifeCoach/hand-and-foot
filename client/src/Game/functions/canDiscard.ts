@@ -10,7 +10,8 @@ const canDiscard = (gamePlay: IGamePlay, gameBase: IGameBase, card: ICard) => {
   if (
     gamePlay.gameState !== 'inPlay' ||
     !gamePlay.currentPlayer.isPlayerTurn ||
-    gamePlay.currentPlayer.numberOfCardsToDraw
+    gamePlay.currentPlayer.numberOfCardsToDraw ||
+    gamePlay.currentPlayer.numberOfCardsToReplace
   ) {
     return 'It\'s not time to discard'
   }

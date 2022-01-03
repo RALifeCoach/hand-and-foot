@@ -25,7 +25,7 @@ const Meld = ({ meld, gamePlay, gameBase, isCurrentPlayer, selectedCards }: IPro
     return (
       <>
         {cards.map((card, cardIndex) => (
-          <span>
+          <span key={card.cardId}>
             {card.suit === 'J' ? '' : card.rank}
             <span style={{ color: SUIT_IMAGES[card.suit].color }}>
               {SUIT_IMAGES[card.suit].image}

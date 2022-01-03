@@ -49,7 +49,7 @@ const DiscardPile = () => {
   }
   return (
     <>
-      <div style={{ position: 'relative', zIndex: 500 }} >
+      <div style={{ position: 'relative', zIndex: 40 }} >
         <PlayingCard
           card={displayCard()}
           left={0}

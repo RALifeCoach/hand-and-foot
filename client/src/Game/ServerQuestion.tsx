@@ -1,74 +1,60 @@
 import React from 'react'
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
-  Typography
 } from '@mui/material'
 import FlexColumn from '../shared/flex-grid/FlexColumn'
-import FlexRow from '../shared/flex-grid/FlexRow'
 import Spacer from '../shared/Spacer'
 import useSendMessage from './hooks/useSendMessage'
-import {IServerQuestion, IServerQuestionButton} from '../../../models/game'
+import { IServerQuestion, IServerQuestionButton } from '../../../models/game'
 
 interface IProps {
   serverQuestion: IServerQuestion;
 }
 
-const ServerQuestion = ({serverQuestion}: IProps) => {
+const ServerQuestion = ({ serverQuestion }: IProps) => {
   const sendMessage = useSendMessage()
 
   const handleClick = (button: IServerQuestionButton) => () => {
-    sendMessage(button.sendType, button.sendValue)
+    sendMessage(button.sendType, { partnerAgreed: button.sendValue })
   }
 
-  const width = 350
-  const height = 600
   return (
     <>
-      <Dialog
-        open={true}
-        disableEscapeKeyDown
-        PaperProps={{
-          style: {
-            width,
-            height,
-            maxWidth: width,
-            maxHeight: height,
-            minWidth: width,
-            minHeight: height,
-          },
-        }}
-      >
-        <DialogTitle>
-          <Typography variant="h2">
-            {serverQuestion.title}
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <FlexColumn>
-            <Divider style={{width: '100%'}}/>
-            <div>{serverQuestion.message}</div>
-          </FlexColumn>
-        </DialogContent>
-        <DialogActions>
-          <FlexRow justify="flex-end">
-            {serverQuestion.buttons.map((button: any, index: number) => (
-              <div key={index}>
-                <Button
-                  onClick={handleClick(button)}
-                >
-                  {button.text}
-                </Button>
-                <Spacer/>
-              </div>
-            ))}
-          </FlexRow>
-        </DialogActions>
-      </Dialog>
+      <div className="absolute inset-0 w-full h-full bg-gray-300 opacity-80 z-50 flex justify-center items-center">
+        <div className="bg-white w-1/3 h-1/2 opacity-100">
+          <DialogTitle>
+            <div className="text-2xl font-bold text-black">
+              {serverQuestion.title}
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            <FlexColumn>
+              <Divider style={{ width: '100%' }}/>
+              <div>{serverQuestion.message}</div>
+            </FlexColumn>
+          </DialogContent>
+          <DialogActions>
+            <div className="flex justify-end  gap-4">
+              {serverQuestion.buttons.map((button: any, index: number) => (
+                <div key={index}>
+                  <Button
+                    onClick={handleClick(button)}
+                    variant="outlined"
+                    color={button.color}
+                  >
+                    {button.text}
+                  </Button>
+                  <Spacer/>
+                </div>
+              ))}
+            </div>
+          </DialogActions>
+        </div>
+      </div>
     </>
   )
 }

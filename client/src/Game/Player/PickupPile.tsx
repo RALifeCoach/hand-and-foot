@@ -22,7 +22,8 @@ const PickupPile = ({ pileIndex }: IProps) => {
       setError("It isn't your turn");
       return;
     }
-    if (gamePlay.currentPlayer.numberOfCardsToDraw === 0) {
+    const count = gamePlay.currentPlayer.numberOfCardsToDraw + gamePlay.currentPlayer.numberOfCardsToReplace
+    if (count === 0) {
       setError("It isn't time to draw cards");
       return;
     }
@@ -33,7 +34,7 @@ const PickupPile = ({ pileIndex }: IProps) => {
 
   return (
     <>
-      <div style={{ position: 'relative', zIndex: 500 }} >
+      <div style={{ position: 'relative', zIndex: 40 }} >
         <PlayingCard
           card={{
             cardText: (
@@ -47,6 +48,7 @@ const PickupPile = ({ pileIndex }: IProps) => {
           onSelect={handleClick}
         />
       </div>
+
       <SnackAlert
         open={Boolean(error)}
         text={error}

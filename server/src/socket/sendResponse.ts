@@ -1,11 +1,12 @@
-import {IGamePlay, IPlayer} from '../models/game'
-import { IGameBase, IMessage, ITeam } from "../../../models/game";
+import { IGamePlay, IPlayer } from '../models/game'
+import { IGameBase, IMessage, ITeam } from '../../../models/game'
 import Database from '../Database'
-import {ACTION_RESPONSE} from '../../constants'
+import { ACTION_RESPONSE } from '../../constants'
 import buildPlayerInfo from '../game/utils/buildPlayerInfo'
-import {IGameController} from './socketManager'
+import { IGameController } from './socketManager'
 import * as uuid from 'uuid'
 import logger from '../util/logger'
+import sendQuestion from './sendQuestion'
 
 const sendResponse = (
   gamePlay: IGamePlay,
@@ -18,7 +19,9 @@ const sendResponse = (
   transactionType: string
 ) => {
   const messages: IMessage[] = []
+  console.log(1)
   if (ACTION_RESPONSE[transactionType].sendToAll) {
+    console.log(2)
     const newMessages = gamePlay.messages.filter(
       (message) => transactionType === 'addPlayer' || !message.isSent
     )
@@ -26,74 +29,21 @@ const sendResponse = (
     newMessages.forEach((message) => (message.isSent = true))
   }
 
-  console.log(gamePlay.transactionLog)
+  console.log(3, gamePlay.gameState)
   Database.updateGame(gameId, gamePlay, players, () => {
+    console.log(4)
     const messageId = uuid.v4()
-    const player = players.find(player => player.playerId === playerId)
-    if (!player) {
-      throw new Error('player not found')
+    const currentPlayer = players.find(player => player.playerId === playerId)
+    if (!currentPlayer) {
+      throw new Error('current player not found')
     }
-    if (gamePlay.gameState === 'askRoundEnd') {
-      try {
-        const team = gamePlay.teams[player.teamId];
-        players.forEach((player) => {
-          const playerTeam = gamePlay.teams[player.teamId]
-          const otherTeam = Object.values(gamePlay.teams).find(
-            (team: ITeam) => team.teamId !== player.teamId
-          )
-          const message = `${player.playerName} has asked to end this round. If ended ${playerTeam.teamId} will
-                score ${playerTeam.scoreBase} base points and ${otherTeam} will score ${otherTeam?.scoreBase}
-                base points.`
-          const buttons =
-            player.playerId === playerId || player.teamId === team.teamId
-              ? []
-              : [
-                {
-                  text: 'End Round',
-                  sendType: 'endRound',
-                  sendValue: true,
-                },
-                {
-                  text: 'End Round',
-                  sendType: 'endRound',
-                  sendValue: false,
-                },
-              ]
-          if (gameController[gameId].players[player.playerId]) {
-            gameController[gameId].players[player.playerId].send(message)
-          }
-        })
-      } catch (ex) {
-        logger.error(
-          `sendResponse: failed to send response ${JSON.stringify(ex)}`
-        )
-      }
-      return
+    const activePlayer = players[gamePlay.currentPlayerIndex]
+    if (!activePlayer) {
+      throw new Error('active player not found')
     }
-    if (gamePlay.gameState === 'finished') {
-      try {
-        // find the winning team(s)
-        const maxScore = Math.max(...Object.values(gamePlay.teams).
-          map(team => team.scoreBase + team.scoreCards))
-        const winners = Object.values(gamePlay.teams)
-          .filter(team => (team.scoreCards + team.scoreBase) === maxScore);
-        players.forEach((player) => {
-          const playerTeam = gamePlay.teams[player.teamId]
-          const message = (playerTeam.scoreCards + playerTeam.scoreBase) === maxScore
-            ? `Congratulations your team ${winners.length > 1 ? 'tied' : 'won'} with a score of ${maxScore}`
-            : `Sorry your team lost with a score of ${playerTeam.scoreCards + playerTeam.scoreBase}`
-          if (gameController[gameId].players[player.playerId]) {
-            gameController[gameId].players[player.playerId].send(message)
-          }
-        })
-      } catch (ex) {
-        logger.error(
-          `sendResponse: failed to send response ${JSON.stringify(ex)}`
-        )
-      }
-      return
-    }
+    console.log(5)
     if (ACTION_RESPONSE[transactionType].sendToAll) {
+      console.log(6)
       try {
         players.forEach((player) => {
           const playerInfo =
@@ -115,11 +65,17 @@ const sendResponse = (
             gameController[gameId].players[player.playerId].send(playerInfo)
           }
         })
-      } catch (ex) {
+      }
+      catch (ex) {
         logger.error(
           `sendResponse: failed to send response ${JSON.stringify(ex)}`
         )
       }
+      sendQuestion(gameId,
+        gamePlay,
+        players,
+        activePlayer,
+        gameController)
       return
     }
     const playerInfo =
@@ -137,7 +93,6 @@ const sendResponse = (
           false
         ),
       })
-    console.log(playerInfo)
     gameController[gameId].players[playerId].send(playerInfo)
   })
 }

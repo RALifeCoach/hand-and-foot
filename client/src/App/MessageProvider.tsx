@@ -22,7 +22,6 @@ const MessageProvider: React.FC<any> = ({children}) => {
   const setLastMessage = useSetRecoilState(lastMessageSelector)
 
   useEffect(() => {
-    console.log('ws')
     const client = new ReconnectingWebsocket('ws://localhost:3100', )
     setWss(client)
   }, [])
