@@ -2,9 +2,20 @@ import { IGamePlay, IPlayer } from '../models/game'
 import Database from '../Database'
 import logger from '../util/logger'
 
-const undoTransaction = (gamePlay: IGamePlay, players: IPlayer[], resolve: any) => {
+const undoTransaction = (gamePlay: IGamePlay, players: IPlayer[], override: boolean, resolve: any) => {
+  if (!gamePlay.transactionLog.length) {
+    resolve({
+      newGamePlay: gamePlay,
+      newPlayers: players,
+      message: JSON.stringify({
+        type: 'cannotUndo',
+        value: '',
+      }),
+    })
+    return
+  }
   const undo = gamePlay.transactionLog[0]
-  if (undo?.canUndo) {
+  if (undo.canUndo || override) {
     const undoSql = `select * from handf.game_log where LogId = '${undo.logId}'`
     Database.query(undoSql, (games: any) => {
       if (games.length !== 1) {

@@ -3,10 +3,11 @@ import { IGameBase } from "../../../../models/game";
 import logGameState from "../../socket/logGameState";
 import canGoDown from "../utils/canGoDown";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";
+import getCurrentPlayer from './getCurrentPlayer'
 
 const completeDraw7 = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[], gameId: number) => {
   console.debug('complete draw 7');
-  const player = players[gamePlay.currentPlayerIndex];
+  const player = getCurrentPlayer(gamePlay, players)
   const team = gamePlay.teams[player.teamId];
   const points = computeTeamCardPoints(gameRules, team);
 

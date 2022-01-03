@@ -4,6 +4,7 @@ import scoreTeam from "../utils/scoreTeam";
 import scoreCards from "../utils/scoreCards";
 import endGame from "./endGame";
 import startNewTurn from './startNewTurn'
+import startNewRound from './startNewRound'
 
 const endRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {
   console.debug('end round');
@@ -28,7 +29,7 @@ const endRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[])
     return
   }
 
-  startNewTurn(gamePlay, gameRules, players);
+  startNewRound(gamePlay, gameRules, players)
 };
 
 export default endRound;

@@ -3,6 +3,7 @@ import { IGameBase, ITeam } from '../../../../models/game'
 import computeTeamCardPoints from '../utils/computeTeamCardPoints'
 import canGoDown from '../utils/canGoDown'
 import discardCardDo from './discardCardDo'
+import getCurrentPlayer from './getCurrentPlayer'
 
 const discardCardCheck = (
   gameId: number,
@@ -13,7 +14,7 @@ const discardCardCheck = (
   toDiscardId: number,
   resolve: any
 ) => {
-  const player = players[gamePlay.currentPlayerIndex]
+  const player = getCurrentPlayer(gamePlay, players)
   if (playerId !== player.playerId) {
     resolve(null)
   }

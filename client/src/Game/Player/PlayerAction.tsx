@@ -66,7 +66,9 @@ const PlayerAction = ({ gamePlay }: IProps) => {
           variant="contained"
           color="primary"
           style={{ maxWidth: 60, maxHeight: 60, minWidth: 60, minHeight: 60, marginTop: 24, marginLeft: 8 }}
-          onClick={() => sendMessage('undo', {})}
+          onClick={(ev) => {
+            sendMessage('undo', ev.shiftKey)
+          }}
         >
           <div style={{ fontSize: 18 }}>Undo</div>
         </Button>
@@ -80,6 +82,11 @@ const PlayerAction = ({ gamePlay }: IProps) => {
         variant="contained"
         color="primary"
         style={{ maxWidth: 60, maxHeight: 60, minWidth: 60, minHeight: 60, marginTop: 24, marginLeft: 8 }}
+        onClick={(ev) => {
+          if (ev.shiftKey) {
+            sendMessage('undo', ev.shiftKey)
+          }
+        }}
       >
         <div style={{ fontSize: 18 }}>Wait</div>
       </Button>

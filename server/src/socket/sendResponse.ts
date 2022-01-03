@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from '../models/game'
-import { IGameBase, IMessage, ITeam } from '../../../models/game'
+import { IGameBase, IMessage } from '../../../models/game'
 import Database from '../Database'
 import { ACTION_RESPONSE } from '../../constants'
 import buildPlayerInfo from '../game/utils/buildPlayerInfo'
@@ -19,9 +19,7 @@ const sendResponse = (
   transactionType: string
 ) => {
   const messages: IMessage[] = []
-  console.log(1)
   if (ACTION_RESPONSE[transactionType].sendToAll) {
-    console.log(2)
     const newMessages = gamePlay.messages.filter(
       (message) => transactionType === 'addPlayer' || !message.isSent
     )
@@ -29,21 +27,14 @@ const sendResponse = (
     newMessages.forEach((message) => (message.isSent = true))
   }
 
-  console.log(3, gamePlay.gameState)
   Database.updateGame(gameId, gamePlay, players, () => {
-    console.log(4)
     const messageId = uuid.v4()
     const currentPlayer = players.find(player => player.playerId === playerId)
     if (!currentPlayer) {
       throw new Error('current player not found')
     }
-    const activePlayer = players[gamePlay.currentPlayerIndex]
-    if (!activePlayer) {
-      throw new Error('active player not found')
-    }
-    console.log(5)
+    const activePlayer = players.find(player => player.playerId === gamePlay.currentPlayerId)
     if (ACTION_RESPONSE[transactionType].sendToAll) {
-      console.log(6)
       try {
         players.forEach((player) => {
           const playerInfo =
@@ -71,11 +62,13 @@ const sendResponse = (
           `sendResponse: failed to send response ${JSON.stringify(ex)}`
         )
       }
-      sendQuestion(gameId,
-        gamePlay,
-        players,
-        activePlayer,
-        gameController)
+      if (activePlayer) {
+        sendQuestion(gameId,
+          gamePlay,
+          players,
+          activePlayer,
+          gameController)
+      }
       return
     }
     const playerInfo =

@@ -25,7 +25,9 @@ const startPlaying = (
   if (currentPlayerIndex >= gameRules.numberOfPlayers) {
     currentPlayerIndex = 0;
   }
-  gamePlay.currentPlayerIndex = currentPlayerIndex
+  const player = players[currentPlayerIndex]
+  gamePlay.currentPlayerId = player.playerId
+  gamePlay.roundStartPlayerId = player.playerId
   gamePlay.gameState = "inPlay";
   startNewRound(gamePlay, gameRules, players);
 };

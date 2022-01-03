@@ -28,7 +28,7 @@ const processMessages = (
 
     new Promise<{ newGamePlay: IGamePlay; newPlayers: IPlayer[]; message: string }>((resolve) => {
       if (data.type === 'undo') {
-        undoTransaction(gamePlay, players, resolve)
+        undoTransaction(gamePlay, players, data.value, resolve)
       } else {
         doTransaction(
           gamePlay,

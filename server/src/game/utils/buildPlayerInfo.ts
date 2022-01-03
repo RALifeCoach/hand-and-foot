@@ -4,6 +4,7 @@ import {
   IGameBase
 } from '../../../../models/game'
 import isWildCard from './isWildCard'
+import getCurrentPlayer from '../functions/getCurrentPlayer'
 
 const buildPlayerInfo = (
   gamePlay: IGamePlay,
@@ -14,7 +15,7 @@ const buildPlayerInfo = (
   messages: IMessage[],
   isCurrentPlayer: boolean,
 ): IPlayerInfo => {
-  const activePlayer = players[gamePlay.currentPlayerIndex]
+  const activePlayer = getCurrentPlayer(gamePlay, players)
   if (!activePlayer) {
     throw new Error('active player not found')
   }

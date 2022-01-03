@@ -63,7 +63,8 @@ export interface IGamePlay {
   };
   gameState: IGameState;
   currentRound: number;
-  currentPlayerIndex: number;
+  currentPlayerId: number;
+  roundStartPlayerId: number;
   rounds: IRound[];
   transactionLog: ILogEntry[];
   messages: IMessage[];

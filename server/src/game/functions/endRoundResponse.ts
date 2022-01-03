@@ -1,7 +1,8 @@
 import {IGamePlay, IPlayer} from '../../models/game'
 import { IGameBase, ITeam } from '../../../../models/game'
-import discardCardDo from './discardCardDo'
 import computeTeamCardPoints from '../utils/computeTeamCardPoints'
+import getCurrentPlayer from './getCurrentPlayer'
+import discardCardDo from './discardCardDo'
 
 const endRoundResponse = (
   gameId: number,
@@ -18,7 +19,7 @@ const endRoundResponse = (
     resolve(null)
     return
   }
-  const player = players[gamePlay.currentPlayerIndex];
+  const player = getCurrentPlayer(gamePlay, players)
   const team: ITeam = gamePlay.teams[player.teamId]
   const points = computeTeamCardPoints(gameRules, team)
 

@@ -15,6 +15,7 @@ import rePinCards from './rePinCards'
 import startNewTurn from './startNewTurn'
 import endTurn from './endTurn'
 import logger from '../../util/logger'
+import getCurrentPlayer from './getCurrentPlayer'
 
 const playCards = (
   gameId: number,
@@ -28,7 +29,7 @@ const playCards = (
   resolve: any
 ) => {
   logger.debug('play cards')
-  const player = players[gamePlay.currentPlayerIndex]
+  const player = getCurrentPlayer(gamePlay, players)
 
   const team = gamePlay.teams[player.teamId]
   if (!team) {

@@ -35,10 +35,10 @@ const mapCards = (cards: ICard[]) => {
         mapping.suits[card.suit] = 0;
       }
       mapping.suits[card.suit] += 1;
-      if (!mapping.ranks[card.rank]) {
-        mapping.ranks[card.rank] = 0;
+      if (!mapping.ranks[card.rank ?? 0]) {
+        mapping.ranks[card.rank ?? 0] = 0;
       }
-      mapping.ranks[card.rank] += 1;
+      mapping.ranks[card.rank ?? 0] += 1;
       return mapping;
     },
     { others: {}, suits: {}, ranks: {} } as ICardMapping
