@@ -43,6 +43,7 @@ const useCanPlay = (gamePlay: IGamePlay, gameBase: IGameBase, meld: IMeld | null
 
       const existingMelds = canPlayFindExistingMelds(
         gamePlay,
+        gameBase,
         meld,
         cards,
         mapping

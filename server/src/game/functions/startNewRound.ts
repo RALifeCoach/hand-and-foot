@@ -1,6 +1,5 @@
 import { IGamePlay, IPlayer } from '../../models/game'
 import { IGameBase } from '../../../../models/game'
-import startNewTurn from './startNewTurn'
 import drawCards from '../utils/drawCards'
 import dealCards from './dealCards'
 import getNextPlayer from './getNextPlayer'
@@ -37,6 +36,7 @@ const startNewRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlay
     team.scoreCards = 0
   })
   gamePlay.pickupPiles = [[], [], [], []]
+  gamePlay.discard = []
   do {
     const pileIndex = Math.min(Math.floor(Math.random() * 4), 3)
     gamePlay.pickupPiles[pileIndex].push(...drawCards(gamePlay.deck, 1))

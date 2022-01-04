@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import PlayingCard from '../PlayingCard/PlayingCard';
-import { ICard } from "../../../../models/game";
-import SortButtons from './SortButtons';
-import useSelectedCards from '../hooks/useSelectedCards';
-import useSendMessage from '../hooks/useSendMessage';
-import {useRecoilState} from 'recoil'
-import {cardMovingAtom, selectedAtom} from '../../atoms/game'
+import React, { useState } from 'react'
+import PlayingCard from '../PlayingCard/PlayingCard'
+import { ICard } from '../../../../models/game'
+import SortButtons from './SortButtons'
+import useSelectedCards from '../hooks/useSelectedCards'
+import useSendMessage from '../hooks/useSendMessage'
+import { useRecoilState } from 'recoil'
+import { cardMovingAtom, selectedAtom } from '../../atoms/game'
 
 const DEFAULTS = {
   offset: 20,
   sortColor: 'grey'
-};
+}
 
 interface IProps {
   options: any;
@@ -23,17 +23,17 @@ interface IProps {
 const Hand = ({ options, cards }: IProps) => {
   const [cardMoving, setCardMoving] = useRecoilState(cardMovingAtom)
   const [selected, setSelected] = useRecoilState(selectedAtom)
-  const [magicCard, setMagicCard] = useState(0);
-  const config = Object.assign({}, DEFAULTS, options);
-  const sendMessage = useSendMessage();
+  const [magicCard, setMagicCard] = useState(0)
+  const config = Object.assign({}, DEFAULTS, options)
+  const sendMessage = useSendMessage()
 
-  const countSelectedCards = useSelectedCards(cards).length;
-  const showIcons = countSelectedCards === 1;
-  const movable = showIcons && !cardMoving;
+  const countSelectedCards = useSelectedCards(cards).length
+  const showIcons = countSelectedCards === 1
+  const movable = showIcons && !cardMoving
 
   return (
     <div className="flex">
-      <SortButtons />
+      <SortButtons/>
       <div className="flex">
         <div
           style={{ overflowX: 'auto', overflowY: 'hidden', maxWidth: '100%' }}
@@ -49,11 +49,14 @@ const Hand = ({ options, cards }: IProps) => {
               return (
                 <PlayingCard
                   card={card}
-                  selected={isSelected}
+                  selected={isSelected || card.isFromPile}
                   left={cardIndex * config.offset + (cardMoving && cardIndex >= magicCard ? config.offset : 0)}
                   onSelect={() => {
+                    if (card.isFromPile) {
+                      return
+                    }
                     if (!cardMoving) {
-                      const newSelected = {...selected}
+                      const newSelected = { ...selected }
                       if (isSelected) {
                         delete newSelected[card.cardId]
                       } else {
@@ -64,16 +67,16 @@ const Hand = ({ options, cards }: IProps) => {
                     }
                     if (!!cardMoving) {
                       const destCardId = cards[magicCard]
-                      sendMessage('moveCard', {movingCardId: cardMoving.cardId, destCardId: destCardId.cardId})
+                      sendMessage('moveCard', { movingCardId: cardMoving.cardId, destCardId: destCardId.cardId })
                     }
                   }}
                   onPinned={movable ? () => sendMessage('setPin', { cardId: card.cardId }) : undefined}
                   onMoved={movable ? () => {
                     setCardMoving(card)
-                    setMagicCard(cardIndex);
+                    setMagicCard(cardIndex)
                   } : undefined}
                   onMouseEnter={!!cardMoving ? () => {
-                    setMagicCard(cardIndex);
+                    setMagicCard(cardIndex)
                   } : undefined}
                   key={card.cardId}
                   top={10}
@@ -86,7 +89,7 @@ const Hand = ({ options, cards }: IProps) => {
                 left={cards.length * config.offset + (cardMoving ? config.offset : 0)}
                 onSelect={() => setSelected({})}
                 onMouseEnter={Boolean(cardMoving) ? () => {
-                  setMagicCard(cards.length);
+                  setMagicCard(cards.length)
                 } : undefined}
                 top={18}
               />
@@ -95,7 +98,7 @@ const Hand = ({ options, cards }: IProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Hand;
+export default Hand

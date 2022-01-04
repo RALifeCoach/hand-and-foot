@@ -47,11 +47,6 @@ export const errorAtom = atom<string>({
   default: '',
 })
 
-export const messagesSeenAtom = atom<IMessage[] | null>({
-  key: 'messagesSeen',
-  default: [],
-})
-
 export const messagesAtom = atom<IMessage[]>({
   key: 'messages',
   default: [],

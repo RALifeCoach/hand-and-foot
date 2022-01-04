@@ -36,6 +36,7 @@ const canDiscard = (gamePlay: IGamePlay, gameBase: IGameBase, card: ICard) => {
   const mapping = mapCards([toDiscard])
   const existingMelds: IMeld[] = canPlayFindExistingMelds(
     gamePlay,
+    gameBase,
     null,
     [toDiscard],
     mapping

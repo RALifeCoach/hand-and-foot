@@ -5,10 +5,10 @@ import Notifications from "./Notifications";
 import ApplicationBarMenu from './ApplicationBarMenu';
 
 interface IProps {
-  notifications: boolean;
+  notifications?: boolean;
 }
 
-const ApplicationBar = ({ notifications }: IProps) => {
+const ApplicationBar = ({ notifications = false }: IProps) => {
   return (
     <AppBar position="static" style={{ width: '100%' }}>
       <Toolbar style={{ width: '100%' }}>

@@ -5,18 +5,17 @@ import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsAc
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FlexColumn from '../shared/flex-grid/FlexColumn';
 import FlexRow from '../shared/flex-grid/FlexRow';
-import {useRecoilValue, useSetRecoilState} from 'recoil'
-import {messagesAtom, messagesSeenAtom, newMessagesAtom} from '../atoms/game'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import {messagesAtom, newMessagesAtom} from '../atoms/game'
 
 const Notifications = () => {
-  const newMessages = useRecoilValue(newMessagesAtom)
+  const [newMessages, setNewMessages] = useRecoilState(newMessagesAtom)
   const messages = useRecoilValue(messagesAtom)
-  const setMessagesSeen = useSetRecoilState(messagesSeenAtom)
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleClose = useCallback(() => {
     setDrawerOpen(false);
-    setMessagesSeen(null)
-  }, [setMessagesSeen]);
+    setNewMessages(false)
+  }, [setNewMessages]);
   return (
     <div>
       <IconButton
