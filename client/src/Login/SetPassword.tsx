@@ -32,7 +32,7 @@ const SetPassword = ({id}: IProps) => {
   const {new1Password, new1Error, new2Password, new2Error} = state
 
   useEffect(() => {
-    localStorage.removeItem('handf:user')
+    sessionStorage.removeItem('handf:user')
   }, [])
 
   useEffect(() => {

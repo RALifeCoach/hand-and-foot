@@ -2,13 +2,14 @@ import React, { memo } from 'react';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import { IconButton, Tooltip } from '@mui/material';
 import styled from '@emotion/styled'
+import { IGamesPlayer } from 'Game'
 
 const BiggerTooltip = styled(Tooltip)`
   font-size: 16px
 `
 
 interface IProps {
-  player: any;
+  player: IGamesPlayer;
   top: number;
   left: number;
   isPlayerPresent: boolean;
@@ -18,7 +19,7 @@ interface IProps {
 
 const SitButton = ({ top, left, player, isPlayerPresent, isCurrentUser, handleSit }: IProps) => {
   const title = player
-    ? `Seat currently being played by ${player.name}`
+    ? `Seat currently being played by ${player.playerName}`
     : 'Empty seat';
 
   const color = isPlayerPresent
@@ -46,7 +47,7 @@ const SitButton = ({ top, left, player, isPlayerPresent, isCurrentUser, handleSi
           />
           {!!player && (
             <div style={{ position: 'relative', left: -38, color: '#00F', maxWidth: 40 }}>
-              {player.name}
+              {player.playerName}
             </div>
           )}
         </>

@@ -23,7 +23,7 @@
         "connect-api-mocker": "^1.10.0",
         "eslint-webpack-plugin": "^3.1.1",
         "graphql": "^16.2.0",
-        "http-proxy-middleware": "0.19.1",
+        "http-proxy-middleware": "^2.0.1",
         "query-string": "^6.12.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
@@ -43,7 +43,7 @@
         "eject": "react-scripts eject",
         "watch": "npm-watch"
     },
-    "proxy": "http://localhost:3100",
+    "proxy": "http://localhost:3200",
     "watch": {
         "build": {
             "patterns": [

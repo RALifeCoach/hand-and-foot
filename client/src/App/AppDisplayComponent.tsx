@@ -14,11 +14,11 @@ function AppDisplayComponent() {
     return null;
   }
   if (menu) {
-    localStorage.setItem('main.menu', menu);
+    sessionStorage.setItem('main.menu', menu);
   }
 
   const initializeState = ({set}: MutableSnapshot) => {
-    set(playerIdAtom, user.userId)
+    set(playerIdAtom, user.id)
   }
 
   const menus: string[] = menu.split(':');

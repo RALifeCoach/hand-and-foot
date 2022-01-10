@@ -7,6 +7,7 @@ query MyQuery($id: Int) {
     gameid
     gamename
     gamerules
+    gamestate
   }
 }
 `
@@ -24,6 +25,11 @@ query MyQuery($states: [String!]) {
     gamename
     gamestate
     numberOfPlayers: gamerules(path: "$.numberOfPlayers")
+    game_players {
+      player_id
+      player_name
+      position
+    }
   }
 }
 `
@@ -35,6 +41,11 @@ query MyQuery {
     gamename
     gamestate
     numberOfPlayers: gamerules(path: "$.numberOfPlayers")
+    game_players {
+      player_id
+      player_name
+      position
+    }
   }
 }
 `
@@ -78,7 +89,7 @@ mutation update_game($id: Int, $name: String!, $rules: json) {
 `
 
 export const CREATE_GAME = gql`
-mutation create_game($name: String!, $play: json, $rules: json) {
+mutation create_game($name: String!, $play: json, $rules: json, $state: String) {
   insert_handf_game(objects: {gamename: $name, gameplay: $play, gamerules: $rules, gamestate: $state}) {
     affected_rows
   }

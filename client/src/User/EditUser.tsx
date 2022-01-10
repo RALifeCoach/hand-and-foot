@@ -42,7 +42,7 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
     roleError: '',
   });
 
-  const { userId, userEmail, emailError, userName, nameError, role, roleError } = state;
+  const { id, userEmail, emailError, userName, nameError, role, roleError } = state;
 
   useEffect(() => {
     if (!userEmail) {
@@ -63,7 +63,7 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
 
   const [status, performUpdate] = useFetchSave();
   const handleUpdate = useCallback((state) => {
-    const { userId, userEmail, emailError, userName, nameError, role, roleError } = state;
+    const { id, userEmail, emailError, userName, nameError, role, roleError } = state;
     if (emailError || nameError || roleError) {
       return;
     }
@@ -72,8 +72,8 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
       userName,
       role,
     } as any;
-    if (userId) {
-      body.userId = userId;;
+    if (id) {
+      body.userId = id;;
     } else {
       body.password = uuidV4().toString();
       alert(`For initial login use url: ${window.location.origin}/?id=${body.password}`);
@@ -109,7 +109,7 @@ const EditUser = ({ user, open, onClose, refreshUsers }: IProps) => {
       >
         <DialogTitle>
           <Typography variant="h2">
-            {Boolean(userId) ? 'Edit User' : 'Add User'}
+            {Boolean(id) ? 'Edit User' : 'Add User'}
           </Typography>
         </DialogTitle>
         <DialogContent>

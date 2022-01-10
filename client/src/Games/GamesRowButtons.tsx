@@ -27,6 +27,10 @@ const GamesRowButtons = ({ game }: IProps) => {
     performDelete(body, 'api/game/delete');
   }, [game, performDelete]);
 
+  const onClose = useCallback(() => {
+    setOpenEdit(false)
+  }, [])
+
   return (
     <>
       <TableCell>
@@ -78,7 +82,7 @@ const GamesRowButtons = ({ game }: IProps) => {
         <EditGame
           game={game}
           open={openEdit}
-          onClose={() => setOpenEdit(false)}
+          onClose={onClose}
         />
       )}
       <UpdateHandling status={deleteStatus} title="Deleting game" />

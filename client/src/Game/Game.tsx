@@ -16,30 +16,36 @@ import { useQuery } from '@apollo/client'
 import { FETCH_GAME } from '../queries/game'
 
 interface IProps {
+  gameId?: number;
   position?: number;
   teamId?: string;
 }
 
 
-const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
-  const params = useParams<{ position: string, team: string }>()
+const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps): JSX.Element => {
+  const params = useParams<{ gameId: string, position: string, team: string }>()
+  const gameIdParam = pGameId ?? parseInt(params.gameId ?? '0')
   const position = positionP ?? parseInt(params.position ?? '0')
-  const teamId = teamIdP ?? parseInt(params.team ?? '0')
-  const gameId = useRecoilValue(gameIdAtom)
+  const teamId = teamIdP ?? params.team ?? ''
+  const [gameId, setGameId] = useRecoilState(gameIdAtom)
   const sendMessage = useSendMessage()
   const [gameBase, setGameBase] = useRecoilState(gameBaseAtom)
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
   const navigate = useNavigate()
   const { loading: gameLoading, error, data: gameData } = useQuery(FETCH_GAME, {
+    skip: !gameId,
     variables: { id: gameId }
   })
 
-  if (!!error) {
-    console.log(error)
-  }
   useEffect(() => {
-    if (!gameLoading && !error && gameData.handf_game.length) {
+    if (gameIdParam) {
+      setGameId(gameIdParam)
+    }
+  }, [gameIdParam, setGameId])
+
+  useEffect(() => {
+    if (!gameLoading && !error && gameData?.handf_game?.length) {
       if (gameData.gamestate === 'finished') {
         return navigate('/games')
       }
@@ -48,8 +54,14 @@ const Game = ({ position: positionP, teamId: teamIdP }: IProps) => {
     }
   }, [gameLoading, sendMessage, position, teamId, setGameBase, navigate, gameData, error])
 
+  if (!!error) {
+    console.log(error)
+    return <div />
+  }
+
   if (!gamePlay || !gameBase) {
-    return null
+    console.log('not', !!gamePlay, !!gameBase)
+    return <div />
   }
 
   return (

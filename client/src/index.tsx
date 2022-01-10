@@ -11,7 +11,7 @@ import {BrowserRouter} from 'react-router-dom'
 import {
   ApolloClient,
   InMemoryCache,
-  ApolloProvider
+  ApolloProvider, createHttpLink
 } from '@apollo/client'
 
 function buildConfig() {
@@ -21,9 +21,18 @@ function buildConfig() {
     WS_URL: `ws://${serverHost}`,
   }
 }
+const link = createHttpLink({
+  uri: `http://localhost:8080/v1/graphql`,
+  headers: {
+    'Access-Control-Request-Method': 'POST',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Request-Headers': 'Content-Type',
+    'Referrer-Policy': 'origin-when-cross-origin'
+  }
+});
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8080/v1/graphql',
+  link,
   cache: new InMemoryCache()
 })
 

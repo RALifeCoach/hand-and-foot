@@ -11,7 +11,7 @@ import {User} from 'User'
 import ReconnectingWebsocket from 'reconnecting-websocket'
 import {lastMessageSelector} from '../atoms/lastMessageSelector/lastMessageSelector'
 
-const MessageProvider: React.FC<any> = ({children}) => {
+const MessageProvider: React.FC<any> = ({children}): JSX.Element => {
   const user = useRecoilValue(userAtom) as User
   const setSavedMessages = useSetRecoilState(savedMessagesSelector)
   const setGamePlay = useSetRecoilState(gamePlayAtom)
@@ -22,7 +22,7 @@ const MessageProvider: React.FC<any> = ({children}) => {
   const setLastMessage = useSetRecoilState(lastMessageSelector)
 
   useEffect(() => {
-    const client = new ReconnectingWebsocket('ws://localhost:3100', )
+    const client = new ReconnectingWebsocket('ws://localhost:3100')
     setWss(client)
   }, [])
 
@@ -33,6 +33,7 @@ const MessageProvider: React.FC<any> = ({children}) => {
       }
       wss.onmessage = (message: any) => {
         const data = JSON.parse(message.data)
+        console.log('message', data)
         setLastMessage(data)
       }
       wss.onclose = () => {

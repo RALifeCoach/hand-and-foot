@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useState} from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import Game from '../Game/Game'
 import Login from '../Login/Login'
 import SetPassword from '../Login/SetPassword'
@@ -8,12 +8,12 @@ import {
   useRecoilState,
   useRecoilValue,
 } from 'recoil'
-import {gameIdAtom, playerIdAtom} from '../atoms/game'
-import {configAtom, userAtom, windowSizeAtom} from '../atoms/main'
+import { playerIdAtom } from '../atoms/game'
+import { configAtom, userAtom, windowSizeAtom } from '../atoms/main'
 import getWindowSize from './getWindowSize'
-import {Routes, Route} from 'react-router-dom'
+import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import Games from '../Games/Games'
-import {User} from 'User'
+import { User } from 'User'
 import MessageProvider from './MessageProvider'
 import useTestSetup from './useTestSetup'
 
@@ -57,7 +57,34 @@ const PLAYERS3 = [
   },
 ]
 
-const App = () => {
+function NoMatch() {
+  return (
+    <div>
+      <h2>Nothing to see here!</h2>
+      <p>
+        <Link to="/">Go to the home page</Link>
+      </p>
+    </div>
+  )
+}
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const user = sessionStorage.getItem('handf:user')
+  console.log(user)
+
+  if (!user) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/login" replace/>
+  }
+
+  return children
+}
+
+
+const App = (): JSX.Element => {
   const [userSet, setUserSet] = useState(false)
   const [windowSize, setWindowSize] = useRecoilState(windowSizeAtom)
   const [user, setUser] = useRecoilState(userAtom)
@@ -82,14 +109,14 @@ const App = () => {
   }, [onWindowResize])
 
   useEffect(() => {
-    const user = localStorage.getItem('handf:user')
+    const user = sessionStorage.getItem('handf:user')
     if (user) {
       setUser(JSON.parse(user))
     }
     setTimeout(() => setUserSet(true), 200)
   }, [setUser])
 
-  const {passwordId, isTest, players, loading, gameId} = useTestSetup()
+  const { passwordId, isTest, players, loading, gameId } = useTestSetup()
 
   if (passwordId) {
     return (
@@ -100,26 +127,25 @@ const App = () => {
   }
 
   if (loading) {
-    return null
+    return <div/>
   }
 
-  const initializeState = (playerId: number) => ({set}: MutableSnapshot) => {
+  const initializeState = (playerId: number) => ({ set }: MutableSnapshot) => {
     set(playerIdAtom, playerId)
-    set(gameIdAtom, gameId)
     set(configAtom, config)
     set(userAtom, user)
   }
 
   if (isTest) {
     if (!gameId) {
-      return null
+      return <div/>
     }
     return (
       <>
         {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (
           <RecoilRoot initializeState={initializeState(player.playerId)} key={player.playerId}>
             <MessageProvider>
-              <Game position={player.position} teamId={player.teamId}/>
+              <Game gameId={gameId} position={player.position} teamId={player.teamId}/>
             </MessageProvider>
           </RecoilRoot>
         ))}
@@ -127,29 +153,33 @@ const App = () => {
     )
   }
 
-  console.log('app2', userSet)
   if (!userSet) {
-    return null
+    return <div/>
   }
 
   return (
-    <RecoilRoot initializeState={initializeState((user as User)?.userId ?? 0)}>
+    <RecoilRoot initializeState={initializeState((user as User)?.id ?? 0)}>
       <Routes>
         <Route path="/login" element={<Login/>}/>
         <Route path="/games" element={(
-          <MessageProvider>
-            <Games/>
-          </MessageProvider>
+          <RequireAuth>
+            <MessageProvider>
+              <Games/>
+            </MessageProvider>
+          </RequireAuth>
         )}/>
         <Route
-          path="/game/:position/:team"
-          element={() => (
-            <MessageProvider>
-              <Game/>
-            </MessageProvider>
+          path="/game/:gameId/:position/:team"
+          element={(
+            <RequireAuth>
+              <MessageProvider>
+                <Game/>
+              </MessageProvider>
+            </RequireAuth>
           )}
         />
         <Route path="/" element={<Login/>}/>
+        <Route path="*" element={<NoMatch/>}/>
       </Routes>
     </RecoilRoot>
   )

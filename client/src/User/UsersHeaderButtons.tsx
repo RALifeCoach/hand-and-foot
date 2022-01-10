@@ -19,7 +19,7 @@ const UsersHeaderButtons = ({refreshUsers}: IProps) => {
       </Button>
       {newOpen && (
         <EditUser
-          user={{token: '', userId: 0, userEmail: '', userName: '', role: ''}}
+          user={{token: '', id: 0, userEmail: '', userName: '', role: ''}}
           open={newOpen}
           onClose={() => setNewOpen(false)}
           refreshUsers={refreshUsers}

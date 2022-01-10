@@ -7,6 +7,7 @@ import useFetchSave from "../hooks/useFetchSave";
 import UpdateHandling from "../shared/UpdateHandling";
 import {useSetRecoilState} from 'recoil'
 import {userAtom} from '../atoms/main'
+import { useNavigate } from 'react-router-dom'
 
 interface ILoginState {
   userId: string;
@@ -25,6 +26,7 @@ const Login = () => {
     passwordError: '',
   } as ILoginState);
   const setUser = useSetRecoilState(userAtom)
+  const navigate = useNavigate()
 
   const { userId, idError, password, passwordError } = state;
 
@@ -37,19 +39,21 @@ const Login = () => {
   }, [password, dispatch]);
 
   const [login, performLogin] = useFetchSave();
+
   const handleLogin = useCallback((event: any) => {
     event.preventDefault();
     if (!idError && !passwordError) {
-      performLogin({ userId, password }, 'login/login');
+      performLogin({ userId, password }, '/api/login/login')
     }
   }, [userId, idError, password, passwordError, performLogin]);
 
   useEffect(() => {
     if (login.status === 'success') {
-      localStorage.setItem('handf:user', JSON.stringify(login.response));
+      sessionStorage.setItem('handf:user', JSON.stringify(login.response));
       setUser(login.response)
+      navigate('/games', { replace: true })
     }
-  }, [login, setUser]);
+  }, [login, setUser, navigate]);
 
   return (
     <>

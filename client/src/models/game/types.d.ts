@@ -1,4 +1,6 @@
 declare module 'Game' {
+  import { ICard, IGameState, IMessage, IPlayerState, ITeam } from '../../../../models/game'
+
   export interface IPlayerCurrent {
     playerId: number;
     playerName: string;
@@ -37,8 +39,8 @@ declare module 'Game' {
   }
 
   export interface IPlayerDb {
-    playerId: number;
-    playerName: string;
+    player_id: number;
+    player_name: string;
     position: number;
   }
 
@@ -46,8 +48,8 @@ declare module 'Game' {
     gameid?: number;
     gamename: string;
     gamestate: IGameState;
-    gameplay: { [playerId: string]: IPlayerDb }
-    gamerules: IGameBase
+    numberOfPlayers: number
+    game_players: IPlayerDb[]
   }
 
   export interface IGamesPlayer {

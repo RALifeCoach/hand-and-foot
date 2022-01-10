@@ -36,13 +36,13 @@ const UsersRowButtons = ({user, refreshUsers}: IProps) => {
   const [deleteStatus, performDelete] = useFetchSave()
   const [resetStatus, performReset] = useFetchSave()
   const handleDelete = useCallback(() => {
-    const body = {id: user.userId}
+    const body = {id: user.id}
     performDelete(body, 'api/users/delete')
   }, [user, performDelete])
 
   const handleReset = useCallback(() => {
     const body = {
-      id: user?.userId || 0,
+      id: user?.id || 0,
       password: uuidV4().toString(),
     }
     alert(`To reset the password use url: ${window.location.origin}/?id=${body.password}`)

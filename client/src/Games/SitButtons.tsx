@@ -2,10 +2,11 @@ import React, {useState, useMemo} from 'react'
 import {IGamesRow} from 'Game'
 import SitButton from './SitButton'
 import SnackAlert from '../shared/SnackAlert'
-import {useRecoilValue} from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {userAtom} from '../atoms/main'
 import {User} from 'User'
-import useSendMessage from '../Game/hooks/useSendMessage'
+import { gameIdAtom } from '../atoms/game'
+import { useNavigate } from 'react-router-dom'
 
 interface IProps {
   game: IGamesRow;
@@ -15,24 +16,26 @@ function getTeam(game: IGamesRow, user: User, position: number) {
   if (game.numberOfPlayers === 3) {
     return user.userName
   }
-  return position % 2 === 0 ? 'North-South' : 'East-West'
+  return position % 2 === 0 ? 'NS' : 'EW'
 }
 
 const SitButtons = ({game}: IProps) => {
   const user = useRecoilValue(userAtom) as User
-  const sendMessage = useSendMessage()
-
+  const setGameId = useSetRecoilState(gameIdAtom)
+  const navigate = useNavigate()
   const [error, setError] = useState('')
 
   const userPosition = useMemo(() => {
     if (!user) {
       return
     }
-    return game.players.find(player => player.playerId === user.userId)
+    console.log('player', game.players, user, game.players.find(player => player.playerId === user.id))
+    return game.players.find(player => player.playerId === user.id)
   }, [game.players, user])
 
   const handleSit = (position: number) => {
     return () => {
+      console.log('pos', userPosition)
       if (userPosition && userPosition.position !== position) {
         return setError(`You are already sitting in position ${userPosition.position}`)
       }
@@ -40,7 +43,9 @@ const SitButtons = ({game}: IProps) => {
       if (userPosition?.position !== position && !!currentPlayer) {
         return setError('someone else is already sitting there')
       }
-      sendMessage('addPlayer', {position, teamId: getTeam(game, user, position)})
+      const teamId = getTeam(game, user, position)
+      setGameId(game.gameId as number)
+      navigate(`/game/${game.gameId}/${position}/${teamId}`)
     }
   }
 

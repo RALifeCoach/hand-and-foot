@@ -4,6 +4,6 @@ declare module "User" {
     role: string;
     userName: string;
     userEmail: string;
-    userId: number;
+    id: number;
   }
 }

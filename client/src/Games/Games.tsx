@@ -17,16 +17,17 @@ import {FETCH_GAMES_FILTERED, FETCH_GAMES_ALL} from '../queries/game'
 import {useQuery} from '@apollo/client'
 
 function onGamesCompleted(data: any, setGames: Dispatch<IGamesRow[]>) {
+  console.log(data)
   const newData = data.handf_game.map((game: IGameDb) => {
     return {
       gameId: game.gameid,
       gameName: game.gamename,
       gameState: game.gamestate,
-      numberOfPlayers: game.gamerules.numberOfPlayers,
-      players: Object.values(game.gameplay.players).map((player: IPlayerDb) => (
+      numberOfPlayers: game.numberOfPlayers,
+      players: Object.values(game.game_players).map((player: IPlayerDb) => (
         {
-          playerId: player.playerId,
-          playerName: player.playerName,
+          playerId: player.player_id,
+          playerName: player.player_name,
           position: player.position
         }
       ))
@@ -37,7 +38,7 @@ function onGamesCompleted(data: any, setGames: Dispatch<IGamesRow[]>) {
 
 const STATES = {
   0: [],
-  1: ['waitingToPlay', 'inPlay', 'waitingToRestart'],
+  1: ['waitingToStart', 'inPlay', 'waitingToRestart'],
   2: ['finished']
 } as { [key: number]: string[] }
 

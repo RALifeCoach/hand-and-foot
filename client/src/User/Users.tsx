@@ -39,7 +39,7 @@ const Users = () => {
               <UsersRow
                 refreshUsers={refreshUsers}
                 user={user}
-                key={user.userId}
+                key={user.id}
               />
             ))}
           </TableBody>

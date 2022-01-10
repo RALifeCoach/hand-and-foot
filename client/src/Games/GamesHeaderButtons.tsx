@@ -1,4 +1,4 @@
-import React, {Dispatch, useState} from 'react'
+import React, { Dispatch, useCallback, useState } from 'react'
 import {Button, FormControl, InputLabel, MenuItem, Select} from '@mui/material'
 import EditGame from './EditGame'
 import {Add} from '@mui/icons-material'
@@ -10,6 +10,10 @@ interface IProps {
 
 const GamesHeaderButtons = ({status, setStatus}: IProps) => {
   const [newOpen, setNewOpen] = useState(false)
+
+  const onClose = useCallback(() => {
+    setNewOpen(false)
+  }, [])
 
   return (
     <div className="flex gap-8">
@@ -37,7 +41,7 @@ const GamesHeaderButtons = ({status, setStatus}: IProps) => {
         <EditGame
           game={{gameName: '', numberOfPlayers: 4, players: []}}
           open={newOpen}
-          onClose={() => setNewOpen(false)}
+          onClose={onClose}
         />
       )}
     </div>

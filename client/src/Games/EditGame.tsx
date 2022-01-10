@@ -54,26 +54,50 @@ const EditGame = ({game, open, onClose}: IProps) => {
 
   const {gameId, gameName, nameError, numberOfPlayers, playersError, gameState} = state
 
-  const [performUpdate, {loading: updateLoading}] = useMutation(UPDATE_GAME)
-  const [performCreate, {loading: createLoading}] = useMutation(CREATE_GAME)
+  const [performUpdate, {loading: updateLoading, error: updateError}] = useMutation(UPDATE_GAME)
+  const [performCreate, {loading: createLoading, error: createError}] = useMutation(CREATE_GAME)
 
-  const handleUpdate = useCallback(() => {
-    if (nameError || playersError) {
-      return
-    }
+  if (createError) {
+    console.log(createError)
+  }
+  if (updateError) {
+    console.log(updateError)
+  }
+
+  const doMutation = async (
+    gameId: number,
+    numberOfPlayers: number,
+    performCreate: any,
+    performUpdate: any,
+    onClose: Function
+  ) => {
     const gameData = startGame(numberOfPlayers)
     if (gameId) {
-      performUpdate({
+      await performUpdate({
         variables: {id: gameId, name: gameName, rules: gameData.rules}
       })
+      onClose()
       return
     }
-    performCreate({
+  console.log('create', {
+    variables: {
+      name: gameName, play: gameData.play, rules: gameData.rules, gamestate: gameData.play.gameState
+    }
+  })
+    await performCreate({
       variables: {
         name: gameName, play: gameData.play, rules: gameData.rules, state: gameData.play.gameState
       }
     })
-  }, [performUpdate, performCreate, gameId, gameName, nameError, numberOfPlayers, playersError])
+    onClose()
+  }
+  const handleUpdate = useCallback(() => {
+    console.log('click', nameError, playersError)
+    if (nameError || playersError) {
+      return
+    }
+    doMutation(gameId as number, numberOfPlayers, performCreate, performUpdate, onClose)
+  }, [performUpdate, performCreate, gameId, gameName, nameError, numberOfPlayers, playersError, onClose])
 
   const width = 350
   const height = 600
@@ -116,7 +140,7 @@ const EditGame = ({game, open, onClose}: IProps) => {
           </FlexColumn>
         </DialogContent>
         <DialogActions>
-          <FlexRow justify="flex-end">
+          <FlexRow justify="flex-end gap-4">
             <Button
               onClick={onClose}
               disabled={updateLoading || createLoading}
@@ -125,7 +149,10 @@ const EditGame = ({game, open, onClose}: IProps) => {
             </Button>
             <Button
               variant="outlined"
-              onClick={() => handleUpdate()}
+              onClick={() => {
+                console.log('clicked')
+                handleUpdate()
+              }}
             >
               <Typography variant="subtitle1">Save</Typography>
             </Button>

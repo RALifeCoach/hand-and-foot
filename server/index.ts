@@ -19,18 +19,19 @@ const ipMiddleware = function (req: any, res: any, next: any) {
 dotenv.config()
 
 const app = express()
-app.use(helmet())
-app.disable('x-powered-by')
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
-app.use(ipMiddleware)
 
 app.use(function (req, res, next) {
   console.log('request', req.url)
   next()
 })
 
-app.use('/login', AuthenticationRoutes())
+app.use(helmet())
+app.disable('x-powered-by')
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use(ipMiddleware)
+
 // app.use("/api", AuthCheckMiddleware, ApiRoutes());
 app.use('/api', ApiRoutes())
 
