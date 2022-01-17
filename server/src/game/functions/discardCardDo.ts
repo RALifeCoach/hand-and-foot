@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../models/game'
-import {IGameBase, ITeam} from '../../../../models/game'
+import {IGameBase, ITeam} from '../../../models/game'
 import startNewTurn from "./startNewTurn";
 import logGameState from "../../socket/logGameState";
 import endRound from "./endRound";

@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { ICard } from "../../../../models/game";
+import { ICard } from "../../../../server/models/game";
 
 interface IProps {
   card: ICard;

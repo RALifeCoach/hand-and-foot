@@ -1,5 +1,5 @@
 import { IGamePlay } from "Game";
-import { IGameBase } from "../../../../models/game";
+import { IGameBase } from "../../../../server/models/game";
 import { useCallback } from "react";
 import mapCards from "../functions/mapCards";
 import isWildCard from "../functions/isWildCard";

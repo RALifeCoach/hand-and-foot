@@ -1,4 +1,4 @@
-import { ICard } from "../../../../models/game";
+import { ICard } from "../../../../server/models/game";
 
 const isRedThree = (card: ICard) =>
   card.rank === '3' && ['D', 'H'].indexOf(card.suit) > -1;

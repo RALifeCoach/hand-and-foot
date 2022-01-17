@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from "../../models/game";
-import { ITeam, ICard } from "../../../../models/game";
+import { ITeam, ICard } from "../../../models/game";
 import Database from "../../Database";
 import logger from "../../util/logger";
 

@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../../models/game'
-import { IMeldType } from "../../../../../models/game";
+import { IMeldType } from "../../../../models/game";
 import getMessageTypeText from "./getMessageTypeText";
 import getCurrentPlayer from '../../functions/getCurrentPlayer'
 

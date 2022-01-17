@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../models/game'
-import { IGameBase } from "../../../../models/game";
+import { IGameBase } from "../../../models/game";
 import logGameState from "../../socket/logGameState";
 import canGoDown from "../utils/canGoDown";
 import computeTeamCardPoints from "../utils/computeTeamCardPoints";

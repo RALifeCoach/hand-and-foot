@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from '../models/game'
-import { IGameBase, IMessage } from '../../../models/game'
+import { IGameBase, IMessage } from '../../models/game'
 import Database from '../Database'
 import { ACTION_RESPONSE } from '../../constants'
 import buildPlayerInfo from '../game/utils/buildPlayerInfo'

@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { ICard } from "../../../../models/game";
+import { ICard } from "../../../../server/models/game";
 
 const useSelectCard = () =>
   useCallback((selected: { [cardId: string]: boolean }, card: ICard) => {

@@ -5,7 +5,7 @@ import {
   IPlayerState,
   IPosition,
   ITeam
-} from '../../../models/game'
+} from '../../models/game'
 
 export interface IPlayer {
   playerId: number;

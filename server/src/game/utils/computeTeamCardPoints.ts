@@ -1,4 +1,4 @@
-import { ITeam, IGameBase } from "../../../../models/game";
+import { ITeam, IGameBase } from "../../../models/game";
 import scoreCards from "./scoreCards";
 
 const computeTeamCardPoints = (gameRules: IGameBase, team: ITeam) => {

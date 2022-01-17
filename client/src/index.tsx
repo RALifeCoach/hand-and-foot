@@ -22,7 +22,7 @@ function buildConfig() {
   }
 }
 const link = createHttpLink({
-  uri: `http://localhost:8080/v1/graphql`,
+  uri: `http://localhost:3200/api/v1/graphql`,
   headers: {
     'Access-Control-Request-Method': 'POST',
     'Access-Control-Allow-Headers': '*',

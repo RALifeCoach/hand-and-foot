@@ -1,5 +1,5 @@
 import { IGamePlay } from "../../models/game";
-import { ITeam, IGameBase } from "../../../../models/game";
+import { ITeam, IGameBase } from "../../../models/game";
 
 const canGoDown = (
   gamePlay: IGamePlay,

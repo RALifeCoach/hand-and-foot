@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../models/game'
-import { IGameBase } from "../../../../models/game";
+import { IGameBase } from "../../../models/game";
 import { IGameController } from "../../socket/socketManager";
 import startNewRound from "../functions/startNewRound";
 

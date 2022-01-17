@@ -1,5 +1,5 @@
 import {gql} from '@apollo/client'
-import {IGameBase} from '../../../models/game'
+import {IGameBase} from '../../../server/models/game'
 
 export const FETCH_GAME = gql`
 query MyQuery($id: Int) {
@@ -57,7 +57,7 @@ export interface IFetchGames {
 }
 
 export const TRUNCATE = gql`
-mutation delete_all_games($play: json, $rules: json, $players: json) {
+mutation delete_all_games($play: json, $rules: json) {
   delete_handf_game(where: {}) {
     affected_rows
   }
@@ -68,8 +68,7 @@ mutation delete_all_games($play: json, $rules: json, $players: json) {
     gamename: "Test Game",
     gameplay: $play,
     gamerules: $rules,
-    gamestate: "waitingToStart",
-    players: $players
+    gamestate: "waitingToStart"
   },  
   ) {
     affected_rows

@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../models/game'
-import { IGameBase } from "../../../models/game";
+import { IGameBase } from "../../models/game";
 import socketHandler from "../game/socketHandler";
 import startPlaying from "../game/utils/startPlaying";
 import { ACTION_RESPONSE } from "../../constants";

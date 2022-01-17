@@ -1,4 +1,4 @@
-import { ITeam, IGameBase } from "../../../../models/game";
+import { ITeam, IGameBase } from "../../../models/game";
 import computeTeamCardPoints from "./computeTeamCardPoints";
 import scoreCards from "./scoreCards";
 

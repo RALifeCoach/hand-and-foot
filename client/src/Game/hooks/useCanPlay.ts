@@ -1,4 +1,4 @@
-import { IGameBase, ICard, IMeld, IMeldType, IRank } from "../../../../models/game";
+import { IGameBase, ICard, IMeld, IMeldType, IRank } from "../../../../server/models/game";
 import { IGamePlay } from "Game";
 import mapCards from "../functions/mapCards";
 import { useCallback } from "react";

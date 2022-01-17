@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from '../../models/game'
-import { IMeldType, IRank, ICard, IGameBase } from '../../../../models/game'
+import { IMeldType, IRank, ICard, IGameBase } from '../../../models/game'
 import * as uuid from 'uuid'
 import logGameState from '../../socket/logGameState'
 import isRedThree from '../utils/isRedThree'

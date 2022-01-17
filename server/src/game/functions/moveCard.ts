@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../models/game'
-import { ICard } from "../../../../models/game";
+import { ICard } from "../../../models/game";
 import rePinCards from "./rePinCards";
 
 const buildNewCards = (

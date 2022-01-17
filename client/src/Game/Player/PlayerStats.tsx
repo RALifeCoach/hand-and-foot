@@ -1,5 +1,5 @@
 import React from 'react'
-import {ITeam} from '../../../../models/game'
+import {ITeam} from '../../../../server/models/game'
 import cx from 'clsx'
 
 interface IProps {

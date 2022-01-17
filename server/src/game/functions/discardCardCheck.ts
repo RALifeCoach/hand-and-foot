@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from '../../models/game'
-import { IGameBase, ITeam } from '../../../../models/game'
+import { IGameBase, ITeam } from '../../../models/game'
 import computeTeamCardPoints from '../utils/computeTeamCardPoints'
 import canGoDown from '../utils/canGoDown'
 import discardCardDo from './discardCardDo'

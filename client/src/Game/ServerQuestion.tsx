@@ -9,7 +9,7 @@ import {
 import FlexColumn from '../shared/flex-grid/FlexColumn'
 import Spacer from '../shared/Spacer'
 import useSendMessage from './hooks/useSendMessage'
-import { IServerQuestion, IServerQuestionButton } from '../../../models/game'
+import { IServerQuestion, IServerQuestionButton } from '../../../server/models/game'
 
 interface IProps {
   serverQuestion: IServerQuestion;

@@ -1,6 +1,6 @@
 import { ICardMapping } from "./mapCards";
 import { ICanPlay } from "../hooks/useCanPlay";
-import { IGameBase } from "../../../../models/game";
+import { IGameBase } from "../../../../server/models/game";
 import { IGamePlay } from "Game";
 import canDiscard from "./canDiscard";
 import isBlackThree from "./isBlackThree";

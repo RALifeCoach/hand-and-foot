@@ -1,4 +1,4 @@
-import { ICard, IGameBase, IMeld } from '../../../../models/game'
+import { ICard, IGameBase, IMeld } from '../../../../server/models/game'
 import { IGamePlay } from 'Game'
 import isWildCard from './isWildCard'
 import checkRunCards from './checkRunCards'

@@ -1,4 +1,4 @@
-import {ICard, IGameBase, IMessage, IServerQuestion} from '../../../models/game'
+import {ICard, IGameBase, IMessage, IServerQuestion} from '../../../server/models/game'
 import {atom, selector} from 'recoil'
 import {IGamePlay} from 'Game'
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PlayingCard from '../PlayingCard/PlayingCard'
-import { ICard } from '../../../../models/game'
+import { ICard } from '../../../../server/models/game'
 import SortButtons from './SortButtons'
 import useSelectedCards from '../hooks/useSelectedCards'
 import useSendMessage from '../hooks/useSendMessage'

@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from '../models/game'
-import { ITeam } from '../../../models/game'
+import { ITeam } from '../../models/game'
 import { IGameController } from './socketManager'
 import logger from '../util/logger'
 

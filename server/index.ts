@@ -6,7 +6,6 @@ import AuthenticationRoutes from './src/routes/authentication/AuthenticationRout
 import * as dotenv from 'dotenv'
 import * as helmet from 'helmet'
 import * as requestIp from 'request-ip'
-import AuthCheckMiddleware from './src/routes/authentication/AuthCheckMiddleware'
 import logger from './src/util/logger'
 
 const bodyParser = require('body-parser')

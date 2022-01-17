@@ -1,23 +1,24 @@
 import {Client, QueryResult} from 'pg'
 import logger from './util/logger'
 import {IGamePlay, IPlayer, IPlayerDb} from './models/game'
-import {IGameBase} from '../../models/game'
+import {IGameBase} from '../models/game'
 
 
 class Database {
   private readonly cache: { [gameId: string]: { gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[] } }
+  private readonly options = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
+  }
 
   constructor() {
     this.cache = {}
   }
 
   query(sql: string, callback: (rows: any) => void) {
-    const client = new Client({
-      host: 'localhost',
-      user: 'root',
-      password: 'postgrespassword',
-      database: 'root'
-    })
+    const client = new Client(this.options)
     client.connect()
       .then(() => {
         client.query(sql)
@@ -27,10 +28,10 @@ class Database {
           })
           .catch(async (err: Error) => {
             await client.end()
-            console.log(err)
+            console.log('catch1', err, sql)
           })
       })
-      .catch((err: Error) => console.log(err))
+      .catch((err: Error) => console.log('catch2', err, sql))
   }
 
   private mapDb(players: IPlayerDb[]) {
@@ -112,12 +113,7 @@ class Database {
         cards_to_replace = ${player.numberOfCardsToReplace}, in_hand = ${player.isInHand},
         sort_order = ${!!player.sortOrder ? '\'' + player.sortOrder + '\'' : 'null'}`
     )))
-    const client = new Client({
-      host: 'localhost',
-      user: 'root',
-      password: 'postgrespassword',
-      database: 'root'
-    })
+    const client = new Client(this.options)
     client.connect()
       .then(() => this.executeQuery(sqls, client, callback))
       .catch((err: Error) => console.log(err))

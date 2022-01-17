@@ -35,7 +35,7 @@ const SitButtons = ({game}: IProps) => {
 
   const handleSit = (position: number) => {
     return () => {
-      console.log('pos', userPosition)
+      console.log('pos', userPosition, position)
       if (userPosition && userPosition.position !== position) {
         return setError(`You are already sitting in position ${userPosition.position}`)
       }

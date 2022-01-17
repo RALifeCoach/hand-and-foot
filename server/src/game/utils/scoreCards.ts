@@ -1,4 +1,4 @@
-import { ICard, IGameBase } from "../../../../models/game";
+import { ICard, IGameBase } from "../../../models/game";
 import getCardPoints from "./getCardPoints";
 
 const scoreCards = (gameRules: IGameBase, cards: ICard[]): number => {

@@ -13,7 +13,7 @@ services:
       - "5432:5432"
     networks:
       - db
-  graphql-engine:
+  hasura:
     image: hasura/graphql-engine:v2.1.1
     container_name: hasura
     ports:
@@ -37,23 +37,44 @@ services:
     networks:
       - reverse
       - db
-#  nginx:
-#    image: nginx:latest
-#    container_name: nginx
-#    volumes:
-#      - ./nginx.conf:/etc/nginx/nginx.conf
-#    ports:
-#      - "3200:3200"
-#    depends_on:
-#      - "hasura"
-#    command: [nginx-debug, '-g', 'daemon off;']
-#    networks:
-#      - reverse
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "3200:3200"
+    depends_on:
+      - hasura
+    command: [nginx-debug, '-g', 'daemon off;']
+    networks:
+      - reverse
   redis:
     image: "redis:alpine"
     container_name: redis
     ports:
       - "6379:6379"
+    networks:
+      - db
+  server:
+    build: "../server"
+    container_name: server
+    restart: always
+    environment:
+      PORT: 3100
+      DB_HOST: postgres
+      DB_USER: root
+      DB_PASSWORD: postgrespassword
+      DB_DATABASE: root
+      REDIS: redis
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - "3100:3100"
+    networks:
+      - db
+      - reverse
 volumes:
   db_data:
 networks:

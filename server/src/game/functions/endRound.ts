@@ -1,5 +1,5 @@
 import {IGamePlay, IPlayer} from '../../models/game'
-import { IGameBase } from "../../../../models/game";
+import { IGameBase } from "../../../models/game";
 import scoreTeam from "../utils/scoreTeam";
 import scoreCards from "../utils/scoreCards";
 import endGame from "./endGame";

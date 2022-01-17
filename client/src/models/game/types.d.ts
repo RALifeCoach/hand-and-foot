@@ -1,5 +1,5 @@
 declare module 'Game' {
-  import { ICard, IGameState, IMessage, IPlayerState, ITeam } from '../../../../models/game'
+  import { ICard, IGameState, IMessage, IPlayerState, ITeam } from '../../../../server/models/game'
 
   export interface IPlayerCurrent {
     playerId: number;

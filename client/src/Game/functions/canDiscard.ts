@@ -1,5 +1,5 @@
 import {IGamePlay} from 'Game'
-import {ICard, IGameBase, IMeld} from '../../../../models/game'
+import {ICard, IGameBase, IMeld} from '../../../../server/models/game'
 import isWildCard from './isWildCard'
 import isRedThree from './isRedThree'
 import isBlackThree from './isBlackThree'

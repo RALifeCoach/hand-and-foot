@@ -2,7 +2,7 @@ import {IGamePlay, IPlayer, IPlayerCurrent, IPlayerInfo, IPlayerOther} from '../
 import {
   IMessage,
   IGameBase
-} from '../../../../models/game'
+} from '../../../models/game'
 import isWildCard from './isWildCard'
 import getCurrentPlayer from '../functions/getCurrentPlayer'
 

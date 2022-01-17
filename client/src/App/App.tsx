@@ -117,6 +117,7 @@ const App = (): JSX.Element => {
   }, [setUser])
 
   const { passwordId, isTest, players, loading, gameId } = useTestSetup()
+  console.log(passwordId, isTest, players, loading, gameId)
 
   if (passwordId) {
     return (

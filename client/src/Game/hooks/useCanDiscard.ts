@@ -1,4 +1,4 @@
-import { IGameBase } from "../../../../models/game";
+import { IGameBase } from "../../../../server/models/game";
 import { IGamePlay } from "Game";
 import useSelectedCards from "./useSelectedCards";
 import canDiscard from "../functions/canDiscard";

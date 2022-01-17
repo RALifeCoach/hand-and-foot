@@ -1,5 +1,5 @@
 import { IGamePlay, IPlayer } from '../../models/game'
-import { IGameBase } from '../../../../models/game'
+import { IGameBase } from '../../../models/game'
 import drawCards from '../utils/drawCards'
 import dealCards from './dealCards'
 import getNextPlayer from './getNextPlayer'
