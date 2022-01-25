@@ -1,4 +1,4 @@
-import { ICard, IGameBase } from "../../../../server/models/game";
+import { ICard, IGameBase } from "../../../models/game";
 import getCardPoints from "./getCardPoints";
 
 const scoreCards = (gameBase: IGameBase, cards: ICard[]): number => {

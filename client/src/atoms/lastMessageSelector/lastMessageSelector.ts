@@ -28,6 +28,9 @@ export const lastMessageSelector = selector<any>({
       return
     }
     switch (message.type) {
+      case "error":
+        console.log(message.message)
+        return;
       case "serverQuestion":
         set(serverQuestionAtom, message.value);
         return;

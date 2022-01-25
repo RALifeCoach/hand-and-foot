@@ -16,7 +16,8 @@ const sendResponse = (
   gameController: IGameController,
   gameId: number,
   playerId: number,
-  transactionType: string
+  transactionType: string,
+  isError: boolean
 ) => {
   const messages: IMessage[] = []
   if (ACTION_RESPONSE[transactionType].sendToAll) {
@@ -31,10 +32,17 @@ const sendResponse = (
     const messageId = uuid.v4()
     const currentPlayer = players.find(player => player.playerId === playerId)
     if (!currentPlayer) {
-      throw new Error('current player not found')
+      const playerInfo =
+        JSON.stringify({
+          type: 'error',
+          message: 'player not found'
+        })
+      console.error(`player (${playerId}) not found`)
+      gameController[gameId].players[playerId].send(playerInfo)
+      return
     }
     const activePlayer = players.find(player => player.playerId === gamePlay.currentPlayerId)
-    if (ACTION_RESPONSE[transactionType].sendToAll) {
+    if (!isError && ACTION_RESPONSE[transactionType].sendToAll) {
       try {
         players.forEach((player) => {
           const playerInfo =

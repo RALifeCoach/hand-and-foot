@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { IGamePlay } from 'Game';
-import { ITeam, ICard, IGameBase } from '../../../../server/models/game';
+import { ITeam, ICard, IGameBase } from '../../../models/game';
 import FlexColumn from '../../shared/flex-grid/FlexColumn';
 import TeamMeld from './TeamMeld';
 import { Typography } from '@mui/material';

@@ -1,5 +1,5 @@
 import { IPlayerCurrent } from "Game";
-import { ICard } from "../../../../server/models/game";
+import { ICard } from "../../../models/game";
 import { ICardMapping } from "./mapCards";
 
 const canDrawFromPileRun = (

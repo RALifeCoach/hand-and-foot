@@ -1,5 +1,5 @@
 import {gql} from '@apollo/client'
-import {IGameBase} from '../../../server/models/game'
+import {IGameBase} from '../../models/game'
 
 export const FETCH_GAME = gql`
 query MyQuery($id: Int) {
@@ -25,7 +25,7 @@ query MyQuery($states: [String!]) {
     gamename
     gamestate
     numberOfPlayers: gamerules(path: "$.numberOfPlayers")
-    game_players {
+    game_players(order_by: {position: asc}) {
       player_id
       player_name
       position
@@ -41,7 +41,7 @@ query MyQuery {
     gamename
     gamestate
     numberOfPlayers: gamerules(path: "$.numberOfPlayers")
-    game_players {
+    game_players(order_by: {position: asc}) {
       player_id
       player_name
       position

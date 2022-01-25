@@ -43,7 +43,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - "3200:3200"
+      - "80:80"
     depends_on:
       - hasura
     command: [nginx-debug, '-g', 'daemon off;']
@@ -74,6 +74,14 @@ services:
       - "3100:3100"
     networks:
       - db
+      - reverse
+  client:
+    build: "../client"
+    container_name: client
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
       - reverse
 volumes:
   db_data:

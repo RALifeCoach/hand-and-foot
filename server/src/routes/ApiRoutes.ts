@@ -5,6 +5,11 @@ import AuthenticationRoutes from './authentication/AuthenticationRoutes'
 
 const ApiRoutes = () => {
   const router = express.Router();
+  router.use(function (req, res, next) {
+    console.log('api routes', req.url)
+    next()
+  })
+
   router.use("/users", canUpdateUsers, UserRoutes());
   router.use("/login", AuthenticationRoutes());
   return router;

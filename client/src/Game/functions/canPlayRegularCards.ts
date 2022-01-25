@@ -1,5 +1,5 @@
 import { ICardMapping } from "./mapCards";
-import { IMeld, ICard, IRank } from "../../../../server/models/game";
+import { IMeld, ICard, IRank } from "../../../models/game";
 import checkRunCards from "./checkRunCards";
 import mapMeldCards from "./mapMeldCards";
 import { ICanPlay } from "../hooks/useCanPlay";

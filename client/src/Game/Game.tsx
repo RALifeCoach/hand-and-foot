@@ -33,9 +33,19 @@ const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps)
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
   const navigate = useNavigate()
+  console.log('here', gameId, gameIdParam)
   const { loading: gameLoading, error, data: gameData } = useQuery(FETCH_GAME, {
     skip: !gameId,
-    variables: { id: gameId }
+    variables: { id: gameId },
+    onCompleted: (data) => {
+      debugger
+      console.log('completed', data.handf_game)
+      if (!data.handf_game.length || data.handf_game.gamestate === 'finished') {
+        return navigate('/games')
+      }
+      setGameBase(data.handf_game[0].gamerules)
+      sendMessage('addPlayer', { position, teamId })
+    }
   })
 
   useEffect(() => {
@@ -43,16 +53,6 @@ const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps)
       setGameId(gameIdParam)
     }
   }, [gameIdParam, setGameId])
-
-  useEffect(() => {
-    if (!gameLoading && !error && gameData?.handf_game?.length) {
-      if (gameData.gamestate === 'finished') {
-        return navigate('/games')
-      }
-      setGameBase(gameData.handf_game[0].gamerules)
-      sendMessage('addPlayer', { position, teamId })
-    }
-  }, [gameLoading, sendMessage, position, teamId, setGameBase, navigate, gameData, error])
 
   if (!!error) {
     console.log(error)

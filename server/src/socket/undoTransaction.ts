@@ -34,6 +34,7 @@ const undoTransaction = (gamePlay: IGamePlay, players: IPlayer[], override: bool
         type: 'cannotUndo',
         value: '',
       }),
+      isError: false
     })
   }
 }

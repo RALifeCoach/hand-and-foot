@@ -3,7 +3,7 @@ import IconRank from './IconRank'
 import IconSuit from './IconSuit'
 import IconPin from './IconPin'
 import IconMove from './IconMove'
-import {ICard} from '../../../../server/models/game'
+import {ICard} from '../../../models/game'
 
 interface IProps {
   card: ICard;

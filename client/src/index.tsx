@@ -16,19 +16,15 @@ import {
 
 function buildConfig() {
   const serverHost = window.location.host
+  console.log('server host', serverHost)
   return {
     API_URL: `http://${serverHost}`,
     WS_URL: `ws://${serverHost}`,
   }
 }
+const serverHost = window.location.host
 const link = createHttpLink({
-  uri: `http://localhost:3200/api/v1/graphql`,
-  headers: {
-    'Access-Control-Request-Method': 'POST',
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Request-Headers': 'Content-Type',
-    'Referrer-Policy': 'origin-when-cross-origin'
-  }
+  uri: `http://${serverHost}/api/v1/graphql`,
 });
 
 const client = new ApolloClient({

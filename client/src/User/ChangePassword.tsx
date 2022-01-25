@@ -75,7 +75,7 @@ const ChangePassword = ({open, onClose}: IProps) => {
       oldPassword,
       newPassword: new1Password,
     };
-    performUpdate(body, 'api/users/changePassword/');
+    performUpdate(body, 'api/users/changePassword');
   }, [performUpdate]);
 
   useEffect(() => {

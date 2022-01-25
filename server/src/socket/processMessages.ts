@@ -1,6 +1,6 @@
-import {IGamePlay, IPlayer} from '../models/game'
-import {IGameBase} from '../../models/game'
-import {IGameController} from './socketManager'
+import { IGamePlay, IPlayer } from '../models/game'
+import { IGameBase } from '../../models/game'
+import { IGameController } from './socketManager'
 import Database from '../Database'
 import undoTransaction from './undoTransaction'
 import doTransaction from './doTransaction'
@@ -13,7 +13,7 @@ const processMessages = (
   const data = messageStack[0]
 
   if (!gameController[data.value.gameId]) {
-    gameController[data.value.gameId] = {players: {}}
+    gameController[data.value.gameId] = { players: {} }
   }
   gameController[data.value.gameId].players[data.value.playerId] = data.socket
 
@@ -26,7 +26,7 @@ const processMessages = (
     const gameRules: IGameBase = game.gameRules
     const players: IPlayer[] = game.players
 
-    new Promise<{ newGamePlay: IGamePlay; newPlayers: IPlayer[]; message: string }>((resolve) => {
+    new Promise<{ newGamePlay: IGamePlay; newPlayers: IPlayer[]; message: string, isError: boolean }>((resolve) => {
       if (data.type === 'undo') {
         undoTransaction(gamePlay, players, data.value.override, resolve)
       } else {
@@ -46,10 +46,12 @@ const processMessages = (
          newGamePlay,
          newPlayers,
          message,
+         isError,
        }: {
         newGamePlay: IGamePlay;
         newPlayers: IPlayer[];
         message: string;
+        isError: boolean;
       }) => {
         sendResponse(
           newGamePlay,
@@ -59,7 +61,8 @@ const processMessages = (
           gameController,
           data.value.gameId,
           data.value.playerId,
-          data.type
+          data.type,
+          isError
         )
         messageStack.splice(0, 1)
         if (messageStack.length) {

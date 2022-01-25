@@ -1,4 +1,4 @@
-import { ICard } from "../../../../server/models/game";
+import { ICard } from "../../../models/game";
 import isWildCard from "./isWildCard";
 
 export interface ICardMapping {

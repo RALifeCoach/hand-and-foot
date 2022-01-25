@@ -15,7 +15,7 @@ const doTransaction = (
   playerId: number,
   resolve: any
 ) => {
-  socketHandler(gamePlay, gameRules, players, gameId, playerId, data).then((message) => {
+  socketHandler(gamePlay, gameRules, players, gameId, playerId, data).then((message: any) => {
     startPlaying(
       ACTION_RESPONSE[data.type].sendToAll,
       gamePlay,
@@ -28,6 +28,7 @@ const doTransaction = (
       newGamePlay: gamePlay,
       newPlayers: players,
       message: message === null ? "" : JSON.stringify(message),
+      isError: message?.type === 'error'
     });
   });
 };
