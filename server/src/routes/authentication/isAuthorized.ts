@@ -14,6 +14,7 @@ const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => v
       }
       redis.redisGet(redisBody.redisKey, (userStr: string) => {
         const user = JSON.parse(userStr);
+        console.log('isAuthorized', user, token, privateKey, clientIp)
         if (!user) {
           return reject();
         }
@@ -22,7 +23,7 @@ const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => v
         // }
 
         // rewrite the token with a new expiry
-        const expiry = new Date().getTime() + 1 * 60 * 60;
+        const expiry = new Date().getTime() + 60 * 60;
         redis.redisSet({
           key: redisBody.redisKey,
           value: JSON.stringify(redisBody),
