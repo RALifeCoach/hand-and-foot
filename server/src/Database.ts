@@ -28,10 +28,10 @@ class Database {
           })
           .catch(async (err: Error) => {
             await client.end()
-            console.log('catch1', err, sql)
+            logger.info('catch1', err, sql)
           })
       })
-      .catch((err: Error) => console.log('catch2', err, sql))
+      .catch((err: Error) => logger.info('catch2', err, sql))
   }
 
   private mapDb(players: IPlayerDb[]) {
@@ -87,8 +87,8 @@ class Database {
       })
       .catch(async (err: Error) => {
         await client.end()
-        console.log('error', err)
-        console.log('error sql', sqls[0])
+        logger.error('error', err)
+        logger.error('error sql', sqls[0])
       })
 
   }
@@ -116,7 +116,7 @@ class Database {
     const client = new Client(this.options)
     client.connect()
       .then(() => this.executeQuery(sqls, client, callback))
-      .catch((err: Error) => console.log(err))
+      .catch((err: Error) => logger.error(err))
   }
 }
 

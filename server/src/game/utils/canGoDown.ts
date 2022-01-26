@@ -1,5 +1,6 @@
 import { IGamePlay } from "../../models/game";
 import { ITeam, IGameBase } from "../../../models/game";
+import logger from '../../util/logger'
 
 const canGoDown = (
   gamePlay: IGamePlay,
@@ -7,7 +8,7 @@ const canGoDown = (
   team: ITeam,
   points: number
 ): boolean => {
-  console.log('can go down', points, gamePlay.minimumPoints)
+  logger.info('can go down', points, gamePlay.minimumPoints)
   if (points > 0 && points >= gamePlay.minimumPoints) {
     return true;
   }

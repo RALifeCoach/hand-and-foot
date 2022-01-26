@@ -1,6 +1,7 @@
 import * as WebSocket from "ws";
 import processMessages from "./processMessages";
 import isAuthorized from "../routes/authentication/isAuthorized";
+import logger from '../util/logger'
 
 export interface IGameController {
   [gameId: string]: {
@@ -22,7 +23,7 @@ const socketManager = (server: any) => {
       const data: { type: string; value: any; token: string } = JSON.parse(
         message
       );
-      console.log('arrived', data.type, data.value)
+      logger.info('arrived', data.type, data.value)
 
       new Promise<any>((resolve: (user: any) => void, reject: () => void) => {
         isAuthorized(data.token, "", resolve, reject);
@@ -39,7 +40,7 @@ const socketManager = (server: any) => {
           processMessages(messageStack, gameController);
         })
         .catch((err) => {
-          console.log('err', err)
+          logger.error('err', err)
           const message = JSON.stringify({ type: "authFailure" });
           socket.send(message);
         });

@@ -3,6 +3,7 @@ import { IGameBase, ITeam } from '../../../models/game'
 import computeTeamCardPoints from '../utils/computeTeamCardPoints'
 import getCurrentPlayer from './getCurrentPlayer'
 import discardCardDo from './discardCardDo'
+import logger from '../../util/logger'
 
 const endRoundResponse = (
   gameId: number,
@@ -12,7 +13,7 @@ const endRoundResponse = (
   partnerAgreed: boolean,
   resolve: any
 ) => {
-  console.log('end round response')
+  logger.info('end round response')
   gamePlay.gameState = "inPlay";
   if (!partnerAgreed) {
     gamePlay.toDiscardId = 0;

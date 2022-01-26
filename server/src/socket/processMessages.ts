@@ -5,6 +5,7 @@ import Database from '../Database'
 import undoTransaction from './undoTransaction'
 import doTransaction from './doTransaction'
 import sendResponse from './sendResponse'
+import logger from '../util/logger'
 
 const processMessages = (
   messageStack: any[],
@@ -19,7 +20,7 @@ const processMessages = (
 
   const gameId = data.value.gameId
   const playerId = data.value.playerId
-  console.log(`About to process ${data.type} for gameId ${data.value.gameId} and player ${data.value.playerId}`)
+  logger.info(`About to process ${data.type} for gameId ${data.value.gameId} and player ${data.value.playerId}`)
 
   Database.readGame(data.value.gameId, (game) => {
     const gamePlay: IGamePlay = game.gamePlay

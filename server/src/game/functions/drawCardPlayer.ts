@@ -1,13 +1,14 @@
 import { IGamePlay, IPlayer } from '../../models/game'
 import drawCards from '../utils/drawCards'
 import getCurrentPlayer from './getCurrentPlayer'
+import logger from '../../util/logger'
 
 const drawCardPlayer = (
   gamePlay: IGamePlay,
   players: IPlayer[],
   pileIndex: number
 ) => {
-  console.log('draw card player', pileIndex)
+  logger.info('draw card player', pileIndex)
   const player = getCurrentPlayer(gamePlay, players)
   const cards = player.isInHand ? player.hand : player.foot
 

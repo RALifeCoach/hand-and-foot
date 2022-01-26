@@ -1,23 +1,24 @@
 import * as jwt from "jsonwebtoken";
 import * as fs from "fs";
 import redis from "../../Redis";
+import logger from '../../util/logger'
 
 const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => void, reject: () => void) => {
-  console.log(1)
+  logger.info(1)
   const privateKey = fs.readFileSync("./private.pem", "utf8");
-  console.log('priv', privateKey)
+  logger.info('priv', privateKey)
   jwt.verify(
     token,
     privateKey,
     { algorithms: ["HS256"] },
     (err: Error | null, redisBody: any) => {
-      console.log('err', err)
+      logger.info('err', err)
       if (err) {
         return reject();
       }
       redis.redisGet(redisBody.redisKey, (userStr: string) => {
         const user = JSON.parse(userStr);
-        console.log('isAuthorized', user, token, privateKey, clientIp)
+        logger.info('isAuthorized', user, token, privateKey, clientIp)
         if (!user) {
           return reject();
         }
