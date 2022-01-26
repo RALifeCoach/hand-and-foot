@@ -79,11 +79,6 @@ const EditGame = ({game, open, onClose}: IProps) => {
       onClose()
       return
     }
-  console.log('create', {
-    variables: {
-      name: gameName, play: gameData.play, rules: gameData.rules, gamestate: gameData.play.gameState
-    }
-  })
     await performCreate({
       variables: {
         name: gameName, play: gameData.play, rules: gameData.rules, state: gameData.play.gameState
@@ -92,7 +87,6 @@ const EditGame = ({game, open, onClose}: IProps) => {
     onClose()
   }
   const handleUpdate = useCallback(() => {
-    console.log('click', nameError, playersError)
     if (nameError || playersError) {
       return
     }
@@ -149,10 +143,7 @@ const EditGame = ({game, open, onClose}: IProps) => {
             </Button>
             <Button
               variant="outlined"
-              onClick={() => {
-                console.log('clicked')
-                handleUpdate()
-              }}
+              onClick={handleUpdate}
             >
               <Typography variant="subtitle1">Save</Typography>
             </Button>

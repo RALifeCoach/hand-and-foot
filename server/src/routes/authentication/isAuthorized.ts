@@ -17,9 +17,9 @@ const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => v
         if (!user) {
           return reject();
         }
-        if (clientIp && user.ip !== clientIp) {
-          return reject();
-        }
+        // if (clientIp && user.ip !== clientIp) {
+        //   return reject();
+        // }
 
         // rewrite the token with a new expiry
         const expiry = new Date().getTime() + 1 * 60 * 60;

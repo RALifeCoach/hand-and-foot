@@ -33,7 +33,6 @@ const useTestSetup = () => {
     if (doFetchGame) {
       fetchGame({variables: {id: pGameId}})
         .then((data) => {
-          console.log(data.data.handf_game[0])
           setPlayers(data.data.handf_game[0].gamerules.numberOfPlayers)
           setGameId(parseInt(pGameId as string))
         })

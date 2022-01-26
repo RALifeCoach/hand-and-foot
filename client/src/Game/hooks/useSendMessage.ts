@@ -20,7 +20,6 @@ const useSendMessage = () => {
         },
         token: user?.token,
       }
-      console.log(body)
       addMessage(body)
     },
     [gameId, playerId, user, addMessage]

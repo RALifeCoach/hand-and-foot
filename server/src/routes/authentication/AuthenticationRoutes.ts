@@ -11,11 +11,6 @@ const AuthenticationRoutes = () => {
   const router = express.Router();
   redis.connect()
 
-  router.use(function (req, res, next) {
-    console.log('auth routes', req.url)
-    next()
-  })
-
   router.post("/login/", (req: any, res) => {
     const sql = `SELECT * FROM handf.player where Email = '${req.body.userId}'`;
 

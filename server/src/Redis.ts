@@ -7,7 +7,6 @@ class Redis {
   public setAsync: ((key: string, value: string) => any) | null = null;
   public expireAsync: ((key: string, expiry: number) => any) | null = null;
   connect() {
-    console.log('redis', process.env.REDIS)
     const client = redis.createClient({
       host: process.env.REDIS as string,
       port: 6379

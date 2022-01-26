@@ -16,7 +16,6 @@ import {
 
 function buildConfig() {
   const serverHost = window.location.host
-  console.log('server host', serverHost)
   return {
     API_URL: `http://${serverHost}`,
     WS_URL: `ws://${serverHost}`,

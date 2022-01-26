@@ -17,7 +17,6 @@ import {FETCH_GAMES_FILTERED, FETCH_GAMES_ALL} from '../queries/game'
 import {useQuery} from '@apollo/client'
 
 function onGamesCompleted(data: any, setGames: Dispatch<IGamesRow[]>) {
-  console.log(data)
   const newData = data.handf_game.map((game: IGameDb) => {
     return {
       gameId: game.gameid,

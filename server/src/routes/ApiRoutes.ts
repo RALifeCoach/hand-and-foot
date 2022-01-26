@@ -6,7 +6,6 @@ import AuthenticationRoutes from './authentication/AuthenticationRoutes'
 const ApiRoutes = () => {
   const router = express.Router();
   router.use(function (req, res, next) {
-    console.log('api routes', req.url)
     next()
   })
 
