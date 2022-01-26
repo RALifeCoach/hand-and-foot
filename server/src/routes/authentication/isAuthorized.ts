@@ -3,12 +3,15 @@ import * as fs from "fs";
 import redis from "../../Redis";
 
 const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => void, reject: () => void) => {
+  console.log(1)
   const privateKey = fs.readFileSync("./private.pem", "utf8");
+  console.log('priv', privateKey)
   jwt.verify(
     token,
     privateKey,
     { algorithms: ["HS256"] },
     (err: Error | null, redisBody: any) => {
+      console.log('err', err)
       if (err) {
         return reject();
       }
