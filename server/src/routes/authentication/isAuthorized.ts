@@ -1,43 +1,43 @@
-import * as jwt from "jsonwebtoken";
-import * as fs from "fs";
-import redis from "../../Redis";
+import * as jwt from 'jsonwebtoken'
+import * as fs from 'fs'
+import redis from '../../Redis'
 import logger from '../../util/logger'
 
 const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => void, reject: () => void) => {
   logger.info(1)
-  const privateKey = fs.readFileSync("./private.pem", "utf8");
-  logger.info({type: 'priv', privateKey})
+  const privateKey = fs.readFileSync('./private.pem', 'utf8')
+  logger.info({ type: 'priv', privateKey })
   jwt.verify(
     token,
     privateKey,
-    { algorithms: ["HS256"] },
+    { algorithms: ['HS256'] },
     (err: Error | null, redisBody: any) => {
-      logger.info({type: 'verify err', err})
+      logger.info({ type: 'verify err', err })
       if (err) {
-        return reject();
+        return reject()
       }
       redis.redisGet(redisBody.redisKey, (userStr: string) => {
-        const user = JSON.parse(userStr);
-        logger.info({type:'isAuthorized', user, token, privateKey, clientIp})
+        const user = JSON.parse(userStr)
+        logger.info({ type: 'isAuthorized', user, token, privateKey, clientIp })
         if (!user) {
-          return reject();
+          return reject()
         }
-        // if (clientIp && user.ip !== clientIp) {
-        //   return reject();
-        // }
+        if (clientIp && user.ip !== clientIp) {
+          return reject()
+        }
 
         // rewrite the token with a new expiry
-        const expiry = new Date().getTime() + 60 * 60;
+        const expiry = new Date().getTime() + 60 * 60
         redis.redisSet({
           key: redisBody.redisKey,
           value: JSON.stringify(redisBody),
           expiry,
-        });
+        })
 
-        resolve(user);
-      });
+        resolve(user)
+      })
     }
-  );
-};
+  )
+}
 
-export default isAuthorized;
+export default isAuthorized

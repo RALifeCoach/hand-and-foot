@@ -42,7 +42,7 @@ const socketManager = (server: any) => {
         })
         .catch((err) => {
           logger.error({type: 'message err', err})
-          const message = JSON.stringify({ type: "authFailure", error: err });
+          const message = JSON.stringify({ type: "authFailure", message: err });
           socket.send(message);
         });
     });

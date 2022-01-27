@@ -5,7 +5,7 @@ import {
   savedMessagesAtom,
   savedMessagesSelector,
 } from '../atoms/game'
-import {userAtom} from '../atoms/main'
+import { configAtom, userAtom } from '../atoms/main'
 import SnackAlert from '../shared/SnackAlert'
 import ReconnectingWebsocket from 'reconnecting-websocket'
 import {lastMessageSelector} from '../atoms/lastMessageSelector/lastMessageSelector'
@@ -19,9 +19,11 @@ const MessageProvider: React.FC<any> = ({children}): JSX.Element => {
   const [wss, setWss] = useState<any>(null)
   const [ready, setReady] = useState(false)
   const setLastMessage = useSetRecoilState(lastMessageSelector)
+  const config = useRecoilValue(configAtom)
 
   useEffect(() => {
-    const client = new ReconnectingWebsocket('ws://localhost:3100')
+    console.log(config.WS_URL)
+    const client = new ReconnectingWebsocket(`${config.WS_URL}/ws`)
     setWss(client)
   }, [])
 
