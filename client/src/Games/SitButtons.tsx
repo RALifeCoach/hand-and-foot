@@ -26,7 +26,7 @@ const SitButtons = ({game}: IProps) => {
   const [error, setError] = useState('')
 
   const userPosition = useMemo(() => {
-    if (!user) {
+    if (!Object.keys(user).length) {
       return
     }
     return game.players.find(player => player.playerId === user.id)

@@ -70,7 +70,6 @@ function NoMatch() {
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const user = sessionStorage.getItem('handf:user')
-  console.log(user)
 
   if (!user) {
     // Redirect them to the /login page, but save the current location they were

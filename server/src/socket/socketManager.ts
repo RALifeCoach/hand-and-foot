@@ -20,10 +20,11 @@ const socketManager = (server: any) => {
     let gameId = "";
     let playerId = "";
     socket.on("message", (message: string) => {
+      logger.info({type:'message', message})
       const data: { type: string; value: any; token: string } = JSON.parse(
         message
       );
-      logger.info('arrived', data.type, data.value)
+      logger.info({type: 'arrived', dataType: data.type, dataValue: data.value})
 
       new Promise<any>((resolve: (user: any) => void, reject: () => void) => {
         isAuthorized(data.token, "", resolve, reject);
@@ -40,7 +41,7 @@ const socketManager = (server: any) => {
           processMessages(messageStack, gameController);
         })
         .catch((err) => {
-          logger.error('err', err)
+          logger.error({type: 'message err', err})
           const message = JSON.stringify({ type: "authFailure", error: err });
           socket.send(message);
         });

@@ -6,19 +6,19 @@ import logger from '../../util/logger'
 const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => void, reject: () => void) => {
   logger.info(1)
   const privateKey = fs.readFileSync("./private.pem", "utf8");
-  logger.info('priv', privateKey)
+  logger.info({type: 'priv', privateKey})
   jwt.verify(
     token,
     privateKey,
     { algorithms: ["HS256"] },
     (err: Error | null, redisBody: any) => {
-      logger.info('err', err)
+      logger.info({type: 'verify err', err})
       if (err) {
         return reject();
       }
       redis.redisGet(redisBody.redisKey, (userStr: string) => {
         const user = JSON.parse(userStr);
-        logger.info('isAuthorized', user, token, privateKey, clientIp)
+        logger.info({type:'isAuthorized', user, token, privateKey, clientIp})
         if (!user) {
           return reject();
         }

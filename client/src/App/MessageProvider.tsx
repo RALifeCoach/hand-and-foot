@@ -1,19 +1,17 @@
 import React, {useEffect, memo, useState} from 'react'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil'
 import {
-  errorAtom, gamePlayAtom, playerIdAtom,
+  errorAtom, gamePlayAtom,
   savedMessagesAtom,
   savedMessagesSelector,
 } from '../atoms/game'
 import {userAtom} from '../atoms/main'
 import SnackAlert from '../shared/SnackAlert'
-import {User} from 'User'
 import ReconnectingWebsocket from 'reconnecting-websocket'
 import {lastMessageSelector} from '../atoms/lastMessageSelector/lastMessageSelector'
-import { useQuery } from '@apollo/client'
 
 const MessageProvider: React.FC<any> = ({children}): JSX.Element => {
-  const user = (useRecoilValue(userAtom) ?? {}) as User
+  const user = useRecoilValue(userAtom)
   const setSavedMessages = useSetRecoilState(savedMessagesSelector)
   const setGamePlay = useSetRecoilState(gamePlayAtom)
   const [error, setError] = useRecoilState(errorAtom)

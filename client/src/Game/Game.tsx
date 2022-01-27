@@ -33,8 +33,7 @@ const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps)
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
   const navigate = useNavigate()
-  console.log('here', gameId, gameIdParam)
-  const { loading: gameLoading, error, data: gameData } = useQuery(FETCH_GAME, {
+  const { error } = useQuery(FETCH_GAME, {
     skip: !gameId,
     variables: { id: gameId },
     onCompleted: (data) => {

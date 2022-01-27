@@ -2,9 +2,9 @@ import { atom } from 'recoil';
 import { User } from 'User';
 import getWindowSize from '../App/getWindowSize';
 
-export const userAtom = atom<User | null>({
+export const userAtom = atom<User>({
     key: 'user',
-    default: null
+    default: {} as User
 });
 
 export const menuAtom = atom<string>({

@@ -91,7 +91,7 @@ const EditGame = ({game, open, onClose}: IProps) => {
       return
     }
     doMutation(gameId as number, numberOfPlayers, performCreate, performUpdate, onClose)
-  }, [performUpdate, performCreate, gameId, gameName, nameError, numberOfPlayers, playersError, onClose])
+  }, [doMutation, performUpdate, performCreate, gameId, gameName, nameError, numberOfPlayers, playersError, onClose])
 
   const width = 350
   const height = 600

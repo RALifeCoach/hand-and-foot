@@ -10,9 +10,6 @@ function AppDisplayComponent() {
   const user = useRecoilValue(userAtom)
   const menu = useRecoilValue(menuAtom)
 
-  if (!user) {
-    return null;
-  }
   if (menu) {
     sessionStorage.setItem('main.menu', menu);
   }

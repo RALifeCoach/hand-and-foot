@@ -8,7 +8,7 @@ const canGoDown = (
   team: ITeam,
   points: number
 ): boolean => {
-  logger.info('can go down', points, gamePlay.minimumPoints)
+  logger.info({type: 'can go down', points, minPoints: gamePlay.minimumPoints})
   if (points > 0 && points >= gamePlay.minimumPoints) {
     return true;
   }
