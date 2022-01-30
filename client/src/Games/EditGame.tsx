@@ -29,6 +29,30 @@ interface IEditGameState extends IGamesRow {
   playersError: string;
 }
 
+async function doMutation(
+  gameId: number,
+  gameName: string,
+  numberOfPlayers: number,
+  performCreate: any,
+  performUpdate: any,
+  onClose: Function
+) {
+  const gameData = startGame(numberOfPlayers)
+  if (gameId) {
+    await performUpdate({
+      variables: {id: gameId, name: gameName, rules: gameData.rules}
+    })
+    onClose()
+    return
+  }
+  await performCreate({
+    variables: {
+      name: gameName, play: gameData.play, rules: gameData.rules, state: gameData.play.gameState
+    }
+  })
+  onClose()
+}
+
 const EditGame = ({game, open, onClose}: IProps) => {
   const [state, dispatch] = useReducer((state: IEditGameState, action: IAction) => {
     switch (action.type) {
@@ -64,34 +88,21 @@ const EditGame = ({game, open, onClose}: IProps) => {
     console.log(updateError)
   }
 
-  const doMutation = async (
-    gameId: number,
-    numberOfPlayers: number,
-    performCreate: any,
-    performUpdate: any,
-    onClose: Function
-  ) => {
-    const gameData = startGame(numberOfPlayers)
-    if (gameId) {
-      await performUpdate({
-        variables: {id: gameId, name: gameName, rules: gameData.rules}
-      })
-      onClose()
-      return
-    }
-    await performCreate({
-      variables: {
-        name: gameName, play: gameData.play, rules: gameData.rules, state: gameData.play.gameState
-      }
-    })
-    onClose()
-  }
   const handleUpdate = useCallback(() => {
     if (nameError || playersError) {
       return
     }
-    doMutation(gameId as number, numberOfPlayers, performCreate, performUpdate, onClose)
-  }, [doMutation, performUpdate, performCreate, gameId, gameName, nameError, numberOfPlayers, playersError, onClose])
+    doMutation(gameId as number, gameName, numberOfPlayers, performCreate, performUpdate, onClose)
+  }, [
+    performUpdate,
+    gameName,
+    performCreate,
+    gameId,
+    nameError,
+    numberOfPlayers,
+    playersError,
+    onClose
+  ])
 
   const width = 350
   const height = 600

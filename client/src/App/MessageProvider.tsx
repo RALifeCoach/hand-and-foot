@@ -22,10 +22,9 @@ const MessageProvider: React.FC<any> = ({children}): JSX.Element => {
   const config = useRecoilValue(configAtom)
 
   useEffect(() => {
-    console.log(config.WS_URL)
     const client = new ReconnectingWebsocket(`${config.WS_URL}/ws`)
     setWss(client)
-  }, [])
+  }, [config.WS_URL])
 
   useEffect(() => {
     if (wss) {
@@ -34,7 +33,6 @@ const MessageProvider: React.FC<any> = ({children}): JSX.Element => {
       }
       wss.onmessage = (message: any) => {
         const data = JSON.parse(message.data)
-        console.log('message', data)
         setLastMessage(data)
       }
       wss.onclose = () => {
