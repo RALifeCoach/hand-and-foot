@@ -17,7 +17,7 @@ const PlayerAction = ({ gamePlay }: IProps) => {
       return false
     }
     return gamePlay.currentPlayer.numberOfCardsToDraw > 0 ||
-     gamePlay.currentPlayer.numberOfCardsToReplace > 0
+      gamePlay.currentPlayer.numberOfCardsToReplace > 0
   }, [
     gamePlay.gameState,
     gamePlay.currentPlayer.isPlayerTurn,
@@ -67,7 +67,7 @@ const PlayerAction = ({ gamePlay }: IProps) => {
           color="primary"
           style={{ maxWidth: 60, maxHeight: 60, minWidth: 60, minHeight: 60, marginTop: 24, marginLeft: 8 }}
           onClick={(ev) => {
-            sendMessage('undo', {override: ev.shiftKey})
+            sendMessage('undo', { override: ev.shiftKey })
           }}
         >
           <div style={{ fontSize: 18 }}>Undo</div>
@@ -84,7 +84,7 @@ const PlayerAction = ({ gamePlay }: IProps) => {
         style={{ maxWidth: 60, maxHeight: 60, minWidth: 60, minHeight: 60, marginTop: 24, marginLeft: 8 }}
         onClick={(ev) => {
           if (ev.shiftKey) {
-            sendMessage('undo', {override: ev.shiftKey})
+            sendMessage('undo', { override: ev.shiftKey })
           }
         }}
       >
