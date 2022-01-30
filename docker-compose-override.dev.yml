@@ -1,0 +1,6 @@
+services:
+  server:
+    image: rainist/redirector
+    environment:
+      DESTINATION: localhost:3100
+    network_mode: host

@@ -72,10 +72,6 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const user = sessionStorage.getItem('handf:user')
 
   if (!user) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
     return <Navigate to="/login" replace/>
   }
 
@@ -159,28 +155,19 @@ const App = (): JSX.Element => {
 
   return (
     <RecoilRoot initializeState={initializeState((user as User)?.id ?? 0)}>
-      <Routes>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/games" element={(
-          <RequireAuth>
-            <MessageProvider>
-              <Games/>
-            </MessageProvider>
-          </RequireAuth>
-        )}/>
-        <Route
-          path="/game/:gameId/:position/:team"
-          element={(
-            <RequireAuth>
-              <MessageProvider>
-                <Game/>
-              </MessageProvider>
-            </RequireAuth>
-          )}
-        />
-        <Route path="/" element={<Login/>}/>
-        <Route path="*" element={<NoMatch/>}/>
-      </Routes>
+      <RequireAuth>
+        <MessageProvider>
+          <Routes>
+            <Route path="/games" element={<Games/>}/>
+            <Route
+              path="/game/:gameId/:position/:team"
+              element={<Game/>}
+            />
+            <Route path="/" element={<Login/>}/>
+            <Route path="*" element={<NoMatch/>}/>
+          </Routes>
+        </MessageProvider>
+      </RequireAuth>
     </RecoilRoot>
   )
 }
