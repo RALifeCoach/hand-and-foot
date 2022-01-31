@@ -22,7 +22,7 @@ const MessageProvider: React.FC<any> = ({children}): JSX.Element => {
   const config = useRecoilValue(configAtom)
 
   useEffect(() => {
-    const client = new ReconnectingWebsocket(`${config.WS_URL}/ws`)
+    const client = new ReconnectingWebsocket(`${config.WS_URL}/wsapp`)
     setWss(client)
   }, [config.WS_URL])
 

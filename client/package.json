@@ -43,7 +43,7 @@
         "eject": "react-scripts eject",
         "watch": "npm-watch"
     },
-    "proxy": "http://localhost:3200",
+    "proxy": "http://localhost",
     "watch": {
         "build": {
             "patterns": [

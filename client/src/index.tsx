@@ -13,12 +13,14 @@ function buildConfig() {
   const serverHost = window.location.host
   return {
     API_URL: `http://${serverHost}`,
-    WS_URL: `ws://${serverHost}`,
+    WS_URL: `ws://${process.env.REACT_APP_WS_PATH ?? serverHost}`,
   }
 }
 
 const initializeState = ({ set }: MutableSnapshot) => {
-  set(configAtom, buildConfig())
+  const config = buildConfig()
+  console.log('config', config, process.env.REACT_APP_WS_PATH)
+  set(configAtom, config)
 }
 
 ReactDOM.render(

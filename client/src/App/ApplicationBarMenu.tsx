@@ -3,8 +3,8 @@ import {
   IconButton, Menu, MenuItem,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { menuAtom, userAtom } from '../atoms/main'
+import { useRecoilValue } from 'recoil'
+import { userAtom } from '../atoms/main'
 import { useNavigate } from 'react-router-dom'
 
 const MENU_ITEMS = [
