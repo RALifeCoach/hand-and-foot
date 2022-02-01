@@ -20,7 +20,7 @@ dotenv.config()
 const app = express()
 
 app.use(function (req, res, next) {
-  logger.info('request', req.url)
+  logger.debug('request', req.url)
   next()
 })
 
@@ -35,8 +35,8 @@ app.use(ipMiddleware)
 app.use('/api', ApiRoutes())
 
 app.use(function (req, res) {
-  logger.info('404')
-  logger.info(req.url)
+  logger.error('404')
+  logger.error(req.url)
   res.status(404).send('Sorry can\'t find that!')
 })
 

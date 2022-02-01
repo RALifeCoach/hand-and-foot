@@ -94,7 +94,7 @@ const AuthenticationRoutes = () => {
           res.json({ status: "failure", message: err });
           return;
         }
-        logger.info(`User ${rows[0].UserId} successfully changed their password`);
+        logger.debug(`User ${rows[0].UserId} successfully changed their password`);
         res.json({ status: "success" });
       });
     });

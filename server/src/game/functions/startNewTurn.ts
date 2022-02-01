@@ -5,7 +5,7 @@ import startPlay from './startPlay'
 import logger from '../../util/logger'
 
 const startNewTurn = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {
-  logger.info('start new turn')
+  logger.debug('start new turn')
   const nextPlayer = getNextPlayer(players, gamePlay.currentPlayerId)
 
   gamePlay.currentPlayerId = nextPlayer.playerId

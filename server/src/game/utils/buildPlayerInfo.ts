@@ -4,7 +4,6 @@ import {
   IGameBase
 } from '../../../models/game'
 import isWildCard from './isWildCard'
-import getCurrentPlayer from '../functions/getCurrentPlayer'
 
 const buildPlayerInfo = (
   gamePlay: IGamePlay,
@@ -15,13 +14,10 @@ const buildPlayerInfo = (
   messages: IMessage[],
   isCurrentPlayer: boolean,
 ): IPlayerInfo => {
-  const activePlayer = getCurrentPlayer(gamePlay, players)
-  if (!activePlayer) {
-    throw new Error('active player not found')
-  }
+  const activePlayer = players.find(player => player.playerId === gamePlay.currentPlayerId)
   const currentPlayer = players.find(player => player.playerId === playerId)
   if (!currentPlayer) {
-    throw new Error('player not found')
+    throw new Error(`player not found (${playerId})`)
   }
 
   return {
@@ -32,7 +28,7 @@ const buildPlayerInfo = (
       playerName: currentPlayer.playerName,
       playerState: currentPlayer.playerState,
       cards: currentPlayer.isInHand ? currentPlayer.hand : currentPlayer.foot,
-      isPlayerTurn: currentPlayer.playerId === activePlayer.playerId,
+      isPlayerTurn: currentPlayer.playerId === activePlayer?.playerId,
       numberOfCardsToDraw: currentPlayer.numberOfCardsToDraw,
       numberOfCardsToReplace: currentPlayer.numberOfCardsToReplace,
       isInHand: currentPlayer.isInHand,
@@ -57,7 +53,7 @@ const buildPlayerInfo = (
             playerName: player.playerName,
             playerState: player.playerState,
             cards: player.isInHand ? player.hand.length : player.foot.length,
-            isPlayerTurn: player.playerId === activePlayer.playerId,
+            isPlayerTurn: player.playerId === activePlayer?.playerId,
             isInHand: player.isInHand,
             teamId: player.teamId,
           } as IPlayerOther)

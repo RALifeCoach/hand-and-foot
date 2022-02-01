@@ -20,7 +20,7 @@ const processMessages = (
 
   const gameId = data.value.gameId
   const playerId = data.value.playerId
-  logger.info(`About to process ${data.type} for gameId ${data.value.gameId} and player ${data.value.playerId}`)
+  logger.debug(`About to process ${data.type} for gameId ${data.value.gameId} and player ${data.value.playerId}`)
 
   Database.readGame(data.value.gameId, (game) => {
     const gamePlay: IGamePlay = game.gamePlay

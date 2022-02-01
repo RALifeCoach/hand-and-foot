@@ -20,11 +20,10 @@ const socketManager = (server: any) => {
     let gameId = "";
     let playerId = "";
     socket.on("message", (message: string) => {
-      logger.info({type:'message', message})
       const data: { type: string; value: any; token: string } = JSON.parse(
         message
       );
-      logger.info({type: 'arrived', dataType: data.type, dataValue: data.value})
+      logger.debug({type: 'arrived', dataType: data.type, dataValue: data.value})
 
       new Promise<any>((resolve: (user: any) => void, reject: () => void) => {
         isAuthorized(data.token, "", resolve, reject);

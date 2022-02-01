@@ -8,7 +8,7 @@ const drawCardPlayer = (
   players: IPlayer[],
   pileIndex: number
 ) => {
-  logger.info({type:'draw card player', pileIndex})
+  logger.debug({type:'draw card player', pileIndex})
   const player = getCurrentPlayer(gamePlay, players)
   const cards = player.isInHand ? player.hand : player.foot
 

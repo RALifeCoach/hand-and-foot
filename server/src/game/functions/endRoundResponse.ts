@@ -13,7 +13,7 @@ const endRoundResponse = (
   partnerAgreed: boolean,
   resolve: any
 ) => {
-  logger.info('end round response')
+  logger.debug('end round response')
   gamePlay.gameState = "inPlay";
   if (!partnerAgreed) {
     gamePlay.toDiscardId = 0;

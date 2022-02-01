@@ -14,6 +14,7 @@ interface IProps {
 
 const PlayerAction = ({ gamePlay }: IProps) => {
   const sendMessage = useSendMessage()
+  const isStarted = gamePlay.gameState !== 'waitingToStart'
   const canDraw = useMemo(() => {
     if (gamePlay.gameState !== 'inPlay' || !gamePlay.currentPlayer.isPlayerTurn) {
       return false
@@ -42,6 +43,9 @@ const PlayerAction = ({ gamePlay }: IProps) => {
   })
 
   const firstButton = () => {
+    if (!isStarted) {
+      return <div/>
+    }
     if (canDraw) {
       return (
         <ThemeProvider theme={themeGreen}>
@@ -104,18 +108,20 @@ const PlayerAction = ({ gamePlay }: IProps) => {
   return (
     <div className="flex flex-col gap-3 mt-4">
       {firstButton()}
-      <Button
-        style={{ maxWidth: 60, maxHeight: 40, minWidth: 60, minHeight: 40 }}
-        onClick={(ev) => {
-          if (ev.shiftKey) {
-            sendMessage('undo', { override: ev.shiftKey })
-          }
-        }}
-      >
-        <Tooltip title="resign">
-          <img src={death} alt="resign"/>
-        </Tooltip>
-      </Button>
+      {isStarted && (
+        <Button
+          style={{ maxWidth: 60, maxHeight: 40, minWidth: 60, minHeight: 40 }}
+          onClick={(ev) => {
+            if (ev.shiftKey) {
+              sendMessage('undo', { override: ev.shiftKey })
+            }
+          }}
+        >
+          <Tooltip title="resign">
+            <img src={death} alt="resign"/>
+          </Tooltip>
+        </Button>
+      )}
     </div>
   )
 }

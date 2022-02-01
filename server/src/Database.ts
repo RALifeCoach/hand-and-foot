@@ -28,7 +28,7 @@ class Database {
           })
           .catch(async (err: Error) => {
             await client.end()
-            logger.info({type:'catch1', err, sql})
+            logger.error({type:'catch1', err, sql})
           })
       })
       .catch((err: Error) => logger.error({type:'catch2', err, sql}))

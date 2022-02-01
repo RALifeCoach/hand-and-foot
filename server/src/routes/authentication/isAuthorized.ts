@@ -4,25 +4,24 @@ import redis from '../../Redis'
 import logger from '../../util/logger'
 
 const isAuthorized = (token: string, clientIp: string, resolve: (user: any) => void, reject: () => void) => {
-  logger.info(1)
   const privateKey = fs.readFileSync('./private.pem', 'utf8')
-  logger.info({ type: 'priv', privateKey })
   jwt.verify(
     token,
     privateKey,
     { algorithms: ['HS256'] },
     (err: Error | null, redisBody: any) => {
-      logger.info({ type: 'verify err', err })
       if (err) {
+        logger.error({ type: 'verify err', err })
         return reject()
       }
       redis.redisGet(redisBody.redisKey, (userStr: string) => {
         const user = JSON.parse(userStr)
-        logger.info({ type: 'isAuthorized', user, token, privateKey, clientIp })
         if (!user) {
+          logger.error({type: 'auth', message: 'User not found'})
           return reject()
         }
         if (clientIp && user.ip !== clientIp) {
+          logger.error({type: 'auth', message: 'ip does not match'})
           return reject()
         }
 
