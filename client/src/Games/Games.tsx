@@ -2,19 +2,16 @@ import React, {Dispatch, useState} from 'react'
 import {
   CircularProgress,
   Paper,
-  Table,
-  TableBody,
   Typography
 } from '@mui/material'
 import Spacer from '../shared/Spacer'
 import {IGameDb, IGamesRow, IPlayerDb} from 'Game'
-import GamesHeader from './GamesHeader'
-import GamesRow from './GamesRow'
 import FlexRow from '../shared/flex-grid/FlexRow'
 import GamesHeaderButtons from './GamesHeaderButtons'
 import ApplicationBar from '../App/ApplicationBar'
 import {FETCH_GAMES_FILTERED, FETCH_GAMES_ALL} from '../queries/game'
 import {useQuery} from '@apollo/client'
+import GameCard from './GameCard'
 
 function onGamesCompleted(data: any, setGames: Dispatch<IGamesRow[]>) {
   const newData = data.handf_game.map((game: IGameDb) => {
@@ -78,17 +75,14 @@ const Games = () => {
           />
         </FlexRow>
         <Spacer height={16}/>
-        <Table size="small">
-          <GamesHeader/>
-          <TableBody>
-            {(games ?? []).map((game: IGamesRow) => (
-              <GamesRow
-                game={game}
-                key={game.gameId}
-              />
-            ))}
-          </TableBody>
-        </Table>
+        <div className="flex flex-wrap gap-10">
+          {(games ?? []).map((game: IGamesRow) => (
+            <GameCard
+              game={game}
+              key={game.gameId}
+            />
+          ))}
+        </div>
       </Paper>
     </>
   )

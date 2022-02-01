@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
-import EventSeatIcon from '@mui/icons-material/EventSeat';
-import { IconButton, Tooltip } from '@mui/material';
+import React, { memo } from 'react'
+import EventSeatIcon from '@mui/icons-material/EventSeat'
+import { IconButton, Tooltip } from '@mui/material'
 import styled from '@emotion/styled'
 import { IGamesPlayer } from 'Game'
 
@@ -10,17 +10,15 @@ const BiggerTooltip = styled(Tooltip)`
 
 interface IProps {
   player: IGamesPlayer;
-  top: number;
-  left: number;
   isPlayerPresent: boolean;
   isCurrentUser: boolean;
   handleSit: () => void;
 }
 
-const SitButton = ({ top, left, player, isPlayerPresent, isCurrentUser, handleSit }: IProps) => {
+const SitButton = ({ player, isPlayerPresent, isCurrentUser, handleSit }: IProps) => {
   const title = player
     ? `Seat currently being played by ${player.playerName}`
-    : 'Empty seat';
+    : 'Empty seat'
 
   const color = isPlayerPresent
     ? isCurrentUser
@@ -28,32 +26,35 @@ const SitButton = ({ top, left, player, isPlayerPresent, isCurrentUser, handleSi
       : '#F00'
     : Boolean(player)
       ? '#F00'
-      : '#0F0';
+      : '#0F0'
 
   return (
-    <IconButton
-      style={{ position: 'absolute', top, left, color }}
-      onClick={() => {
-        handleSit()}}
-    >
-      <BiggerTooltip
-        placement="top"
-        title={title}
-        arrow
+    <div className="h-14 w-14">
+      <IconButton
+        style={{ color }}
+        onClick={() => {
+          handleSit()
+        }}
       >
-        <>
-          <EventSeatIcon
-            style={{ width: 40, height: 40 }}
-          />
-          {!!player && (
-            <div style={{ position: 'relative', left: -38, color: '#00F', maxWidth: 40 }}>
-              {player.playerName}
-            </div>
-          )}
-        </>
-      </BiggerTooltip>
-    </IconButton>
-  );
-};
+        <BiggerTooltip
+          placement="top"
+          title={title}
+          arrow
+        >
+          <div className="flex flex-col items-center">
+            <EventSeatIcon
+              style={{ width: 30, height: 30 }}
+            />
+            {!!player && (
+              <div style={{ color: '#00F' }}>
+                {player.playerName}
+              </div>
+            )}
+          </div>
+        </BiggerTooltip>
+      </IconButton>
+    </div>
+  )
+}
 
-export default memo(SitButton);
+export default memo(SitButton)
