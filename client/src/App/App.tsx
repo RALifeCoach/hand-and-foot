@@ -133,9 +133,11 @@ const App = (): JSX.Element => {
   }
 
   if (isTest) {
+    console.log('test')
     if (!gameId) {
       return <div/>
     }
+    console.log('game id', gameId)
     return (
       <>
         {(players === 4 ? PLAYERS4 : PLAYERS3).map((player) => (

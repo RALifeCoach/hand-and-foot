@@ -6,19 +6,20 @@ import {IGameBase} from '../models/game'
 
 class Database {
   private readonly cache: { [gameId: string]: { gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[] } }
-  private readonly options = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
-  }
 
   constructor() {
     this.cache = {}
   }
 
   query(sql: string, callback: (rows: any) => void) {
-    const client = new Client(this.options)
+    const options = {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE
+    }
+
+    const client = new Client(options)
     client.connect()
       .then(() => {
         client.query(sql)
@@ -94,6 +95,12 @@ class Database {
   }
 
   updateGame(gameId: number, gamePlay: IGamePlay, players: IPlayer[], callback: (rows: any) => void) {
+    const options = {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE
+    }
     this.cache[gameId].gamePlay = gamePlay
     this.cache[gameId].players = players
     const sqls: string[] = []
@@ -113,7 +120,7 @@ class Database {
         cards_to_replace = ${player.numberOfCardsToReplace}, in_hand = ${player.isInHand},
         sort_order = ${!!player.sortOrder ? '\'' + player.sortOrder + '\'' : 'null'}`
     )))
-    const client = new Client(this.options)
+    const client = new Client(options)
     client.connect()
       .then(() => this.executeQuery(sqls, client, callback))
       .catch((err: Error) => logger.error({type: 'query', err}))

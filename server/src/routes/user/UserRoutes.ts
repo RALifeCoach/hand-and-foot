@@ -1,6 +1,6 @@
 import * as express from "express";
 import Database from "../../Database";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import userValidate from "../../user/UserValidate";
 
 const UserRoutes = () => {

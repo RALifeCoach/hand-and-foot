@@ -1,32 +1,26 @@
 import * as redis from "redis";
-import { promisify } from "util";
 import logger from "./util/logger";
+import {RedisClientType, RedisFunctions, RedisModules, RedisScripts} from "redis";
 
 class Redis {
-  public getAsync: ((key: string) => any) | null = null;
-  public setAsync: ((key: string, value: string) => any) | null = null;
-  public expireAsync: ((key: string, expiry: number) => any) | null = null;
-  connect() {
-    const client = redis.createClient({
-      host: process.env.REDIS as string,
-      port: 6379
+  private _client: RedisClientType<RedisModules, RedisFunctions, RedisScripts>;
+  constructor() {
+    this._client = redis.createClient({
+      url: process.env.REDIS as string,
     });
 
-    client.on("error", function (error: any) {
-      console.error(error);
+    this._client.connect().then(() => {
+      this._client.on("error", function (error: any) {
+        console.error(error);
+      });
     });
-
-    this.getAsync = promisify(client.get).bind(client);
-    this.setAsync = promisify(client.set).bind(client);
-    this.expireAsync = promisify(client.expire).bind(client);
   }
 
   redisGet(key: string, callback: any) {
-    if (!this.getAsync) {
-      return
-    }
-    this.getAsync(key)
-      .then((value: string) => callback(value))
+    this._client.get(key)
+      .then((value: string | null) => {
+        callback(value)
+      })
       .catch(logger.error);
   }
 
@@ -41,16 +35,10 @@ class Redis {
     expiry: number;
     callback?: any;
   }) {
-    if (!this.setAsync) {
-      return
-    }
-    this.setAsync(key, value)
+    this._client.set(key, value)
       .then(() => {
         if (expiry) {
-          if (!this.expireAsync) {
-            return
-          }
-          this.expireAsync(key, expiry).then(() => {
+          this._client.expire(key, expiry).then(() => {
             if (callback) {
               callback(null);
             }

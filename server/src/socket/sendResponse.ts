@@ -98,13 +98,13 @@ const sendResponse = (
       try {
         gameController[gameId].players[playerId].send(playerInfo)
       }
-      catch (ex) {
+      catch (ex: any) {
         logger.error(
           `sendResponse_player: failed to send response ${JSON.stringify(ex)}`
         )
       }
     })
-  } catch(err) {
+  } catch(err: any) {
     logger.error(
       `sendResponse_catch: failed to send response ${err.message}`
     )

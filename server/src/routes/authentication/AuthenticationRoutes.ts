@@ -9,7 +9,6 @@ import logger from "../../util/logger";
 
 const AuthenticationRoutes = () => {
   const router = express.Router();
-  redis.connect()
 
   router.post("/login/", (req: any, res) => {
     const sql = `SELECT * FROM handf.player where Email = '${req.body.userId}'`;
@@ -84,8 +83,8 @@ const AuthenticationRoutes = () => {
       }
 
       const updateSql = `Update handf.player set password = '${newPassword}' where id = ${rows[0].id}`;
-      Database.query(updateSql, (err: Error) => {
-        if (err) {
+      Database.query(updateSql, (err: any) => {
+        if (err && err.length > 0) {
           logger.error(
             `setPassword: update failed ${JSON.stringify(
               err

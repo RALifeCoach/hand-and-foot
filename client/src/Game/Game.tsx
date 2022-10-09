@@ -37,6 +37,7 @@ const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps)
     skip: !gameId,
     variables: { id: gameId },
     onCompleted: (data) => {
+      console.log('read game', data)
       if (!data.handf_game.length || data.handf_game.gamestate === 'finished') {
         return navigate('/games')
       }

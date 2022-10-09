@@ -9,10 +9,28 @@ CREATE TABLE handf.game (
   GameRules json NOT NULL
 );
 
+CREATE TABLE handf.game_player (
+  game_id integer not null,
+  player_id integer not null,
+  position text not null,
+  team text not null,
+  hand text not null,
+  foot text not null,
+  player_state text not null,
+  cards_to_draw integer not null,
+  cards_to_replace integer not null,
+  in_hand boolean not null,
+  sort_order text,
+  player_name text not null,
+  CONSTRAINT game_player_pkey
+     PRIMARY KEY (game_id, player_id)
+);
+
 CREATE TABLE handf.game_log (
   LogId varchar(60) NOT NULL PRIMARY KEY,
   GameId int DEFAULT NULL,
-  GamePlay json DEFAULT NULL
+  GamePlay json DEFAULT NULL,
+  Players json DEFAULT NULL
 );
 
 CREATE TABLE handf.player (

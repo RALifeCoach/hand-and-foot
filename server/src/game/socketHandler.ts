@@ -93,7 +93,7 @@ const socketHandler = (
           logger.error(`unknown action ${action}`)
           throw new Error('unknown action type')
       }
-    } catch (ex) {
+    } catch (ex: any) {
       resolve({type: 'error', message: ex.message})
     }
   })

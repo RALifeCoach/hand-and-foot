@@ -23,7 +23,7 @@ const socketManager = (server: any) => {
       const data: { type: string; value: any; token: string } = JSON.parse(
         message
       );
-      logger.debug({type: 'arrived', dataType: data.type, dataValue: data.value})
+      console.log({type: 'arrived', dataType: data.type, dataValue: data.value})
 
       new Promise<any>((resolve: (user: any) => void, reject: () => void) => {
         isAuthorized(data.token, "", resolve, reject);

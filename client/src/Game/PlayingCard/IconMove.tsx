@@ -26,7 +26,7 @@ export default function IconMove({showIcons, selected, onMoved, config}: IProps)
   return (
     <div style={styleMove}>
       <SwapHorizIcon
-        onClick={onMoved ? (event) => handleMove(event) : undefined}
+        onClick={!!onMoved ? (event) => handleMove(event) : undefined}
       />
     </div>
   )

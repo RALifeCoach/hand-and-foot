@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
 
 const ApolloAppProvider: React.FC<any> = ({ children }) => {
-  const [client, setClient] = useState()
+  const [client, setClient] = useState<any>()
 
   useEffect(() => {
     const serverHost = window.location.host
     const link = createHttpLink({
-      uri: `http://${serverHost}/api/v1/graphql`,
+      uri: `http://localhost:8080/v1/graphql`,
     })
 
     const client = new ApolloClient({

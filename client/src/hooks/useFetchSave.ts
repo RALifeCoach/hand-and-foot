@@ -43,6 +43,7 @@ const useFetchSave = () => {
       (body: object, url: string, type: string = "POST") => {
         try {
           dispatch({ type: "in progress", value: null });
+          console.log('config', config)
           const fullUrl = `${config.API_URL}/${url}`;
           fetch(fullUrl, {
             method: type,

@@ -2,11 +2,12 @@ import * as express from 'express'
 import * as http from 'http'
 import socketManager from './src/socket/socketManager'
 import ApiRoutes from './src/routes/ApiRoutes'
-import AuthenticationRoutes from './src/routes/authentication/AuthenticationRoutes'
 import * as dotenv from 'dotenv'
 import * as helmet from 'helmet'
 import * as requestIp from 'request-ip'
+import * as cors from 'cors'
 import logger from './src/util/logger'
+import AuthCheckMiddleware from "./src/routes/authentication/AuthCheckMiddleware";
 
 const bodyParser = require('body-parser')
 
@@ -30,6 +31,7 @@ app.disable('x-powered-by')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(ipMiddleware)
+app.use(cors())
 
 // app.use("/api", AuthCheckMiddleware, ApiRoutes());
 app.use('/api', ApiRoutes())
