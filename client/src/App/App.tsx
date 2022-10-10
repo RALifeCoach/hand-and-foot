@@ -153,6 +153,7 @@ const App = (): JSX.Element => {
     return <div/>
   }
 
+  console.log('route')
   return (
     <RecoilRoot initializeState={initializeState((user as User)?.id ?? 0)}>
       <RequireAuth>

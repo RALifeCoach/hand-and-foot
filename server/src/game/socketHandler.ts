@@ -74,7 +74,7 @@ const socketHandler = (
           endRoundResponse(gameId, gamePlay, gameRules, players, action.value.partnerAgreed, resolve)
           break
         case 'resign':
-          resignResponse(gameId, gamePlay, gameRules, players, action.value.partnerAgreed, resolve)
+          resignResponse(gamePlay, action.value.partnerAgreed, resolve)
           break
         case 'playCards':
           playCards(

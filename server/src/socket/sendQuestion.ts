@@ -8,6 +8,7 @@ const sendQuestion = (
   gameId: number,
   gamePlay: IGamePlay,
   players: IPlayer[],
+  playerId: number,
   currentPlayer: IPlayer,
   gameController: IGameController
 ) => {
@@ -16,7 +17,7 @@ const sendQuestion = (
     return
   }
   if (gamePlay.gameState === 'askResign') {
-    askResign(gamePlay, currentPlayer, players, gameController, gameId)
+    askResign(gamePlay, playerId, players, gameController, gameId)
     return
   }
   if (gamePlay.gameState === 'finished') {

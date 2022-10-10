@@ -5,11 +5,15 @@ import {IGameController} from "./socketManager";
 
 const askResign = (
   gamePlay: IGamePlay,
-  currentPlayer: IPlayer,
+  playerId: number,
   players: IPlayer[],
   gameController: IGameController,
   gameId: number
 ) => {
+  const currentPlayer = players.find(player => player.playerId === playerId)
+  if (!currentPlayer) {
+    return
+  }
   const team = gamePlay.teams[currentPlayer.teamId]
   players.forEach((player) => {
     const playerTeam = gamePlay.teams[player.teamId]

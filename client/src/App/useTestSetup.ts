@@ -17,6 +17,7 @@ const useTestSetup = () => {
   const pGameId = queryParams.gameId
   const doTruncate = isTest && truncate === 'yes'
   const doFetchGame = isTest && !!pGameId
+  console.log('test', isTest)
 
   useEffect(() => {
     if (doTruncate && !gameId) {

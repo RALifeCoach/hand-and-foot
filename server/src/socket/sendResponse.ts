@@ -17,7 +17,7 @@ const sendResponse = (
   gameId: number,
   playerId: number,
   transactionType: string,
-  isError: boolean
+  isError: boolean,
 ) => {
   try {
     const messages: IMessage[] = []
@@ -75,6 +75,7 @@ const sendResponse = (
           sendQuestion(gameId,
             gamePlay,
             players,
+            playerId,
             activePlayer,
             gameController)
         }

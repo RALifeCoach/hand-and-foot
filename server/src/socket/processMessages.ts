@@ -44,10 +44,10 @@ const processMessages = (
       }
     }).then(
       ({
-         newGamePlay,
-         newPlayers,
-         message,
-         isError,
+        newGamePlay,
+        newPlayers,
+        message,
+        isError,
        }: {
         newGamePlay: IGamePlay;
         newPlayers: IPlayer[];
@@ -63,7 +63,7 @@ const processMessages = (
           data.value.gameId,
           data.value.playerId,
           data.type,
-          isError
+          isError,
         )
         messageStack.splice(0, 1)
         if (messageStack.length) {
