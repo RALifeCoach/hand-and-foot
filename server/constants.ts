@@ -123,4 +123,8 @@ export const ACTION_RESPONSE: {
     canUndo: false,
     sendToAll: true,
   },
+  finished: {
+    canUndo: false,
+    sendToAll: true,
+  },
 };

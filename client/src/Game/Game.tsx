@@ -6,6 +6,7 @@ import useSendMessage from './hooks/useSendMessage'
 import ServerQuestion from './ServerQuestion'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
+  finishGameAtom,
   gameBaseAtom,
   gameIdAtom,
   gamePlayAtom,
@@ -14,6 +15,7 @@ import {
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { FETCH_GAME } from '../queries/game'
+import FinishGame from "./FinishGame";
 
 interface IProps {
   gameId?: number;
@@ -32,6 +34,7 @@ const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps)
   const [gameBase, setGameBase] = useRecoilState(gameBaseAtom)
   const gamePlay = useRecoilValue(gamePlayAtom)
   const serverQuestion = useRecoilValue(serverQuestionAtom)
+  const finishGame = useRecoilValue(finishGameAtom)
   const navigate = useNavigate()
   const { error } = useQuery(FETCH_GAME, {
     skip: !gameId,
@@ -74,6 +77,11 @@ const Game = ({ gameId: pGameId, position: positionP, teamId: teamIdP }: IProps)
           {!!serverQuestion && (
             <ServerQuestion
               serverQuestion={serverQuestion}
+            />
+          )}
+          {!!finishGame && (
+            <FinishGame
+              finishGame={finishGame}
             />
           )}
         </>

@@ -31,7 +31,10 @@ const sendQuestion = (
         : `Sorry your team lost with a score of ${playerTeam.scoreCards + playerTeam.scoreBase}`
       if (gameController[gameId].players[player.playerId]) {
         try {
-          gameController[gameId].players[player.playerId].send(message)
+          gameController[gameId].players[player.playerId].send(JSON.stringify({
+            type: 'finishGame',
+            value: {title: 'Finish Game', message}
+          }))
         }
         catch (ex) {
           logger.error(

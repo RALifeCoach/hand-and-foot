@@ -14,13 +14,14 @@ const resignResponse = (
   partnerAgreed: boolean,
   resolve: any
 ) => {
-  logger.debug('resign response')
+  logger.debug(`resign response: ${partnerAgreed}`)
   gamePlay.gameState = "inPlay";
   if (!partnerAgreed) {
     resolve(null)
     return
   }
   endGame(gamePlay)
+  resolve(null)
 };
 
 export default resignResponse;

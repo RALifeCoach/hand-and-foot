@@ -82,6 +82,11 @@ export interface IServerQuestion {
   buttons: IServerQuestionButton[];
 }
 
+export interface IFinishGame {
+  title: string;
+  message: string;
+}
+
 export interface IGameBase {
   gameId: number;
   gameName: string;

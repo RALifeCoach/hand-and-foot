@@ -117,6 +117,12 @@ const useSendMessage = (gameId: number, user: any, playerId: number) => {
                 ...state,
                 serverQuestion: action.value,
               };
+            case "finishGame":
+              console.log('finish reducer')
+              return {
+                ...state,
+                finishGame: action.value,
+              };
             case "moveCard":
               return {
                 ...state,

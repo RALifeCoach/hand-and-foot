@@ -16,6 +16,7 @@ import Games from '../Games/Games'
 import { User } from 'User'
 import MessageProvider from './MessageProvider'
 import useTestSetup from './useTestSetup'
+import Users from "../User/Users";
 
 const PLAYERS4 = [
   {
@@ -163,6 +164,7 @@ const App = (): JSX.Element => {
               element={<Game/>}
             />
             <Route path="/" element={<Login/>}/>
+            <Route path="/users" element={<Users/>}/>
             <Route path="*" element={<NoMatch/>}/>
           </Routes>
         </MessageProvider>

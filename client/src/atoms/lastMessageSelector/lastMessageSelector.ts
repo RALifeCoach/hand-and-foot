@@ -1,6 +1,7 @@
 import {GetRecoilValue, selector, SetRecoilState} from 'recoil'
 import {
   errorAtom,
+  finishGameAtom,
   lastMessageAtom,
   selectedAtom,
   serverQuestionAtom,
@@ -33,6 +34,10 @@ export const lastMessageSelector = selector<any>({
         return;
       case "serverQuestion":
         set(serverQuestionAtom, message.value);
+        return;
+      case "finishGame":
+        console.log('finish game selector')
+        set(finishGameAtom, message.value);
         return;
       case "unmetMin":
         set(errorAtom, "You do not have enough points on the board to go down");

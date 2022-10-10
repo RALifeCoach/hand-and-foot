@@ -1,4 +1,4 @@
-import {ICard, IGameBase, IMessage, IServerQuestion} from '../../models/game'
+import {ICard, IFinishGame, IGameBase, IMessage, IServerQuestion} from '../../models/game'
 import {atom, selector} from 'recoil'
 import {IGamePlay} from 'Game'
 
@@ -69,6 +69,11 @@ export const playerIdAtom = atom<number>({
 
 export const serverQuestionAtom = atom<IServerQuestion | null>({
   key: 'serverQuestion',
+  default: null,
+})
+
+export const finishGameAtom = atom<IFinishGame | null>({
+  key: 'finishGame',
   default: null,
 })
 
