@@ -3,6 +3,7 @@
 FROM node:16.17.0-alpine as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
+ENV NODE_OPTIONS "--max-old-space-size=8192"
 COPY . /app
 RUN npm ci --loglevel verbose
 RUN npm run build
