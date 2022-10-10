@@ -17,14 +17,12 @@ const useTestSetup = () => {
   const pGameId = queryParams.gameId
   const doTruncate = isTest && truncate === 'yes'
   const doFetchGame = isTest && !!pGameId
-  console.log('ues test', isTest, players, truncate, pGameId, doTruncate, doFetchGame, gameId)
 
   useEffect(() => {
     if (doTruncate && !gameId) {
       const rulesPlay = startGame(players)
       truncateData({variables: {play: rulesPlay.play, rules: rulesPlay.rules, players: rulesPlay.players}})
         .then(data => {
-          console.log('delete', data);
           setGameId(data?.data?.insert_handf_game?.returning[0]?.gameid)
         })
         .catch(err => console.log(err))

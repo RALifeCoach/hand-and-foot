@@ -18,7 +18,8 @@ export type IGameState =
   | 'inPlay'
   | 'finished'
   | 'askRoundEnd'
-  | 'waitingToReStart';
+  | 'waitingToReStart'
+  | 'askResign';
 export type IPlayerState = 'playing' | 'waiting' | 'draw' | 'draw7';
 export type IPosition = 0 | 1 | 2 | 3;
 export type IMeldType = '3s' | 'clean' | 'dirty' | 'run' | 'wild';

@@ -5,9 +5,8 @@ const ApolloAppProvider: React.FC<any> = ({ children }) => {
   const [client, setClient] = useState<any>()
 
   useEffect(() => {
-    const serverHost = window.location.host
     const link = createHttpLink({
-      uri: `http://localhost:8080/v1/graphql`,
+      uri: process.env.REACT_APP_GRAPHQL_PATH,
     })
 
     const client = new ApolloClient({

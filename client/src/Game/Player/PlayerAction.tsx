@@ -114,7 +114,9 @@ const PlayerAction = ({ gamePlay }: IProps) => {
           onClick={(ev) => {
             if (ev.shiftKey) {
               sendMessage('undo', { override: ev.shiftKey })
+              return
             }
+            sendMessage('askResign', "")
           }}
         >
           <Tooltip title="resign">

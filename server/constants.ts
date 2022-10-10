@@ -115,4 +115,12 @@ export const ACTION_RESPONSE: {
     canUndo: false,
     sendToAll: true,
   },
+  askResign: {
+    canUndo: false,
+    sendToAll: true,
+  },
+  resign: {
+    canUndo: false,
+    sendToAll: true,
+  },
 };

@@ -11,6 +11,7 @@ import playCards from './functions/playCards'
 import draw7 from './functions/draw7'
 import endRoundResponse from './functions/endRoundResponse'
 import logger from '../util/logger'
+import resignResponse from "./functions/resignResponse";
 
 const socketHandler = (
   gamePlay: IGamePlay,
@@ -72,6 +73,9 @@ const socketHandler = (
         case 'endRound':
           endRoundResponse(gameId, gamePlay, gameRules, players, action.value.partnerAgreed, resolve)
           break
+        case 'resign':
+          resignResponse(gameId, gamePlay, gameRules, players, action.value.partnerAgreed, resolve)
+          break
         case 'playCards':
           playCards(
             gameId,
@@ -89,9 +93,14 @@ const socketHandler = (
           gamePlay.gameState = 'waitingToReStart'
           resolve(null)
           break
+        case 'askResign':
+          console.log('ask resign')
+          gamePlay.gameState = 'askResign'
+          resolve(null)
+          break
         default:
           logger.error(`unknown action ${action}`)
-          throw new Error('unknown action type')
+          resolve({type: 'error', message: `Unknown action type (${action.type})`})
       }
     } catch (ex: any) {
       resolve({type: 'error', message: ex.message})

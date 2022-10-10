@@ -3,7 +3,6 @@ import { IGameBase } from "../../../models/game";
 import scoreTeam from "../utils/scoreTeam";
 import scoreCards from "../utils/scoreCards";
 import endGame from "./endGame";
-import startNewTurn from './startNewTurn'
 import startNewRound from './startNewRound'
 
 const endRound = (gamePlay: IGamePlay, gameRules: IGameBase, players: IPlayer[]) => {

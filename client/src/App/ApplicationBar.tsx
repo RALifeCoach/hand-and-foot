@@ -24,7 +24,6 @@ const ApplicationBar = ({ notifications = false }: IProps) => {
     navigate('/login')
   }
 
-  console.log('user', user)
   return (
     <>
       <AppBar position="static" style={{ width: '100%' }}>
